@@ -1,0 +1,59 @@
+.yellow-theme {
+  --main-bg-base: #ececec;
+  --main-header-background: #ececec;
+  --main-sidebar-line: #acb0b6;
+  --main-sidebar-bg: #dce1e4;
+  --menu-header-background: #515b75;
+  --menu-tree1-background: #dadada;
+  --menu-tree1-active-background: #dadada;
+  --menu-tree2-background: #dadada;
+  --clr-dashboard-bg: #e4e3db;
+  --clr-primary: #fdee02;
+  --clr-primary-rgb: 253, 238, 2;
+  --clr-primary-line: #cbbf00;
+  --clr-primary-hover: #fdee02;
+  --clr-popheader: #000;
+  --clr-primary-txt: #000;
+  --nav-tab: #000;
+  --nav-bg: #fffef6;
+  --tran_basic: all 0.3s ease-in-out;
+  --grid-basic: #fffeeb;
+  --grid-select: #fffcd0;
+  --dark-clr-primary: #fef567;
+  --dark-clr-primary-line: #b2a429;
+  --dark-clr-primary-txt: #000;
+  --dark-clr-secondary: #b2a429;
+  --dark-clr-secondary-line: #b2a429;
+  --dark-clr-secondary-txt: #000;
+  --dark-grid-basic: #494521;
+}
+
+.yellow-theme.dark {
+  --main-bg-base: #494521;
+  --main-header-background: #494521;
+  --main-sidebar-line: #b2a429;
+  --main-sidebar-bg: #b2a429;
+  --menu-header-background: #b2a429;
+  --menu-tree1-background: #b2a429;
+  --menu-tree1-active-background: #b2a429;
+  --menu-tree2-background: #b2a429;
+  --clr-dashboard-bg: #494521;
+  --clr-primary: #fef567;
+  --clr-primary-rgb: 254, 245, 103;
+  --clr-primary-line: #b2a429;
+  --clr-primary-hover: #fef567;
+  --clr-popheader: #000;
+  --clr-primary-txt: #000;
+  --nav-tab: #000;
+  --nav-bg: #b2a429;
+  --tran_basic: all 0.3s ease-in-out;
+  --grid-basic: #494521;
+  --grid-select: #b2a429;
+  --dark-clr-primary: #fef567;
+  --dark-clr-primary-line: #b2a429;
+  --dark-clr-primary-txt: #000;
+  --dark-clr-secondary: #b2a429;
+  --dark-clr-secondary-line: #b2a429;
+  --dark-clr-secondary-txt: #000;
+  --dark-grid-basic: #494521;
+}

@@ -1,0 +1,80 @@
+Integrated Test Case ID,IT-IA-001,Author (Designer),[Your Name],Date of writing,[Current Date]
+Integrated Test Case Name,Internal Adjustment Management and Approval,Performer (PL),[Project Lead],Date of performance,[TBD]
+Precondition,User must have a registered account and login with valid username and password,Verifier (Customer),TRA Internal Audit Team,Confirmation date,[TBD]
+Test Start Location (or URL),[System URL] Home > Internal Adjustment,,,,
+Scenario Case ID,Scenario Case Name,Actors,Test Case,Test Case ID,Step Case Detail,Screen Name (Test Step),Test Data,Expected Result,Actual Result,Post Condition,Pass(■)/Fail(□),Remarks,Inspection confirmation
+IT-IA-001-01,Internal Adjustment Registration,Internal Audit Officer,Input Correct Adjustment Details,1,"1. Login as Internal Audit Officer
+2. Navigate to Internal Adjustment
+3. Click ""New Adjustment"" button
+4. Fill in all required fields
+5. Click ""Save"" button","Internal Adjustment > New Adjustment",Valid adjustment data,Adjustment is successfully saved,,Message ""Adjustment Saved Successfully"" appears,■,,
+IT-IA-001-01,Internal Adjustment Registration,Internal Audit Officer,Input Incorrect Details,2,"1. Click ""New Adjustment"" button
+2. Leave required fields empty
+3. Click ""Save"" button","Internal Adjustment > New Adjustment",Invalid/incomplete data,Adjustment is not saved and validation errors displayed,,Validation messages appear for required fields,□,,
+IT-IA-001-01,Internal Adjustment Registration,Internal Audit Officer,Modify Existing Adjustment,3,"1. Search for existing adjustment
+2. Click on adjustment record
+3. Modify details
+4. Click ""Update"" button","Internal Adjustment > Edit Adjustment",Modified adjustment data,Adjustment is successfully modified,,Message ""Adjustment Updated Successfully"" appears,■,,
+IT-IA-001-01,Internal Adjustment Registration,Internal Audit Officer,Delete Adjustment,4,"1. Search for adjustment
+2. Select adjustment
+3. Click ""Delete"" button
+4. Confirm deletion","Internal Adjustment > List",Adjustment ID,Adjustment is successfully deleted,,Message ""Adjustment Deleted Successfully"" appears,■,,
+IT-IA-001-01,Internal Adjustment Registration,Internal Audit Officer,Export Adjustment List,5,"1. Apply search filters
+2. Click ""Export to Excel"" button","Internal Adjustment > List",Search criteria,Excel file with adjustment data is downloaded,,File downloads successfully,■,,
+IT-IA-001-02,Adjustment Approval Workflow,Internal Audit Officer,Submit for Approval,1,"1. Select adjustment
+2. Click ""Submit for Approval""
+3. Add approval comments","Internal Adjustment > Approval",Approval comments,Adjustment status changes to ""Pending Approval"",,Status updated and notification sent,■,,
+IT-IA-001-02,Adjustment Approval Workflow,Approver,Approve Adjustment,2,"1. Login as Approver
+2. View pending adjustments
+3. Click ""Approve""
+4. Add approval notes","Internal Adjustment > Approval",Approval notes,Adjustment is approved,,Status changes to ""Approved"",■,,
+IT-IA-001-02,Adjustment Approval Workflow,Approver,Reject Adjustment,3,"1. Login as Approver
+2. View pending adjustment
+3. Click ""Reject""
+4. Add rejection reason","Internal Adjustment > Approval",Rejection reason,Adjustment is rejected,,Status changes to ""Rejected"",■,,
+IT-IA-001-02,Adjustment Approval Workflow,Approver,Send Back for Revision,4,"1. Login as Approver
+2. View adjustment
+3. Click ""Send Back""
+4. Add revision comments","Internal Adjustment > Approval",Revision comments,Adjustment sent back for revision,,Status changes to ""Sent Back"",■,,
+IT-IA-001-03,Adjustment Search and Filter,Internal Audit Officer,Search by Adjustment ID,1,"1. Enter adjustment ID in search field
+2. Click ""Search""","Internal Adjustment > Search",Adjustment ID,Correct adjustment is displayed,,Search results show matching record,■,,
+IT-IA-001-03,Adjustment Search and Filter,Internal Audit Officer,Filter by Date Range,2,"1. Select date range
+2. Click ""Apply Filter""","Internal Adjustment > Search",Date range,Adjustments within date range displayed,,Filtered results shown,■,,
+IT-IA-001-03,Adjustment Search and Filter,Internal Audit Officer,Filter by Status,3,"1. Select status filter
+2. Click ""Apply Filter""","Internal Adjustment > Search",Status value,Adjustments with selected status displayed,,Filtered results shown,■,,
+IT-IA-001-03,Adjustment Search and Filter,Internal Audit Officer,Advanced Search,4,"1. Use multiple search criteria
+2. Click ""Advanced Search""","Internal Adjustment > Search",Multiple criteria,Results match all criteria,,Accurate search results,■,,
+IT-IA-001-04,Adjustment Validation,Internal Audit Officer,Validate Required Fields,1,"1. Try to save without required fields
+2. Check validation messages","Internal Adjustment > Validation",Empty required fields,Validation errors displayed,,Clear error messages shown,■,,
+IT-IA-001-04,Adjustment Validation,Internal Audit Officer,Validate Data Types,2,"1. Enter invalid data types
+2. Check validation","Internal Adjustment > Validation",Invalid data types,Data type validation errors,,Appropriate error messages,■,,
+IT-IA-001-04,Adjustment Validation,Internal Audit Officer,Validate Business Rules,3,"1. Enter data violating business rules
+2. Check validation","Internal Adjustment > Validation",Invalid business data,Business rule validation errors,,Business rule messages shown,■,,
+IT-IA-001-05,Adjustment History and Audit Trail,Internal Audit Officer,View Adjustment History,1,"1. Select adjustment
+2. Click ""View History""","Internal Adjustment > History",Adjustment ID,Complete history displayed,,All changes and approvals shown,■,,
+IT-IA-001-05,Adjustment History and Audit Trail,Internal Audit Officer,Export Audit Trail,2,"1. Select adjustment
+2. Click ""Export Audit Trail""","Internal Adjustment > History",Adjustment ID,Audit trail exported,,PDF/Excel file generated,■,,
+IT-IA-001-05,Adjustment History and Audit Trail,Internal Audit Officer,Track User Actions,3,"1. Perform various actions
+2. Check audit log","Internal Adjustment > Audit",User actions,All actions logged,,Complete audit trail maintained,■,,
+IT-IA-001-06,Adjustment Notifications,Internal Audit Officer,Email Notifications,1,"1. Submit adjustment for approval
+2. Check email notifications","Internal Adjustment > Notifications",Approval submission,Email notification sent,,Email received by approver,■,,
+IT-IA-001-06,Adjustment Notifications,Internal Audit Officer,System Notifications,2,"1. Login to system
+2. Check notification center","Internal Adjustment > Notifications",Pending approvals,System notifications displayed,,Notifications appear in UI,■,,
+IT-IA-001-06,Adjustment Notifications,Internal Audit Officer,SMS Notifications,3,"1. Configure SMS settings
+2. Trigger notification","Internal Adjustment > Notifications",SMS configuration,SMS notification sent,,SMS received,■,,
+IT-IA-001-07,Adjustment Reports,Internal Audit Officer,Generate Summary Report,1,"1. Navigate to Reports
+2. Select summary report
+3. Set parameters
+4. Generate report","Internal Adjustment > Reports",Report parameters,Summary report generated,,Report displays correctly,■,,
+IT-IA-001-07,Adjustment Reports,Internal Audit Officer,Generate Detailed Report,2,"1. Select detailed report
+2. Set filters
+3. Generate report","Internal Adjustment > Reports",Detailed parameters,Detailed report generated,,Complete report data shown,■,,
+IT-IA-001-07,Adjustment Reports,Internal Audit Officer,Export Reports,3,"1. Generate report
+2. Click ""Export""
+3. Select format","Internal Adjustment > Reports",Export format,Report exported successfully,,File downloaded in selected format,■,,
+IT-IA-001-08,Adjustment Security,Internal Audit Officer,Role-Based Access,1,"1. Login with different roles
+2. Check access permissions","Internal Adjustment > Security",Different user roles,Appropriate access granted,,Access controls working,■,,
+IT-IA-001-08,Adjustment Security,Internal Audit Officer,Data Encryption,2,"1. View sensitive data
+2. Check encryption","Internal Adjustment > Security",Sensitive data,Data properly encrypted,,Encryption verified,■,,
+IT-IA-001-08,Adjustment Security,Internal Audit Officer,Session Management,3,"1. Leave session idle
+2. Try to access data","Internal Adjustment > Security",Session timeout,Session properly terminated,,Security timeout working,■,, 

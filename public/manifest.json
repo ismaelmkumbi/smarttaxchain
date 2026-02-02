@@ -1,0 +1,56 @@
+{
+  "name": "TRA Public Audit Portal",
+  "short_name": "TRA Portal",
+  "description": "Tanzania Revenue Authority Public Audit Portal - Tax Transparency Dashboard",
+  "start_url": "/public-audit-portal",
+  "display": "standalone",
+  "background_color": "#ececec",
+  "theme_color": "#fdee02",
+  "orientation": "portrait-primary",
+  "categories": ["government", "finance", "transparency"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logoIcon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/tra_logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "TRA Public Audit Portal Dashboard"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "TRA Public Audit Portal Mobile View"
+    }
+  ],
+  "features": ["Cross Platform", "fast", "simple"],
+  "prefer_related_applications": false,
+  "scope": "/",
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/",
+    "update_via_cache": "none"
+  }
+}

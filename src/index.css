@@ -1,0 +1,11 @@
+@import './theme/tra-theme.css';
+
+body {
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  background: var(--main-bg-base);
+  color: var(--clr-primary-txt);
+}
+
+body.yellow-theme {
+  /* Ensures the theme is applied globally */
+}
