@@ -4913,13 +4913,13 @@ export default function SmartTaxChainPresentation() {
           className="stc-deck"
           ref={deckRef}
           sx={{
-            // Use dvh to prevent jumps on mobile (address bar show/hide).
-            // Toolbar is 56px on xs, 64px on sm+.
-            height: isFullscreen
+            // Use dvh to prevent jumps on mobile (address bar show/hide) while letting tall slides stretch.
+            height: isFullscreen ? '100dvh' : { xs: 'auto', sm: 'calc(100dvh - 64px)' },
+            minHeight: isFullscreen
               ? '100dvh'
               : { xs: 'calc(100dvh - 56px)', sm: 'calc(100dvh - 64px)' },
             overflowY: 'auto',
-            scrollSnapType: 'y mandatory',
+            scrollSnapType: { xs: 'none', sm: 'y mandatory' },
             backgroundColor: isFullscreen ? '#0b0b0b' : 'transparent',
             overscrollBehavior: 'contain',
           }}
@@ -4934,13 +4934,14 @@ export default function SmartTaxChainPresentation() {
                     slideRefs.current[idx] = el;
                   }}
                   sx={{
-                    height: isFullscreen
+                    height: isFullscreen ? '100dvh' : { xs: 'auto', sm: 'calc(100dvh - 64px)' },
+                    minHeight: isFullscreen
                       ? '100dvh'
                       : { xs: 'calc(100dvh - 56px)', sm: 'calc(100dvh - 64px)' },
                     width: '100%',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: { xs: 'stretch', md: 'center' },
+                    justifyContent: { xs: 'flex-start', md: 'center' },
                     // In fullscreen, keep a PPT-like safe margin (avoid content touching edges)
                     // Also respects notch safe-areas.
                     px: isFullscreen
@@ -4949,16 +4950,16 @@ export default function SmartTaxChainPresentation() {
                           sm: 'calc(env(safe-area-inset-left, 0px) + 16px)',
                           md: 'calc(env(safe-area-inset-left, 0px) + 24px)',
                         }
-                      : 0,
+                      : { xs: 0, sm: 0 },
                     py: isFullscreen
                       ? {
                           xs: 'calc(env(safe-area-inset-top, 0px) + 10px)',
                           sm: 'calc(env(safe-area-inset-top, 0px) + 16px)',
                           md: 'calc(env(safe-area-inset-top, 0px) + 24px)',
                         }
-                      : 0,
-                    scrollSnapAlign: 'start',
-                    scrollSnapStop: 'always',
+                      : { xs: 4, sm: 0 },
+                    scrollSnapAlign: { xs: 'none', sm: 'start' },
+                    scrollSnapStop: { xs: 'normal', sm: 'always' },
                   }}
                 >
                   <SlideFrame
@@ -4982,15 +4983,15 @@ export default function SmartTaxChainPresentation() {
                     }
                   >
                     {/* Slide content */}
-                    <Grid container spacing={3} sx={{ height: '100%' }}>
+                    <Grid container spacing={3} sx={{ height: { md: '100%' } }}>
                       <Grid item xs={12} md={s.diagram ? 7 : 12}>
-                        <Stack spacing={2.5} sx={{ height: '100%' }}>
+                        <Stack spacing={2.5} sx={{ height: { md: '100%' }, minHeight: 0 }}>
                           {idx === 0 ? (
                             <Grid
                               container
                               spacing={3}
                               alignItems="stretch"
-                              sx={{ height: '100%' }}
+                              sx={{ height: { md: '100%' } }}
                             >
                               <Grid item xs={12} md={7}>
                                 <Stack
@@ -5001,7 +5002,7 @@ export default function SmartTaxChainPresentation() {
                                     justifyContent: { md: 'center' },
                                   }}
                                 >
-                                  <Stack spacing={30} sx={{ maxWidth: 820 }}>
+                                  <Stack spacing={{ xs: 6, md: 30 }} sx={{ maxWidth: 820 }}>
                                     {/* Classic title slide */}
                                     <Box>
                                       <Typography
@@ -5494,7 +5495,8 @@ export default function SmartTaxChainPresentation() {
                             className="stc-diagram-wrap"
                             onDoubleClick={(e) => {
                               const el = e.currentTarget;
-                              if (el?.scrollTo) el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+                              if (el?.scrollTo)
+                                el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
                             }}
                             onTouchEnd={(e) => {
                               const el = e.currentTarget;
@@ -5510,8 +5512,9 @@ export default function SmartTaxChainPresentation() {
                             <Box
                               className="stc-diagram-inner"
                               sx={{
-                                minWidth: { xs: 560, sm: '100%' },
+                                width: '100%',
                                 height: '100%',
+                                mx: 'auto',
                               }}
                             >
                               {isValidElement(s.diagram) && s.title === 'Call to Action'
