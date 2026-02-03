@@ -4653,7 +4653,7 @@ export default function SmartTaxChainPresentation() {
           return;
         }
 
-        // In focus mode, arrows/space move between steps until complete.
+        // In focus mode, arrows/space move between steps until complete......
         if (challengeStage === 'reveal' && !challengeComplete) {
           if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
             e.preventDefault();
