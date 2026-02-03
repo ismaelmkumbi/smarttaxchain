@@ -111,7 +111,10 @@ const SlideFrame = ({ children, footerLeft, footerRight, sx }) => {
               theme.palette.primary.main,
               0.18,
             )} 0%, transparent 55%),
-            radial-gradient(circle at 85% 60%, ${alpha(theme.palette.primary.main, 0.12)} 0%, transparent 60%)`,
+            radial-gradient(circle at 85% 60%, ${alpha(
+              theme.palette.primary.main,
+              0.12,
+            )} 0%, transparent 60%)`,
           },
           '&:after': {
             content: '""',
@@ -139,13 +142,21 @@ const SlideFrame = ({ children, footerLeft, footerRight, sx }) => {
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography
             variant="caption"
-            sx={{ color: alpha('#111111', 0.7), fontWeight: 700, fontSize: { xs: 11.5, sm: 12, md: 13 } }}
+            sx={{
+              color: alpha('#111111', 0.7),
+              fontWeight: 700,
+              fontSize: { xs: 11.5, sm: 12, md: 13 },
+            }}
           >
             {footerLeft}
           </Typography>
           <Typography
             variant="caption"
-            sx={{ color: alpha('#111111', 0.6), fontWeight: 700, fontSize: { xs: 11.5, sm: 12, md: 13 } }}
+            sx={{
+              color: alpha('#111111', 0.6),
+              fontWeight: 700,
+              fontSize: { xs: 11.5, sm: 12, md: 13 },
+            }}
           >
             {footerRight}
           </Typography>
@@ -841,8 +852,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
           tone === 'queue'
             ? 'none'
             : isActive
-              ? `0 18px 55px ${alpha(theme.palette.primary.main, 0.18)}`
-              : 'none',
+            ? `0 18px 55px ${alpha(theme.palette.primary.main, 0.18)}`
+            : 'none',
         transform: tone === 'queue' ? 'none' : isActive ? 'translateY(-2px)' : 'none',
         opacity: tone === 'queue' ? 0.58 : 1,
         filter: tone === 'queue' ? 'blur(1.15px)' : 'none',
@@ -887,7 +898,10 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
               borderRadius: 3,
               overflow: 'hidden',
               border: `1px solid ${alpha('#111111', 0.08)}`,
-              background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, #ffffff 70%)`,
+              background: `linear-gradient(135deg, ${alpha(
+                theme.palette.primary.main,
+                0.1,
+              )} 0%, #ffffff 70%)`,
             }}
           >
             {c.illustration}
@@ -1020,7 +1034,10 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
             <Box
               component="svg"
               data-stc-aim="1"
-              viewBox={`0 0 ${Math.max(1, wrapSize?.width ?? 1)} ${Math.max(1, wrapSize?.height ?? 1)}`}
+              viewBox={`0 0 ${Math.max(1, wrapSize?.width ?? 1)} ${Math.max(
+                1,
+                wrapSize?.height ?? 1,
+              )}`}
               preserveAspectRatio="none"
               aria-hidden="true"
               sx={{
@@ -1105,8 +1122,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                   ? displayItem.right.type === 'image'
                     ? 'minmax(0, 0.65fr) minmax(0, 1.35fr)'
                     : displayItem.right.type === 'node'
-                      ? 'minmax(0, 0.75fr) minmax(0, 1.25fr)'
-                      : 'minmax(0, 1.05fr) minmax(0, 0.95fr)'
+                    ? 'minmax(0, 0.75fr) minmax(0, 1.25fr)'
+                    : 'minmax(0, 1.05fr) minmax(0, 0.95fr)'
                   : 'minmax(0, 1fr)',
               }}
             >
@@ -1120,11 +1137,14 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                         ? 1.25
                         : 1.5
                       : isDense
-                        ? 1.5
-                        : 2,
+                      ? 1.5
+                      : 2,
                   borderRadius: 4,
                   border: `1px solid ${alpha('#111111', 0.08)}`,
-                  background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.16)} 0%, #ffffff 55%)`,
+                  background: `linear-gradient(135deg, ${alpha(
+                    theme.palette.primary.main,
+                    0.16,
+                  )} 0%, #ffffff 55%)`,
                   overflow: 'hidden',
                   minHeight: 0,
                 }}
@@ -1267,8 +1287,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                           ? 1
                           : 1.25
                         : isDense
-                          ? 1.25
-                          : 1.5,
+                        ? 1.25
+                        : 1.5,
                     borderRadius: 4,
                     border: `1px solid ${alpha('#111111', 0.08)}`,
                     backgroundColor: '#ffffff',
@@ -1285,8 +1305,16 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                       minHeight: 0,
                       transformOrigin: 'top left',
                       flex: 1,
-                      transform: `scale(${displayItem.right.type === 'image' || displayItem.right.type === 'node' ? 1 : panelContentScale})`,
-                      width: `calc(100% / ${displayItem.right.type === 'image' || displayItem.right.type === 'node' ? 1 : panelContentScale})`,
+                      transform: `scale(${
+                        displayItem.right.type === 'image' || displayItem.right.type === 'node'
+                          ? 1
+                          : panelContentScale
+                      })`,
+                      width: `calc(100% / ${
+                        displayItem.right.type === 'image' || displayItem.right.type === 'node'
+                          ? 1
+                          : panelContentScale
+                      })`,
                     }}
                   >
                     <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -1439,7 +1467,14 @@ const SolutionNetworkArt = () => (
           strokeWidth="3.5"
           opacity="0.95"
         />
-        <g transform={`translate(${n.x - 18} ${n.y - 18})`} fill="none" stroke="#e6d700" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <g
+          transform={`translate(${n.x - 18} ${n.y - 18})`}
+          fill="none"
+          stroke="#e6d700"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {n.icon === 'receipt' ? (
             <>
               <path d="M8 4 h18 v28 l-4-3 -4 3 -4-3 -4 3 -4-3 -4 3 z" />
@@ -1489,9 +1524,25 @@ const SolutionNetworkArt = () => (
     {/* center node */}
     <g>
       <circle cx="380" cy="180" r="54" fill="#fff200" opacity="0.92" />
-      <circle cx="380" cy="180" r="54" fill="none" stroke="#111111" strokeOpacity="0.12" strokeWidth="6" />
+      <circle
+        cx="380"
+        cy="180"
+        r="54"
+        fill="none"
+        stroke="#111111"
+        strokeOpacity="0.12"
+        strokeWidth="6"
+      />
       {/* chain link icon */}
-      <g transform="translate(350 150)" fill="none" stroke="#111111" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" opacity="0.95">
+      <g
+        transform="translate(350 150)"
+        fill="none"
+        stroke="#111111"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.95"
+      >
         <path d="M18 24 a14 14 0 0 1 0-20 l6-6 a14 14 0 0 1 20 0" />
         <path d="M42 36 a14 14 0 0 1 0 20 l-6 6 a14 14 0 0 1-20 0" />
         <path d="M28 32 l16-16" />
@@ -1536,7 +1587,10 @@ const KeyBenefitsPanel = () => {
         p: 2.5,
         borderRadius: 4,
         border: `1px solid ${alpha('#111111', 0.08)}`,
-        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.08)} 0%, #ffffff 65%)`,
+        background: `linear-gradient(135deg, ${alpha(
+          theme.palette.primary.main,
+          0.08,
+        )} 0%, #ffffff 65%)`,
       }}
     >
       <Stack spacing={1.75}>
@@ -1619,7 +1673,10 @@ const SolutionCapabilityBlock = ({ icon, title, desc }) => (
         <Typography variant="h6" sx={{ fontWeight: 1000, letterSpacing: '-0.25px' }}>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: alpha('#111111', 0.72), lineHeight: 1.75, mt: 0.35 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: alpha('#111111', 0.72), lineHeight: 1.75, mt: 0.35 }}
+        >
           {desc}
         </Typography>
       </Box>
@@ -1656,10 +1713,16 @@ const CapabilityShowCard = ({ icon, title, desc, tags = [] }) => (
           {icon}
         </Box>
         <Box sx={{ minWidth: 0 }}>
-          <Typography variant="h6" sx={{ fontWeight: 1050, letterSpacing: '-0.25px', lineHeight: 1.15 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 1050, letterSpacing: '-0.25px', lineHeight: 1.15 }}
+          >
             {title}
           </Typography>
-          <Typography variant="body2" sx={{ color: alpha('#111111', 0.74), lineHeight: 1.75, mt: 0.5 }}>
+          <Typography
+            variant="body2"
+            sx={{ color: alpha('#111111', 0.74), lineHeight: 1.75, mt: 0.5 }}
+          >
             {desc}
           </Typography>
         </Box>
@@ -1723,10 +1786,22 @@ const PlatformMapArt = () => (
     <rect x="0" y="0" width="1000" height="520" rx="30" fill="url(#stcPmBg)" />
 
     {/* section labels */}
-    <g fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fontSize="12" fill="#111111" opacity="0.72">
-      <text x="78" y="70">INPUTS (TRA)</text>
-      <text x="424" y="70">SMART TAX CHAIN CORE</text>
-      <text x="780" y="70">OUTPUTS</text>
+    <g
+      fontFamily="ui-sans-serif, system-ui, -apple-system"
+      fontWeight="900"
+      fontSize="12"
+      fill="#111111"
+      opacity="0.72"
+    >
+      <text x="78" y="70">
+        INPUTS (TRA)
+      </text>
+      <text x="424" y="70">
+        SMART TAX CHAIN CORE
+      </text>
+      <text x="780" y="70">
+        OUTPUTS
+      </text>
     </g>
 
     {/* connectors */}
@@ -1750,7 +1825,12 @@ const PlatformMapArt = () => (
     ].map((p, i) => (
       <circle key={i} r="6" fill="#fff200" stroke="#111111" strokeOpacity="0.14" strokeWidth="2">
         <animateMotion dur={p.dur} repeatCount="indefinite" path={p.d} />
-        <animate attributeName="opacity" values="0.35;1;0.35" dur={p.dur} repeatCount="indefinite" />
+        <animate
+          attributeName="opacity"
+          values="0.35;1;0.35"
+          dur={p.dur}
+          repeatCount="indefinite"
+        />
       </circle>
     ))}
 
@@ -1761,16 +1841,54 @@ const PlatformMapArt = () => (
       { x: 70, y: 330, title: 'Payments', sub: 'Collections / adjustments' },
     ].map((n, i) => (
       <g key={n.title} filter="url(#stcPmShadow)">
-        <rect x={n.x} y={n.y} width="230" height="92" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
-        <rect x={n.x + 16} y={n.y + 16} width="52" height="52" rx="18" fill="url(#stcPmY)" opacity="0.22" />
-        <text x={n.x + 84} y={n.y + 42} fontSize="18" fontWeight="950" fill="#111111" fontFamily="ui-sans-serif, system-ui, -apple-system">
+        <rect
+          x={n.x}
+          y={n.y}
+          width="230"
+          height="92"
+          rx="22"
+          fill="#ffffff"
+          stroke="#111111"
+          strokeOpacity="0.12"
+        />
+        <rect
+          x={n.x + 16}
+          y={n.y + 16}
+          width="52"
+          height="52"
+          rx="18"
+          fill="url(#stcPmY)"
+          opacity="0.22"
+        />
+        <text
+          x={n.x + 84}
+          y={n.y + 42}
+          fontSize="18"
+          fontWeight="950"
+          fill="#111111"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+        >
           {n.title}
         </text>
-        <text x={n.x + 84} y={n.y + 66} fontSize="13" fill="url(#stcPmInk)" fontFamily="ui-sans-serif, system-ui, -apple-system">
+        <text
+          x={n.x + 84}
+          y={n.y + 66}
+          fontSize="13"
+          fill="url(#stcPmInk)"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+        >
           {n.sub}
         </text>
         {/* tiny icon */}
-        <g transform={`translate(${n.x + 26} ${n.y + 26})`} fill="none" stroke="#111111" strokeOpacity="0.75" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <g
+          transform={`translate(${n.x + 26} ${n.y + 26})`}
+          fill="none"
+          stroke="#111111"
+          strokeOpacity="0.75"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {i === 0 ? (
             <>
               <path d="M8 2 h20 v30 l-4-3 -4 3 -4-3 -4 3 -4-3 -4 3 z" />
@@ -1799,18 +1917,56 @@ const PlatformMapArt = () => (
 
     {/* Core (STC) */}
     <g filter="url(#stcPmShadow)">
-      <rect x="420" y="120" width="260" height="240" rx="28" fill="#ffffff" stroke="#111111" strokeOpacity="0.14" />
+      <rect
+        x="420"
+        y="120"
+        width="260"
+        height="240"
+        rx="28"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.14"
+      />
       <circle cx="550" cy="220" r="66" fill="url(#stcPmY)" opacity="0.38" />
-      <circle cx="550" cy="220" r="66" fill="none" stroke="#111111" strokeOpacity="0.12" strokeWidth="6" />
-      <text x="470" y="158" fontSize="16" fontWeight="950" fill="#111111" fontFamily="ui-sans-serif, system-ui, -apple-system">
+      <circle
+        cx="550"
+        cy="220"
+        r="66"
+        fill="none"
+        stroke="#111111"
+        strokeOpacity="0.12"
+        strokeWidth="6"
+      />
+      <text
+        x="470"
+        y="158"
+        fontSize="16"
+        fontWeight="950"
+        fill="#111111"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+      >
         Smart Tax Chain
       </text>
-      <text x="470" y="182" fontSize="13" fill="url(#stcPmInk)" fontFamily="ui-sans-serif, system-ui, -apple-system">
+      <text
+        x="470"
+        y="182"
+        fontSize="13"
+        fill="url(#stcPmInk)"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+      >
         Evidence ledger + monitoring + audit
       </text>
 
       {/* chain icon */}
-      <g transform="translate(515 185)" fill="none" stroke="#111111" strokeOpacity="0.9" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+      <g
+        transform="translate(515 185)"
+        fill="none"
+        stroke="#111111"
+        strokeOpacity="0.9"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M18 24 a14 14 0 0 1 0-20 l6-6 a14 14 0 0 1 20 0" />
         <path d="M42 36 a14 14 0 0 1 0 20 l-6 6 a14 14 0 0 1-20 0" />
         <path d="M28 32 l16-16" />
@@ -1823,11 +1979,40 @@ const PlatformMapArt = () => (
         { x: 450, y: 320, t: 'Real-time audit' },
       ].map((m, i) => (
         <g key={m.t}>
-          <rect x={m.x} y={m.y} width="200" height="28" rx="14" fill={alpha('#111111', 0.03)} stroke="#111111" strokeOpacity="0.08" />
-          <circle cx={m.x + 16} cy={m.y + 14} r="6" fill="#fff200" stroke="#111111" strokeOpacity="0.14" strokeWidth="2">
-            <animate attributeName="opacity" values="0.35;1;0.35" dur={`${2.2 + i * 0.2}s`} repeatCount="indefinite" />
+          <rect
+            x={m.x}
+            y={m.y}
+            width="200"
+            height="28"
+            rx="14"
+            fill={alpha('#111111', 0.03)}
+            stroke="#111111"
+            strokeOpacity="0.08"
+          />
+          <circle
+            cx={m.x + 16}
+            cy={m.y + 14}
+            r="6"
+            fill="#fff200"
+            stroke="#111111"
+            strokeOpacity="0.14"
+            strokeWidth="2"
+          >
+            <animate
+              attributeName="opacity"
+              values="0.35;1;0.35"
+              dur={`${2.2 + i * 0.2}s`}
+              repeatCount="indefinite"
+            />
           </circle>
-          <text x={m.x + 30} y={m.y + 19} fontSize="12.5" fontWeight="900" fill="#111111" fontFamily="ui-sans-serif, system-ui, -apple-system">
+          <text
+            x={m.x + 30}
+            y={m.y + 19}
+            fontSize="12.5"
+            fontWeight="900"
+            fill="#111111"
+            fontFamily="ui-sans-serif, system-ui, -apple-system"
+          >
             {m.t}
           </text>
         </g>
@@ -1841,12 +2026,42 @@ const PlatformMapArt = () => (
       { x: 820, y: 350, title: 'Alerts & cases', sub: 'Faster recovery' },
     ].map((n, i) => (
       <g key={n.title} filter="url(#stcPmShadow)">
-        <rect x={n.x} y={n.y} width="160" height="92" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
-        <rect x={n.x + 18} y={n.y + 16} width="44" height="44" rx="16" fill="url(#stcPmY)" opacity="0.22" />
-        <text x={n.x + 72} y={n.y + 42} fontSize="14" fontWeight="950" fill="#111111" fontFamily="ui-sans-serif, system-ui, -apple-system">
+        <rect
+          x={n.x}
+          y={n.y}
+          width="160"
+          height="92"
+          rx="22"
+          fill="#ffffff"
+          stroke="#111111"
+          strokeOpacity="0.12"
+        />
+        <rect
+          x={n.x + 18}
+          y={n.y + 16}
+          width="44"
+          height="44"
+          rx="16"
+          fill="url(#stcPmY)"
+          opacity="0.22"
+        />
+        <text
+          x={n.x + 72}
+          y={n.y + 42}
+          fontSize="14"
+          fontWeight="950"
+          fill="#111111"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+        >
           {n.title}
         </text>
-        <text x={n.x + 72} y={n.y + 64} fontSize="12" fill="url(#stcPmInk)" fontFamily="ui-sans-serif, system-ui, -apple-system">
+        <text
+          x={n.x + 72}
+          y={n.y + 64}
+          fontSize="12"
+          fill="url(#stcPmInk)"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+        >
           {n.sub}
         </text>
       </g>
@@ -1879,7 +2094,12 @@ const CtaHeroArt = () => (
 
     <rect x="0" y="0" width="900" height="360" rx="26" fill="url(#stcCtaBg)" />
     <circle cx="650" cy="170" r="170" fill="url(#stcCtaPulse)">
-      <animate attributeName="opacity" values="0.55;0.85;0.55" dur="3.6s" repeatCount="indefinite" />
+      <animate
+        attributeName="opacity"
+        values="0.55;0.85;0.55"
+        dur="3.6s"
+        repeatCount="indefinite"
+      />
     </circle>
 
     {/* Network lines */}
@@ -1901,9 +2121,31 @@ const CtaHeroArt = () => (
     ].map(([x, y], idx) => (
       <g key={idx}>
         <circle cx={x} cy={y} r="14" fill="#ffffff" />
-        <circle cx={x} cy={y} r="14" fill="none" stroke="#111111" strokeOpacity="0.18" strokeWidth="4" />
-        <circle cx={x} cy={y} r="6" fill="#fff200" stroke="#111111" strokeOpacity="0.18" strokeWidth="2">
-          <animate attributeName="opacity" values="0.45;1;0.45" dur="2.6s" begin={`${idx * 0.12}s`} repeatCount="indefinite" />
+        <circle
+          cx={x}
+          cy={y}
+          r="14"
+          fill="none"
+          stroke="#111111"
+          strokeOpacity="0.18"
+          strokeWidth="4"
+        />
+        <circle
+          cx={x}
+          cy={y}
+          r="6"
+          fill="#fff200"
+          stroke="#111111"
+          strokeOpacity="0.18"
+          strokeWidth="2"
+        >
+          <animate
+            attributeName="opacity"
+            values="0.45;1;0.45"
+            dur="2.6s"
+            begin={`${idx * 0.12}s`}
+            repeatCount="indefinite"
+          />
         </circle>
       </g>
     ))}
@@ -1930,12 +2172,30 @@ const CtaHeroArt = () => (
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <animate attributeName="stroke-opacity" values="0.45;1;0.45" dur="2.1s" repeatCount="indefinite" />
+        <animate
+          attributeName="stroke-opacity"
+          values="0.45;1;0.45"
+          dur="2.1s"
+          repeatCount="indefinite"
+        />
       </path>
-      <text x="120" y="48" fontSize="22" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="800" fill="#111111">
+      <text
+        x="120"
+        y="48"
+        fontSize="22"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="800"
+        fill="#111111"
+      >
         LIVE LEDGER EVIDENCE
       </text>
-      <text x="120" y="78" fontSize="16" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcCtaInk)">
+      <text
+        x="120"
+        y="78"
+        fontSize="16"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcCtaInk)"
+      >
         Traceable receipts • tamper-evident records • defensible audit trail
       </text>
     </g>
@@ -2066,7 +2326,11 @@ const CtaEndAnimator = ({ playKey }) => {
                 animationDelay: c.delay,
               }}
             >
-              <Box component="svg" viewBox="0 0 28 360" sx={{ width: '100%', height: '100%', display: 'block' }}>
+              <Box
+                component="svg"
+                viewBox="0 0 28 360"
+                sx={{ width: '100%', height: '100%', display: 'block' }}
+              >
                 <g>
                   {[24, 92, 170, 250, 320].map((y, i) => (
                     <circle
@@ -2095,10 +2359,10 @@ const CtaEndAnimator = ({ playKey }) => {
           right: '-20%',
           height: 70,
           bottom: -40,
-          background: `linear-gradient(90deg, transparent 0%, ${alpha('#111111', 0.78)} 18%, ${alpha(
-            '#fff200',
-            0.9,
-          )} 40%, ${alpha('#111111', 0.78)} 62%, transparent 100%)`,
+          background: `linear-gradient(90deg, transparent 0%, ${alpha(
+            '#111111',
+            0.78,
+          )} 18%, ${alpha('#fff200', 0.9)} 40%, ${alpha('#111111', 0.78)} 62%, transparent 100%)`,
           filter: `drop-shadow(0 22px 50px ${alpha('#111111', 0.16)})`,
           opacity: 0,
           animation: `stcCutSweep 1.25s cubic-bezier(0.2, 0.8, 0.2, 1) 2.55s 1 both`,
@@ -2329,7 +2593,10 @@ const CtaBenefitCard = ({ icon, title, desc }) => (
         <Typography variant="subtitle1" sx={{ fontWeight: 1000, lineHeight: 1.2 }}>
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: alpha('#111111', 0.72), lineHeight: 1.55, mt: 0.4 }}>
+        <Typography
+          variant="body2"
+          sx={{ color: alpha('#111111', 0.72), lineHeight: 1.55, mt: 0.4 }}
+        >
           {desc}
         </Typography>
       </Box>
@@ -2375,7 +2642,12 @@ const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
           <Stack spacing={2.2} sx={{ width: '100%' }} alignItems="center">
             <Typography
               variant="h4"
-              sx={{ fontWeight: 1050, textAlign: 'center', letterSpacing: '-0.6px', lineHeight: 1.08 }}
+              sx={{
+                fontWeight: 1050,
+                textAlign: 'center',
+                letterSpacing: '-0.6px',
+                lineHeight: 1.08,
+              }}
             >
               Securing Tanzania’s Tax Revenue Starts Now
             </Typography>
@@ -2387,8 +2659,9 @@ const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
                 maxWidth: 820,
               }}
             >
-              Smart Tax Chain strengthens revenue protection by making critical tax records tamper‑evident, improving
-              visibility, and enabling real-time verification across TRA workflows.
+              Smart Tax Chain strengthens revenue protection by making critical tax records
+              tamper‑evident, improving visibility, and enabling real-time verification across TRA
+              workflows.
             </Typography>
 
             <Grid container spacing={2.5} sx={{ mt: 0.5 }}>
@@ -2427,7 +2700,14 @@ const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
                 mt: 1,
               }}
             >
-              <Box sx={{ flex: 1, height: 2, backgroundColor: alpha('#e6d700', 0.65), borderRadius: 999 }} />
+              <Box
+                sx={{
+                  flex: 1,
+                  height: 2,
+                  backgroundColor: alpha('#e6d700', 0.65),
+                  borderRadius: 999,
+                }}
+              />
               {[
                 { icon: <Shield sx={{ fontSize: 18, color: '#111111' }} />, key: 'a' },
                 { icon: <Lock sx={{ fontSize: 18, color: '#111111' }} />, key: 'b' },
@@ -2450,7 +2730,14 @@ const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
                   {n.icon}
                 </Box>
               ))}
-              <Box sx={{ flex: 1, height: 2, backgroundColor: alpha('#e6d700', 0.65), borderRadius: 999 }} />
+              <Box
+                sx={{
+                  flex: 1,
+                  height: 2,
+                  backgroundColor: alpha('#e6d700', 0.65),
+                  borderRadius: 999,
+                }}
+              />
             </Box>
 
             <Button
@@ -2491,14 +2778,14 @@ const FlowNode = ({ title, subtitle, tone = 'neutral' }) => {
     tone === 'primary'
       ? alpha(theme.palette.primary.main, 0.2)
       : tone === 'danger'
-        ? alpha(theme.palette.error.main, 0.12)
-        : alpha('#111111', 0.04);
+      ? alpha(theme.palette.error.main, 0.12)
+      : alpha('#111111', 0.04);
   const border =
     tone === 'primary'
       ? alpha(theme.palette.primary.main, 0.45)
       : tone === 'danger'
-        ? alpha(theme.palette.error.main, 0.25)
-        : alpha('#111111', 0.12);
+      ? alpha(theme.palette.error.main, 0.25)
+      : alpha('#111111', 0.12);
 
   return (
     <Paper
@@ -2580,7 +2867,16 @@ const RootCauseSystemArt = () => (
 
     {/* Left inputs */}
     <g filter="url(#stcRcShadow)">
-      <rect x="70" y="80" width="220" height="120" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
+      <rect
+        x="70"
+        y="80"
+        width="220"
+        height="120"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
       <circle cx="120" cy="140" r="26" fill="#fff200" opacity="0.24" />
       <path
         d="M110 128 h20 v34 l-4-3 -4 3 -4-3 -4 3 -4-3 -4 3 z"
@@ -2590,16 +2886,38 @@ const RootCauseSystemArt = () => (
         strokeWidth="3.5"
         strokeLinejoin="round"
       />
-      <text x="160" y="132" fontSize="18" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <text
+        x="160"
+        y="132"
+        fontSize="18"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         EFD / POS events
       </text>
-      <text x="160" y="156" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="160"
+        y="156"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Receipts + transactions
       </text>
     </g>
 
     <g filter="url(#stcRcShadow)">
-      <rect x="70" y="230" width="220" height="120" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
+      <rect
+        x="70"
+        y="230"
+        width="220"
+        height="120"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
       <circle cx="120" cy="290" r="26" fill="#fff200" opacity="0.24" />
       <path
         d="M110 278 h22 a6 6 0 0 1 6 6 v24 a6 6 0 0 1-6 6 h-22 a6 6 0 0 1-6-6 v-24 a6 6 0 0 1 6-6 z"
@@ -2608,18 +2926,52 @@ const RootCauseSystemArt = () => (
         strokeOpacity="0.75"
         strokeWidth="3.5"
       />
-      <path d="M112 290 h20" stroke="#111111" strokeOpacity="0.55" strokeWidth="3.5" strokeLinecap="round" />
-      <path d="M112 300 h16" stroke="#111111" strokeOpacity="0.45" strokeWidth="3.5" strokeLinecap="round" />
-      <text x="160" y="282" fontSize="18" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <path
+        d="M112 290 h20"
+        stroke="#111111"
+        strokeOpacity="0.55"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M112 300 h16"
+        stroke="#111111"
+        strokeOpacity="0.45"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+      <text
+        x="160"
+        y="282"
+        fontSize="18"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         Declarations
       </text>
-      <text x="160" y="306" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="160"
+        y="306"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Returns + filings
       </text>
     </g>
 
     <g filter="url(#stcRcShadow)">
-      <rect x="70" y="380" width="220" height="90" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
+      <rect
+        x="70"
+        y="380"
+        width="220"
+        height="90"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
       <circle cx="120" cy="425" r="26" fill="#fff200" opacity="0.24" />
       <path
         d="M110 420 h28"
@@ -2637,10 +2989,23 @@ const RootCauseSystemArt = () => (
         strokeWidth="3.5"
         strokeLinecap="round"
       />
-      <text x="160" y="420" fontSize="18" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <text
+        x="160"
+        y="420"
+        fontSize="18"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         Other sources
       </text>
-      <text x="160" y="444" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="160"
+        y="444"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Payments, adjustments
       </text>
     </g>
@@ -2657,17 +3022,47 @@ const RootCauseSystemArt = () => (
 
     {/* Core system */}
     <g filter="url(#stcRcShadow)">
-      <rect x="370" y="120" width="340" height="260" rx="28" fill="#ffffff" stroke="#111111" strokeOpacity="0.14" strokeWidth="2.5" />
+      <rect
+        x="370"
+        y="120"
+        width="340"
+        height="260"
+        rx="28"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.14"
+        strokeWidth="2.5"
+      />
       <rect x="392" y="145" width="296" height="42" rx="21" fill="url(#stcRcY)" opacity="0.28" />
-      <text x="410" y="173" fontSize="18" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="950" fill="#111111">
+      <text
+        x="410"
+        y="173"
+        fontSize="18"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="950"
+        fill="#111111"
+      >
         CORE TAX SYSTEM (TODAY)
       </text>
-      <text x="410" y="206" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="410"
+        y="206"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Records stored in a mutable database
       </text>
 
       {/* database icon */}
-      <g transform="translate(410 228)" fill="none" stroke="#111111" strokeOpacity="0.75" strokeWidth="4" strokeLinejoin="round">
+      <g
+        transform="translate(410 228)"
+        fill="none"
+        stroke="#111111"
+        strokeOpacity="0.75"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      >
         <ellipse cx="52" cy="16" rx="48" ry="16" />
         <path d="M4 16 v66 c0 10 21.5 20 48 20 s48-10 48-20 V16" />
         <path d="M4 48 c0 10 21.5 20 48 20 s48-10 48-20" opacity="0.65" />
@@ -2677,7 +3072,14 @@ const RootCauseSystemArt = () => (
       {/* silent edit tag */}
       <g transform="translate(560 238)">
         <rect x="0" y="0" width="128" height="34" rx="17" fill="#111111" opacity="0.92" />
-        <text x="18" y="23" fontSize="13" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#fff200">
+        <text
+          x="18"
+          y="23"
+          fontSize="13"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+          fontWeight="900"
+          fill="#fff200"
+        >
           EDIT AFTER SAVE
         </text>
         <animate attributeName="opacity" values="0.85;1;0.85" dur="1.9s" repeatCount="indefinite" />
@@ -2685,15 +3087,44 @@ const RootCauseSystemArt = () => (
 
       {/* broken evidence callout */}
       <g transform="translate(520 292)">
-        <rect x="0" y="0" width="168" height="70" rx="18" fill="#fffde7" stroke="#111111" strokeOpacity="0.12" />
-        <text x="18" y="28" fontSize="13" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+        <rect
+          x="0"
+          y="0"
+          width="168"
+          height="70"
+          rx="18"
+          fill="#fffde7"
+          stroke="#111111"
+          strokeOpacity="0.12"
+        />
+        <text
+          x="18"
+          y="28"
+          fontSize="13"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+          fontWeight="900"
+          fill="#111111"
+        >
           Evidence is weak
         </text>
-        <text x="18" y="50" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+        <text
+          x="18"
+          y="50"
+          fontSize="12"
+          fontFamily="ui-sans-serif, system-ui, -apple-system"
+          fill="url(#stcRcInk)"
+        >
           Hard to prove who/when changed
         </text>
         {/* broken chain icon */}
-        <g transform="translate(128 14)" fill="none" stroke="#111111" strokeOpacity="0.55" strokeWidth="3.5" strokeLinecap="round">
+        <g
+          transform="translate(128 14)"
+          fill="none"
+          stroke="#111111"
+          strokeOpacity="0.55"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        >
           <path d="M8 24 a10 10 0 0 1 0-14 l6-6 a10 10 0 0 1 14 0" />
           <path d="M32 28 a10 10 0 0 1 0 14 l-6 6 a10 10 0 0 1-14 0" />
           <path d="M18 20 l8-8" />
@@ -2709,32 +3140,96 @@ const RootCauseSystemArt = () => (
     </g>
 
     <g filter="url(#stcRcShadow)">
-      <rect x="810" y="140" width="160" height="120" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
+      <rect
+        x="810"
+        y="140"
+        width="160"
+        height="120"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
       <rect x="828" y="160" width="124" height="28" rx="14" fill="#111111" opacity="0.92" />
-      <text x="842" y="179" fontSize="12.5" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#fff200">
+      <text
+        x="842"
+        y="179"
+        fontSize="12.5"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#fff200"
+      >
         MANUAL CHECKS
       </text>
-      <text x="828" y="212" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <text
+        x="828"
+        y="212"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         Verification
       </text>
-      <text x="828" y="236" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="828"
+        y="236"
+        fontSize="12"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Cross-checking + rework
       </text>
     </g>
 
     <g filter="url(#stcRcShadow)">
-      <rect x="810" y="280" width="160" height="150" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
+      <rect
+        x="810"
+        y="280"
+        width="160"
+        height="150"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
       <rect x="828" y="300" width="124" height="28" rx="14" fill="url(#stcRcY)" opacity="0.32" />
-      <text x="840" y="319" fontSize="12.5" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <text
+        x="840"
+        y="319"
+        fontSize="12.5"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         LATE AUDIT
       </text>
-      <text x="828" y="352" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+      <text
+        x="828"
+        y="352"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#111111"
+      >
         Discovery window
       </text>
-      <text x="828" y="376" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="828"
+        y="376"
+        fontSize="12"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Often 30–180 days
       </text>
-      <text x="828" y="404" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+      <text
+        x="828"
+        y="404"
+        fontSize="12"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fill="url(#stcRcInk)"
+      >
         Disputes + delayed recovery
       </text>
     </g>
@@ -2742,14 +3237,36 @@ const RootCauseSystemArt = () => (
     {/* bottom timeline */}
     <g>
       <rect x="70" y="30" width="330" height="38" rx="19" fill="#111111" opacity="0.88" />
-      <text x="92" y="55" fontSize="14" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#fff200">
+      <text
+        x="92"
+        y="55"
+        fontSize="14"
+        fontFamily="ui-sans-serif, system-ui, -apple-system"
+        fontWeight="900"
+        fill="#fff200"
+      >
         CORE PROBLEM: MUTABLE RECORDS + DELAYED VISIBILITY
       </text>
     </g>
 
     <g>
-      <rect x="370" y="415" width="600" height="64" rx="22" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" />
-      <path d="M410 448 H930" stroke="#111111" strokeOpacity="0.2" strokeWidth="4" strokeLinecap="round" />
+      <rect
+        x="370"
+        y="415"
+        width="600"
+        height="64"
+        rx="22"
+        fill="#ffffff"
+        stroke="#111111"
+        strokeOpacity="0.12"
+      />
+      <path
+        d="M410 448 H930"
+        stroke="#111111"
+        strokeOpacity="0.2"
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
 
       {[
         { x: 430, label: 'Day 0', sub: 'Saved' },
@@ -2757,15 +3274,48 @@ const RootCauseSystemArt = () => (
         { x: 860, label: 'Day 30–180', sub: 'Audit finds late' },
       ].map((m, i) => (
         <g key={m.label}>
-          <circle cx={m.x} cy="448" r="10" fill="#fff200" stroke="#111111" strokeOpacity="0.12" strokeWidth="3" />
+          <circle
+            cx={m.x}
+            cy="448"
+            r="10"
+            fill="#fff200"
+            stroke="#111111"
+            strokeOpacity="0.12"
+            strokeWidth="3"
+          />
           <circle cx={m.x} cy="448" r="10" fill="#fff200" opacity="0.35">
-            <animate attributeName="r" values="10;18" dur="2.8s" begin={`${i * 0.25}s`} repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.35;0" dur="2.8s" begin={`${i * 0.25}s`} repeatCount="indefinite" />
+            <animate
+              attributeName="r"
+              values="10;18"
+              dur="2.8s"
+              begin={`${i * 0.25}s`}
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0.35;0"
+              dur="2.8s"
+              begin={`${i * 0.25}s`}
+              repeatCount="indefinite"
+            />
           </circle>
-          <text x={m.x - 26} y="438" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fontWeight="900" fill="#111111">
+          <text
+            x={m.x - 26}
+            y="438"
+            fontSize="12"
+            fontFamily="ui-sans-serif, system-ui, -apple-system"
+            fontWeight="900"
+            fill="#111111"
+          >
             {m.label}
           </text>
-          <text x={m.x - 26} y="466" fontSize="12" fontFamily="ui-sans-serif, system-ui, -apple-system" fill="url(#stcRcInk)">
+          <text
+            x={m.x - 26}
+            y="466"
+            fontSize="12"
+            fontFamily="ui-sans-serif, system-ui, -apple-system"
+            fill="url(#stcRcInk)"
+          >
             {m.sub}
           </text>
         </g>
@@ -2860,7 +3410,16 @@ const AuditDelayFlowArt = () => (
     {/* pain callout */}
     <g transform="translate(520 392)">
       <rect x="0" y="0" width="440" height="24" rx="12" fill="#ffffff" opacity="0.92" />
-      <rect x="0" y="0" width="440" height="24" rx="12" fill="none" stroke="#111111" strokeOpacity="0.1" />
+      <rect
+        x="0"
+        y="0"
+        width="440"
+        height="24"
+        rx="12"
+        fill="none"
+        stroke="#111111"
+        strokeOpacity="0.1"
+      />
       <text x="14" y="16" fontSize="13" fontWeight="900" fill="#111111" opacity="0.72">
         Outcome: delayed recovery + bigger fraud window + weaker management control
       </text>
@@ -3141,7 +3700,15 @@ const FraudAttackFlowArt = () => {
         >
           SYSTEM
         </text>
-        <text x="30" y="96" textAnchor="middle" fontSize="9" fontWeight="900" fill={ink} opacity="0.55">
+        <text
+          x="30"
+          y="96"
+          textAnchor="middle"
+          fontSize="9"
+          fontWeight="900"
+          fill={ink}
+          opacity="0.55"
+        >
           Weak
         </text>
       </g>
@@ -3209,7 +3776,10 @@ const FraudAttackDiagram = () => {
         p: 1.25,
         borderRadius: 3,
         border: `1px solid ${alpha('#111111', 0.1)}`,
-        background: `linear-gradient(135deg, ${alpha(theme.palette.error.main, 0.06)} 0%, #ffffff 60%)`,
+        background: `linear-gradient(135deg, ${alpha(
+          theme.palette.error.main,
+          0.06,
+        )} 0%, #ffffff 60%)`,
         height: '100%',
       }}
     >
@@ -3577,7 +4147,10 @@ export default function SmartTaxChainPresentation() {
                 }}
               >
                 <Stack spacing={1.5} sx={{ height: '100%' }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 1000, letterSpacing: '-0.2px' }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 1000, letterSpacing: '-0.2px' }}
+                  >
                     What management experiences today
                   </Typography>
                   <Stack spacing={1.25}>
@@ -3618,8 +4191,14 @@ export default function SmartTaxChainPresentation() {
                           sx={{
                             fontWeight: 950,
                             borderRadius: 999,
-                            backgroundColor: t === 'Delayed recovery' ? alpha('#fff200', 0.22) : alpha('#111111', 0.03),
-                            border: `1px solid ${alpha(t === 'Delayed recovery' ? '#fff200' : '#111111', t === 'Delayed recovery' ? 0.6 : 0.12)}`,
+                            backgroundColor:
+                              t === 'Delayed recovery'
+                                ? alpha('#fff200', 0.22)
+                                : alpha('#111111', 0.03),
+                            border: `1px solid ${alpha(
+                              t === 'Delayed recovery' ? '#fff200' : '#111111',
+                              t === 'Delayed recovery' ? 0.6 : 0.12,
+                            )}`,
                           }}
                         />
                       ))}
@@ -3630,7 +4209,10 @@ export default function SmartTaxChainPresentation() {
             </Grid>
 
             <Grid item xs={12} md={7.5}>
-              <DiagramCard title="Today: where control breaks" subtitle="Save → silent edit → late audit">
+              <DiagramCard
+                title="Today: where control breaks"
+                subtitle="Save → silent edit → late audit"
+              >
                 <Box
                   sx={{
                     borderRadius: 3,
@@ -3804,9 +4386,12 @@ export default function SmartTaxChainPresentation() {
                 <Typography variant="subtitle2" sx={{ fontWeight: 950 }}>
                   Management promise
                 </Typography>
-                <Typography variant="body2" sx={{ color: alpha('#111111', 0.72), mt: 0.5, lineHeight: 1.65 }}>
-                  A verifiable evidence trail for every critical tax event — so leadership decisions become faster,
-                  defensible, and measurable.
+                <Typography
+                  variant="body2"
+                  sx={{ color: alpha('#111111', 0.72), mt: 0.5, lineHeight: 1.65 }}
+                >
+                  A verifiable evidence trail for every critical tax event — so leadership decisions
+                  become faster, defensible, and measurable.
                 </Typography>
               </Paper>
             </Grid>
@@ -3820,7 +4405,10 @@ export default function SmartTaxChainPresentation() {
         content: (
           <Grid container spacing={2.5} alignItems="stretch" sx={{ mt: 0.5 }}>
             <Grid item xs={12} md={7.2}>
-              <DiagramCard title="What Smart Tax Chain comes with" subtitle="Inputs → evidence → real-time decisions">
+              <DiagramCard
+                title="What Smart Tax Chain comes with"
+                subtitle="Inputs → evidence → real-time decisions"
+              >
                 <Box
                   sx={{
                     borderRadius: 3,
@@ -3832,21 +4420,25 @@ export default function SmartTaxChainPresentation() {
                   <PlatformMapArt />
                 </Box>
                 <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1.25 }}>
-                  {['Dashboards', 'APIs & integration', 'Role-based access', 'Audit-ready exports', 'Alerts & cases'].map(
-                    (t) => (
-                      <Chip
-                        key={t}
-                        label={t}
-                        size="small"
-                        sx={{
-                          fontWeight: 950,
-                          borderRadius: 999,
-                          backgroundColor: alpha('#111111', 0.03),
-                          border: `1px solid ${alpha('#111111', 0.12)}`,
-                        }}
-                      />
-                    ),
-                  )}
+                  {[
+                    'Dashboards',
+                    'APIs & integration',
+                    'Role-based access',
+                    'Audit-ready exports',
+                    'Alerts & cases',
+                  ].map((t) => (
+                    <Chip
+                      key={t}
+                      label={t}
+                      size="small"
+                      sx={{
+                        fontWeight: 950,
+                        borderRadius: 999,
+                        backgroundColor: alpha('#111111', 0.03),
+                        border: `1px solid ${alpha('#111111', 0.12)}`,
+                      }}
+                    />
+                  ))}
                 </Stack>
               </DiagramCard>
             </Grid>
@@ -3884,9 +4476,12 @@ export default function SmartTaxChainPresentation() {
                   <Typography variant="subtitle2" sx={{ fontWeight: 950 }}>
                     Leadership message
                   </Typography>
-                  <Typography variant="body2" sx={{ color: alpha('#111111', 0.74), mt: 0.5, lineHeight: 1.65 }}>
-                    Smart Tax Chain delivers integrity + visibility + defensible proof — turning tax administration into
-                    measurable, evidence-based control.
+                  <Typography
+                    variant="body2"
+                    sx={{ color: alpha('#111111', 0.74), mt: 0.5, lineHeight: 1.65 }}
+                  >
+                    Smart Tax Chain delivers integrity + visibility + defensible proof — turning tax
+                    administration into measurable, evidence-based control.
                   </Typography>
                 </Paper>
               </Stack>
@@ -4185,7 +4780,10 @@ export default function SmartTaxChainPresentation() {
             display: isFullscreen ? 'none' : 'flex',
             backgroundColor: isFullscreen ? alpha('#111111', 0.72) : alpha('#ffffff', 0.82),
             backdropFilter: 'blur(10px)',
-            borderBottom: `1px solid ${alpha(isFullscreen ? '#ffffff' : '#111111', isFullscreen ? 0.12 : 0.08)}`,
+            borderBottom: `1px solid ${alpha(
+              isFullscreen ? '#ffffff' : '#111111',
+              isFullscreen ? 0.12 : 0.08,
+            )}`,
             '& .MuiTypography-root, & .MuiButton-root': {
               color: isFullscreen ? '#ffffff' : undefined,
             },
@@ -4238,7 +4836,7 @@ export default function SmartTaxChainPresentation() {
                 >
                   Open demo
                 </Button>
-        
+
                 <Button
                   onClick={toggleFullscreen}
                   variant="outlined"
@@ -4349,9 +4947,7 @@ export default function SmartTaxChainPresentation() {
                         ? 'Tanzania Revenue Authority'
                         : `Tanzania Revenue Authority • Presenter: ${PRESENTER_NAME}`)
                     }
-                    footerRight={
-                      s.footerRight ?? `SMART TAX CHAIN • ${idx + 1} / ${slides.length}`
-                    }
+                    footerRight={s.footerRight ?? `SMART TAX CHAIN • ${idx + 1} / ${slides.length}`}
                     sx={
                       isFullscreen
                         ? {
@@ -4369,7 +4965,12 @@ export default function SmartTaxChainPresentation() {
                       <Grid item xs={12} md={s.diagram ? 7 : 12}>
                         <Stack spacing={2.5} sx={{ height: '100%' }}>
                           {idx === 0 ? (
-                            <Grid container spacing={3} alignItems="stretch" sx={{ height: '100%' }}>
+                            <Grid
+                              container
+                              spacing={3}
+                              alignItems="stretch"
+                              sx={{ height: '100%' }}
+                            >
                               <Grid item xs={12} md={7}>
                                 <Stack
                                   spacing={2.5}
@@ -4413,12 +5014,12 @@ export default function SmartTaxChainPresentation() {
                                           maxWidth: 820,
                                         }}
                                       >
-                                        Blockchain-Based Solution for Enhanced Data Integrity, Trust, and Operational
-                                        Efficiency
+                                        Blockchain-Based Solution for Enhanced Data Integrity,
+                                        Trust, and Operational Efficiency
                                       </Typography>
                                     </Box>
 
-                                    {/* Presenter / Date (single clean block) */}
+                                    {/* Presenter / Date (single clean block) ***/}
                                     <Paper
                                       elevation={0}
                                       sx={{
@@ -4467,7 +5068,10 @@ export default function SmartTaxChainPresentation() {
                                           <Typography variant="h6" sx={{ fontWeight: 900 }}>
                                             Nov 19, 2025
                                           </Typography>
-                                          <Typography variant="caption" sx={{ color: alpha('#111111', 0.65) }}>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: alpha('#111111', 0.65) }}
+                                          >
                                             Press <strong>F</strong> for full screen
                                           </Typography>
                                         </Grid>
@@ -4531,7 +5135,10 @@ export default function SmartTaxChainPresentation() {
                                         fontWeight: 950,
                                         borderRadius: 999,
                                         whiteSpace: 'nowrap',
-                                        boxShadow: `0 16px 40px ${alpha(theme.palette.primary.main, 0.22)}`,
+                                        boxShadow: `0 16px 40px ${alpha(
+                                          theme.palette.primary.main,
+                                          0.22,
+                                        )}`,
                                       }}
                                     >
                                       Next
@@ -4556,7 +5163,9 @@ export default function SmartTaxChainPresentation() {
                                     >
                                       <Chip
                                         icon={<Verified sx={{ color: '#111111 !important' }} />}
-                                        label={`Active: ${s?.cards?.[challengeActive]?.title ?? ''}`}
+                                        label={`Active: ${
+                                          s?.cards?.[challengeActive]?.title ?? ''
+                                        }`}
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
@@ -4565,20 +5174,12 @@ export default function SmartTaxChainPresentation() {
                                         }}
                                       />
                                       <Chip
-                                        onClick={() => setChallengeActive((challengeActive + 1) % 3)}
-                                        label={`Next: ${s?.cards?.[(challengeActive + 1) % 3]?.title ?? ''}`}
-                                        size="small"
-                                        sx={{
-                                          fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
-                                          backgroundColor: alpha('#111111', 0.03),
-                                          border: `1px solid ${alpha('#111111', 0.12)}`,
-                                        }}
-                                      />
-                                      <Chip
-                                        onClick={() => setChallengeActive((challengeActive + 2) % 3)}
-                                        label={`Then: ${s?.cards?.[(challengeActive + 2) % 3]?.title ?? ''}`}
+                                        onClick={() =>
+                                          setChallengeActive((challengeActive + 1) % 3)
+                                        }
+                                        label={`Next: ${
+                                          s?.cards?.[(challengeActive + 1) % 3]?.title ?? ''
+                                        }`}
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
@@ -4589,7 +5190,12 @@ export default function SmartTaxChainPresentation() {
                                         }}
                                       />
                                       <Chip
-                                        label={`Progress: ${(challengeVisited || []).filter(Boolean).length}/3`}
+                                        onClick={() =>
+                                          setChallengeActive((challengeActive + 2) % 3)
+                                        }
+                                        label={`Then: ${
+                                          s?.cards?.[(challengeActive + 2) % 3]?.title ?? ''
+                                        }`}
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
@@ -4600,7 +5206,24 @@ export default function SmartTaxChainPresentation() {
                                         }}
                                       />
                                       <Chip
-                                        label={(challengeVisited || []).every(Boolean) ? 'Unlocked' : 'Locked'}
+                                        label={`Progress: ${
+                                          (challengeVisited || []).filter(Boolean).length
+                                        }/3`}
+                                        size="small"
+                                        sx={{
+                                          fontWeight: 950,
+                                          height: 28,
+                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          backgroundColor: alpha('#111111', 0.03),
+                                          border: `1px solid ${alpha('#111111', 0.12)}`,
+                                        }}
+                                      />
+                                      <Chip
+                                        label={
+                                          (challengeVisited || []).every(Boolean)
+                                            ? 'Unlocked'
+                                            : 'Locked'
+                                        }
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
@@ -4609,7 +5232,10 @@ export default function SmartTaxChainPresentation() {
                                           backgroundColor: (challengeVisited || []).every(Boolean)
                                             ? alpha('#fff200', 0.26)
                                             : alpha('#111111', 0.03),
-                                          border: `1px solid ${alpha('#111111', (challengeVisited || []).every(Boolean) ? 0.14 : 0.12)}`,
+                                          border: `1px solid ${alpha(
+                                            '#111111',
+                                            (challengeVisited || []).every(Boolean) ? 0.14 : 0.12,
+                                          )}`,
                                         }}
                                       />
                                     </Stack>
@@ -4693,10 +5319,10 @@ export default function SmartTaxChainPresentation() {
                                           ? 12
                                           : 6
                                         : s.cards.length === 1
-                                          ? 12
-                                          : s.cards.length === 2
-                                            ? 6
-                                            : 4
+                                        ? 12
+                                        : s.cards.length === 2
+                                        ? 6
+                                        : 4
                                     }
                                   >
                                     <Paper
@@ -4723,7 +5349,10 @@ export default function SmartTaxChainPresentation() {
                                                 theme.palette.primary.main,
                                                 0.18,
                                               ),
-                                              border: `1px solid ${alpha(theme.palette.primary.main, 0.35)}`,
+                                              border: `1px solid ${alpha(
+                                                theme.palette.primary.main,
+                                                0.35,
+                                              )}`,
                                             }}
                                           >
                                             {c.icon}
@@ -4816,7 +5445,10 @@ export default function SmartTaxChainPresentation() {
                                 p: 2.5,
                                 borderRadius: 4,
                                 border: `1px solid ${alpha('#111111', 0.08)}`,
-                                background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.22)} 0%, #ffffff 60%)`,
+                                background: `linear-gradient(135deg, ${alpha(
+                                  theme.palette.primary.main,
+                                  0.22,
+                                )} 0%, #ffffff 60%)`,
                               }}
                             >
                               <Stack spacing={0.5}>
