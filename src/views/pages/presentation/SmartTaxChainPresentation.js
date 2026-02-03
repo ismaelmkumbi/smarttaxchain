@@ -4647,7 +4647,7 @@ export default function SmartTaxChainPresentation() {
           return;
         }
 
-        // Keep users on Slide 3 in overview mode (prevents skipping the guided deep-dive).
+        // Keep users .... on Slide 3 in overview mode (prevents skipping the guided deep-dive).
         if (challengeStage === 'overview' && e.key === 'ArrowRight') {
           e.preventDefault();
           return;
