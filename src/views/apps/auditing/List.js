@@ -5,7 +5,7 @@ import { InvoiceProvider } from 'src/context/InvoiceContext/index';
 import { AuditProvider } from '../../../context/AuditContext/AuditContext';
 import BlankCard from 'src/components/shared/BlankCard';
 import { CardContent } from '@mui/material';
-import AuditingList from '../../../components/apps/Auditing/Invoice-list';
+import AuditingList from '../../../components/apps/auditing/Invoice-list';
 
 const BCrumb = [
   {
