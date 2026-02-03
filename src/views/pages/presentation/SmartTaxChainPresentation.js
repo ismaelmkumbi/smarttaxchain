@@ -672,6 +672,7 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
   const [panelOriginRect, setPanelOriginRect] = useState(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [panelPhase, setPanelPhase] = useState('from'); // 'from' | 'to'
+  const diagramDoubleTapRef = useRef({ time: 0 });
 
   useEffect(() => {
     // Keep in sync when (re)entering reveal mode.
@@ -4746,6 +4747,26 @@ export default function SmartTaxChainPresentation() {
           '.stc-slide .MuiChip-label': {
             fontSize: 'inherit',
           },
+          '.stc-diagram-wrap': {
+            position: 'relative',
+          },
+          '.stc-diagram-hint': {
+            display: 'none',
+          },
+          '@media (max-width: 600px)': {
+            '.stc-diagram-wrap': {
+              overflow: 'auto',
+              touchAction: 'pan-x pan-y',
+              WebkitOverflowScrolling: 'touch',
+            },
+            '.stc-diagram-wrap svg, .stc-diagram-wrap img': {
+              width: '100% !important',
+              height: 'auto !important',
+            },
+            '.stc-diagram-hint': {
+              display: 'block',
+            },
+          },
           '@media print': {
             '@page': { margin: '10mm', size: 'A4 landscape' },
             '#stc-topbar': { display: 'none !important' },
@@ -5469,9 +5490,47 @@ export default function SmartTaxChainPresentation() {
 
                       {s.diagram ? (
                         <Grid item xs={12} md={5}>
-                          {isValidElement(s.diagram) && s.title === 'Call to Action'
-                            ? cloneElement(s.diagram, { isSlideActive: idx === active })
-                            : s.diagram}
+                          <Box
+                            className="stc-diagram-wrap"
+                            onDoubleClick={(e) => {
+                              const el = e.currentTarget;
+                              if (el?.scrollTo) el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+                            }}
+                            onTouchEnd={(e) => {
+                              const el = e.currentTarget;
+                              const now = Date.now();
+                              if (now - diagramDoubleTapRef.current.time < 400 && el?.scrollTo) {
+                                el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+                                diagramDoubleTapRef.current.time = 0;
+                                return;
+                              }
+                              diagramDoubleTapRef.current.time = now;
+                            }}
+                          >
+                            <Box
+                              className="stc-diagram-inner"
+                              sx={{
+                                minWidth: { xs: 560, sm: '100%' },
+                                height: '100%',
+                              }}
+                            >
+                              {isValidElement(s.diagram) && s.title === 'Call to Action'
+                                ? cloneElement(s.diagram, { isSlideActive: idx === active })
+                                : s.diagram}
+                            </Box>
+                            <Typography
+                              className="stc-diagram-hint"
+                              variant="caption"
+                              sx={{
+                                mt: 1,
+                                color: alpha('#111111', 0.6),
+                                fontWeight: 800,
+                                textAlign: 'center',
+                              }}
+                            >
+                              Tip: pinch to zoom and drag to explore; double-tap to reset view
+                            </Typography>
+                          </Box>
                         </Grid>
                       ) : null}
                     </Grid>
@@ -5517,6 +5576,35 @@ export default function SmartTaxChainPresentation() {
               </Typography>
               <IconButton
                 size="small"
+                onClick={() => goTo(active + 1)}
+                disabled={active === slides.length - 1}
+              >
+                <KeyboardArrowRight />
+              </IconButton>
+            </Paper>
+            <Paper
+              elevation={0}
+              sx={{
+                pointerEvents: 'auto',
+                display: { xs: 'flex', md: 'none' },
+                alignItems: 'center',
+                gap: 1,
+                px: 1.5,
+                py: 0.9,
+                borderRadius: 999,
+                border: `1px solid ${alpha('#111111', 0.12)}`,
+                backgroundColor: alpha('#ffffff', 0.92),
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <IconButton size="medium" onClick={() => goTo(active - 1)} disabled={active === 0}>
+                <KeyboardArrowLeft />
+              </IconButton>
+              <Typography variant="caption" sx={{ fontWeight: 900, color: alpha('#111111', 0.75) }}>
+                {active + 1} / {slides.length}
+              </Typography>
+              <IconButton
+                size="medium"
                 onClick={() => goTo(active + 1)}
                 disabled={active === slides.length - 1}
               >
