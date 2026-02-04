@@ -25,6 +25,7 @@ import {
   Grid,
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   ArrowBack,
   ArrowForward,
@@ -185,8 +186,8 @@ const Bullet = ({ children }) => (
   </Stack>
 );
 
-const BulletItem = ({ icon, text }) => (
-  <Stack direction="row" spacing={1.25} alignItems="flex-start">
+const BulletItem = ({ icon, text, spacing = 1.25, iconBoxSx, textSx, textVariant = 'body1' }) => (
+  <Stack direction="row" spacing={spacing} alignItems="flex-start">
     <Box
       sx={{
         mt: '2px',
@@ -199,11 +200,15 @@ const BulletItem = ({ icon, text }) => (
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
+        ...(iconBoxSx || {}),
       }}
     >
       {icon}
     </Box>
-    <Typography variant="body1" sx={{ color: alpha('#111111', 0.8), lineHeight: 1.7 }}>
+    <Typography
+      variant={textVariant}
+      sx={{ color: alpha('#111111', 0.8), lineHeight: 1.7, ...(textSx || {}) }}
+    >
       {text}
     </Typography>
   </Stack>
@@ -672,7 +677,6 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
   const [panelOriginRect, setPanelOriginRect] = useState(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [panelPhase, setPanelPhase] = useState('from'); // 'from' | 'to'
-  const diagramDoubleTapRef = useRef({ time: 0 });
 
   useEffect(() => {
     // Keep in sync when (re)entering reveal mode.
@@ -853,8 +857,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
           tone === 'queue'
             ? 'none'
             : isActive
-            ? `0 18px 55px ${alpha(theme.palette.primary.main, 0.18)}`
-            : 'none',
+              ? `0 18px 55px ${alpha(theme.palette.primary.main, 0.18)}`
+              : 'none',
         transform: tone === 'queue' ? 'none' : isActive ? 'translateY(-2px)' : 'none',
         opacity: tone === 'queue' ? 0.58 : 1,
         filter: tone === 'queue' ? 'blur(1.15px)' : 'none',
@@ -1123,8 +1127,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                   ? displayItem.right.type === 'image'
                     ? 'minmax(0, 0.65fr) minmax(0, 1.35fr)'
                     : displayItem.right.type === 'node'
-                    ? 'minmax(0, 0.75fr) minmax(0, 1.25fr)'
-                    : 'minmax(0, 1.05fr) minmax(0, 0.95fr)'
+                      ? 'minmax(0, 0.75fr) minmax(0, 1.25fr)'
+                      : 'minmax(0, 1.05fr) minmax(0, 0.95fr)'
                   : 'minmax(0, 1fr)',
               }}
             >
@@ -1138,8 +1142,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                         ? 1.25
                         : 1.5
                       : isDense
-                      ? 1.5
-                      : 2,
+                        ? 1.5
+                        : 2,
                   borderRadius: 4,
                   border: `1px solid ${alpha('#111111', 0.08)}`,
                   background: `linear-gradient(135deg, ${alpha(
@@ -1288,8 +1292,8 @@ const ChallengeFocus = ({ cards, focus, activeIdx, onSelect, stage, setStage }) 
                           ? 1
                           : 1.25
                         : isDense
-                        ? 1.25
-                        : 1.5,
+                          ? 1.25
+                          : 1.5,
                     borderRadius: 4,
                     border: `1px solid ${alpha('#111111', 0.08)}`,
                     backgroundColor: '#ffffff',
@@ -1378,12 +1382,21 @@ const Pill = ({ icon, label }) => (
   <Chip
     icon={icon}
     label={label}
+    size="small"
     sx={{
       borderRadius: 999,
       backgroundColor: alpha('#fff200', 0.22),
       border: `1px solid ${alpha('#fff200', 0.6)}`,
       fontWeight: 900,
-      '& .MuiChip-icon': { color: '#111111' },
+      height: { xs: 26, sm: 28, md: 32 },
+      '& .MuiChip-label': {
+        fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8125rem' },
+        px: { xs: 0.75, sm: 1, md: 1.5 },
+      },
+      '& .MuiChip-icon': {
+        color: '#111111',
+        fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+      },
     }}
   />
 );
@@ -1800,7 +1813,7 @@ const PlatformMapArt = () => (
       <text x="424" y="70">
         SMART TAX CHAIN CORE
       </text>
-      <text x="780" y="70">
+      <text x="830" y="70">
         OUTPUTS
       </text>
     </g>
@@ -1811,8 +1824,8 @@ const PlatformMapArt = () => (
       <path d="M300 260 C360 260, 390 250, 420 240" />
       <path d="M300 370 C360 370, 395 335, 420 300" />
 
-      <path d="M660 240 C720 240, 760 200, 820 190" />
-      <path d="M660 260 C720 260, 760 270, 820 300" />
+      <path d="M660 240 C710 240, 740 200, 780 185" />
+      <path d="M660 260 C710 260, 740 270, 780 295" />
       <path d="M620 340 C705 370, 770 392, 860 402" />
     </g>
 
@@ -1938,21 +1951,13 @@ const PlatformMapArt = () => (
         strokeOpacity="0.12"
         strokeWidth="6"
       />
+
       <text
-        x="470"
-        y="158"
-        fontSize="16"
-        fontWeight="950"
-        fill="#111111"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-      >
-        Smart Tax Chain
-      </text>
-      <text
-        x="470"
-        y="182"
-        fontSize="13"
+        x="550"
+        y="148"
+        fontSize="12"
         fill="url(#stcPmInk)"
+        textAnchor="middle"
         fontFamily="ui-sans-serif, system-ui, -apple-system"
       >
         Evidence ledger + monitoring + audit
@@ -2022,15 +2027,15 @@ const PlatformMapArt = () => (
 
     {/* Outputs */}
     {[
-      { x: 820, y: 130, title: 'Real-time dashboard', sub: 'Leadership visibility' },
-      { x: 820, y: 240, title: 'Audit exports', sub: 'Defensible evidence' },
-      { x: 820, y: 350, title: 'Alerts & cases', sub: 'Faster recovery' },
+      { x: 780, y: 130, title: 'Real-time dashboard', sub: 'National visibility' },
+      { x: 780, y: 240, title: 'Audit exports', sub: 'Defensible evidence' },
+      { x: 780, y: 350, title: 'Alerts & cases', sub: 'Faster recovery' },
     ].map((n, i) => (
       <g key={n.title} filter="url(#stcPmShadow)">
         <rect
           x={n.x}
           y={n.y}
-          width="160"
+          width="200"
           height="92"
           rx="22"
           fill="#ffffff"
@@ -2038,18 +2043,18 @@ const PlatformMapArt = () => (
           strokeOpacity="0.12"
         />
         <rect
-          x={n.x + 18}
+          x={n.x + 14}
           y={n.y + 16}
-          width="44"
-          height="44"
-          rx="16"
+          width="40"
+          height="40"
+          rx="14"
           fill="url(#stcPmY)"
           opacity="0.22"
         />
         <text
-          x={n.x + 72}
-          y={n.y + 42}
-          fontSize="14"
+          x={n.x + 62}
+          y={n.y + 40}
+          fontSize="13"
           fontWeight="950"
           fill="#111111"
           fontFamily="ui-sans-serif, system-ui, -apple-system"
@@ -2057,9 +2062,9 @@ const PlatformMapArt = () => (
           {n.title}
         </text>
         <text
-          x={n.x + 72}
-          y={n.y + 64}
-          fontSize="12"
+          x={n.x + 62}
+          y={n.y + 58}
+          fontSize="11"
           fill="url(#stcPmInk)"
           fontFamily="ui-sans-serif, system-ui, -apple-system"
         >
@@ -2069,6 +2074,176 @@ const PlatformMapArt = () => (
     ))}
   </Box>
 );
+
+// Platform Map content with toggle between one-side and full-side views
+const PlatformMapSlideContent = ({ illustrationFull = false, onToggleIllustration }) => {
+  const handleToggle = onToggleIllustration || (() => {});
+
+  const toggleBtn = (
+    <Button
+      size="small"
+      variant="outlined"
+      onClick={handleToggle}
+      startIcon={illustrationFull ? <FullscreenExit /> : <Fullscreen />}
+      sx={{
+        textTransform: 'none',
+        fontWeight: 800,
+        borderColor: alpha('#111111', 0.2),
+        color: alpha('#111111', 0.8),
+        flexShrink: 0,
+        fontSize: { xs: '0.7rem', sm: '0.8rem' },
+      }}
+    >
+      {illustrationFull ? 'Split' : 'Full'}
+    </Button>
+  );
+
+  // Full diagram view
+  if (illustrationFull) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: 0,
+          maxHeight: '100%',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>{toggleBtn}</Box>
+        <Paper
+          elevation={0}
+          sx={{
+            flex: 1,
+            minHeight: 0,
+            maxHeight: '100%',
+            overflow: 'hidden',
+            borderRadius: 3,
+            border: `1px solid ${alpha('#111111', 0.08)}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 1,
+          }}
+        >
+          <PlatformMapArt />
+        </Paper>
+      </Box>
+    );
+  }
+
+  // Split view - diagram with side content
+  return (
+    <Grid
+      container
+      spacing={{ xs: 1.5, md: 2.5 }}
+      alignItems="stretch"
+      sx={{ height: '100%', minHeight: 0 }}
+    >
+      <Grid item xs={12} md={7.2} sx={{ minHeight: 0 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 1, sm: 1.5, md: 2 },
+            borderRadius: { xs: 2, md: 3 },
+            border: `1px solid ${alpha('#111111', 0.08)}`,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
+          <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>{toggleBtn}</Box>
+          <Stack spacing={0.5} sx={{ mb: 1, flexShrink: 0 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 950, fontSize: { xs: '0.9rem', sm: '1rem', md: '1.15rem' } }}
+            >
+              What Smart Tax Chain comes with
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: alpha('#111111', 0.6),
+                fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.875rem' },
+              }}
+            >
+              Inputs → evidence → real-time decisions
+            </Typography>
+          </Stack>
+          <Box
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              borderRadius: 2,
+              overflow: 'hidden',
+              border: `1px solid ${alpha('#111111', 0.06)}`,
+              backgroundColor: '#ffffff',
+            }}
+          >
+            <PlatformMapArt />
+          </Box>
+          <Stack
+            direction="row"
+            spacing={{ xs: 0.5, sm: 0.75, md: 1 }}
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ mt: 1, gap: { xs: 0.5, sm: 0.75 } }}
+          >
+            {[
+              'Dashboards',
+              'APIs & integration',
+              'Role-based access',
+              'Audit-ready exports',
+              'Alerts & cases',
+            ].map((t) => (
+              <Chip
+                key={t}
+                label={t}
+                size="small"
+                sx={{
+                  fontWeight: 950,
+                  borderRadius: 999,
+                  backgroundColor: alpha('#111111', 0.03),
+                  border: `1px solid ${alpha('#111111', 0.12)}`,
+                  height: { xs: 22, sm: 26 },
+                  '& .MuiChip-label': { fontSize: { xs: 10, sm: 11 }, px: { xs: 0.75, sm: 1 } },
+                }}
+              />
+            ))}
+          </Stack>
+        </Paper>
+      </Grid>
+
+      <Grid item xs={12} md={4.8} sx={{ minHeight: 0 }}>
+        <Stack spacing={{ xs: 1, sm: 1.5, md: 2 }} sx={{ height: '100%' }}>
+          <CapabilityShowCard
+            icon={<AccountTree />}
+            title="Decentralized and Immutable ledger"
+            desc="A decentralized ledger provides a shared, transparent record where every participant can verify transactions, ensuring trust. Its immutability makes records like EFD receipts tamper-proof — a bulletproof vault for taxpayer data."
+            tags={['Transparent', 'Tamper-proof', 'Verifiable']}
+          />
+          <CapabilityShowCard
+            icon={<Lock />}
+            title="Built-In Fraud Prevention & Traceability"
+            desc="Even under a cyberattack, taxpayer data remains untouched — immutability leaves no room for alteration. No authorized user can secretly change records — fraud stops before it starts."
+            tags={['Cyberattack-proof', 'Traceability', 'No secret changes']}
+          />
+          <CapabilityShowCard
+            icon={<Bolt />}
+            title="Real Time Auditing & Accountability"
+            desc="Enables real-time auditing, dramatically improving efficiency and trust across all stakeholders. Auditors gain immediate access to a complete, immutable, and pre-verified audit trail."
+            tags={['Real-time', 'Pre-verified', 'Complete trail']}
+          />
+        </Stack>
+      </Grid>
+    </Grid>
+  );
+};
 
 const CtaHeroArt = () => (
   <Box
@@ -2203,12 +2378,11 @@ const CtaHeroArt = () => (
   </Box>
 );
 
-const CtaEndAnimator = ({ playKey }) => {
+const CtaEndAnimator = ({ playKey, demoUrl }) => {
   const theme = useTheme();
   return (
     <Box
       key={playKey}
-      aria-hidden="true"
       sx={{
         position: 'absolute',
         inset: 0,
@@ -2231,19 +2405,29 @@ const CtaEndAnimator = ({ playKey }) => {
         },
         '@keyframes stcEndCardDrop': {
           '0%': {
-            transform: 'translate(-50%, -160%) rotate(-7deg) scale(0.92)',
+            transform: 'translate(-50%, 120%) rotate(5deg) scale(0.92)',
             opacity: 0,
           },
           '55%': {
-            transform: 'translate(-50%, 0%) rotate(-7deg) scale(1.04)',
+            transform: 'translate(-50%, -10px) rotate(-3deg) scale(1.02)',
             opacity: 1,
           },
           '72%': {
-            transform: 'translate(-50%, -10px) rotate(-7deg) scale(1.01)',
+            transform: 'translate(-50%, 5px) rotate(-4deg) scale(1.01)',
             opacity: 1,
           },
           '100%': {
-            transform: 'translate(-50%, 0%) rotate(-7deg) scale(1)',
+            transform: 'translate(-50%, 0) rotate(-4deg) scale(1)',
+            opacity: 1,
+          },
+        },
+        '@keyframes stcButtonAppear': {
+          '0%': {
+            transform: 'translateY(30px)',
+            opacity: 0,
+          },
+          '100%': {
+            transform: 'translateY(0)',
             opacity: 1,
           },
         },
@@ -2370,45 +2554,91 @@ const CtaEndAnimator = ({ playKey }) => {
         }}
       />
 
-      {/* Final “end” card drops to bottom (fun + clear ending) */}
-      <Paper
-        elevation={0}
+      {/* Final "end" card rises from bottom */}
+      <Box
         sx={{
           position: 'absolute',
           left: '50%',
-          // Keep above SlideFrame footer area
-          bottom: { xs: 92, md: 106 },
-          transform: 'translate(-50%, -160%) rotate(-7deg) scale(0.92)',
-          px: 3.1,
-          py: 2,
-          borderRadius: 4,
-          backgroundColor: alpha('#ffffff', 0.95),
-          border: `3px solid ${alpha('#111111', 0.34)}`,
-          boxShadow: `0 28px 80px ${alpha('#111111', 0.14)}`,
+          // Position at very bottom of slide
+          bottom: { xs: 8, md: 12 },
+          transform: 'translate(-50%, 120%) rotate(5deg) scale(0.92)',
           zIndex: 8,
           opacity: 0,
           animation: `stcEndCardDrop 720ms cubic-bezier(0.2, 0.9, 0.2, 1) 3.05s 1 both`,
           width: { xs: 'min(92vw, 560px)', md: 620 },
+          pointerEvents: 'auto',
         }}
       >
-        <Typography
-          variant="h4"
+        <Paper
+          elevation={0}
           sx={{
-            fontWeight: 1150,
-            letterSpacing: '0.18em',
-            textAlign: 'center',
-            lineHeight: 1,
+            px: 3.1,
+            py: 2,
+            borderRadius: 4,
+            backgroundColor: alpha('#ffffff', 0.95),
+            border: `3px solid ${alpha('#111111', 0.34)}`,
+            boxShadow: `0 28px 80px ${alpha('#111111', 0.14)}`,
           }}
         >
-          THE END
-        </Typography>
-        <Typography
-          variant="subtitle2"
-          sx={{ color: alpha('#111111', 0.72), fontWeight: 950, textAlign: 'center', mt: 0.6 }}
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 1150,
+              letterSpacing: '0.18em',
+              textAlign: 'center',
+              lineHeight: 1,
+            }}
+          >
+            THE END
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            sx={{ color: alpha('#111111', 0.72), fontWeight: 950, textAlign: 'center', mt: 0.6 }}
+          >
+            Thank you for your attention
+          </Typography>
+        </Paper>
+
+        {/* Small button appears after card settles */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 1.5,
+            opacity: 0,
+            animation: `stcButtonAppear 400ms ease-out 3.8s 1 both`,
+          }}
         >
-          Thank you • Now open the live demo
-        </Typography>
-      </Paper>
+          <Button
+            component="a"
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="contained"
+            size="small"
+            startIcon={<ArrowForward sx={{ fontSize: 16 }} />}
+            sx={{
+              textTransform: 'none',
+              fontWeight: 800,
+              borderRadius: 2.5,
+              px: 2.5,
+              py: 0.9,
+              fontSize: '0.85rem',
+              backgroundColor: '#fff200',
+              color: '#111111',
+              boxShadow: `0 8px 24px ${alpha('#111111', 0.15)}`,
+              transform: 'rotate(4deg)',
+              '&:hover': {
+                backgroundColor: '#e6d700',
+                transform: 'rotate(4deg) scale(1.05)',
+              },
+              transition: 'transform 0.2s ease, background-color 0.2s ease',
+            }}
+          >
+            Let's See Smart Tax Chain in Action
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 };
@@ -2608,16 +2838,23 @@ const CtaBenefitCard = ({ icon, title, desc }) => (
 const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
   const theme = useTheme();
   const [playKey, setPlayKey] = useState(0);
+  const [showEndCard, setShowEndCard] = useState(false);
   const wasActiveRef = useRef(false);
 
   useEffect(() => {
-    if (isSlideActive && !wasActiveRef.current) setPlayKey((k) => k + 1);
+    if (isSlideActive && !wasActiveRef.current) {
+      setPlayKey((k) => k + 1);
+      setShowEndCard(false);
+      // Show end card after animation delay (3.05s)
+      const timer = setTimeout(() => setShowEndCard(true), 3000);
+      return () => clearTimeout(timer);
+    }
     wasActiveRef.current = isSlideActive;
   }, [isSlideActive]);
 
   return (
     <Box sx={{ position: 'relative', height: '100%' }}>
-      {isSlideActive ? <CtaEndAnimator playKey={playKey} /> : null}
+      {isSlideActive ? <CtaEndAnimator playKey={playKey} demoUrl={demoUrl} /> : null}
 
       <Stack
         spacing={2.25}
@@ -2741,31 +2978,15 @@ const CallToActionSlide = ({ demoUrl, isSlideActive = false }) => {
               />
             </Box>
 
-            <Button
-              component="a"
-              href={demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="contained"
-              startIcon={<ArrowForward />}
+            {/* Button fades out when END card appears */}
+            <Box
               sx={{
-                mt: 1.25,
-                textTransform: 'none',
-                fontWeight: 1000,
-                borderRadius: 3,
-                px: 4,
-                py: 1.35,
-                minWidth: { xs: 'min(92vw, 520px)', md: 520 },
-                backgroundColor: '#fff200',
-                color: '#111111',
-                boxShadow: `0 18px 60px ${alpha('#111111', 0.12)}`,
-                '&:hover': {
-                  backgroundColor: '#e6d700',
-                },
+                opacity: showEndCard ? 0 : 1,
+                transform: showEndCard ? 'translateY(20px) scale(0.95)' : 'translateY(0) scale(1)',
+                transition: 'opacity 0.4s ease, transform 0.4s ease',
+                pointerEvents: showEndCard ? 'none' : 'auto',
               }}
-            >
-              Let’s See Smart Tax Chain in Action
-            </Button>
+            ></Box>
           </Stack>
         </Box>
       </Stack>
@@ -2779,14 +3000,14 @@ const FlowNode = ({ title, subtitle, tone = 'neutral' }) => {
     tone === 'primary'
       ? alpha(theme.palette.primary.main, 0.2)
       : tone === 'danger'
-      ? alpha(theme.palette.error.main, 0.12)
-      : alpha('#111111', 0.04);
+        ? alpha(theme.palette.error.main, 0.12)
+        : alpha('#111111', 0.04);
   const border =
     tone === 'primary'
       ? alpha(theme.palette.primary.main, 0.45)
       : tone === 'danger'
-      ? alpha(theme.palette.error.main, 0.25)
-      : alpha('#111111', 0.12);
+        ? alpha(theme.palette.error.main, 0.25)
+        : alpha('#111111', 0.12);
 
   return (
     <Paper
@@ -2816,506 +3037,389 @@ const FlowArrow = () => (
   <Box sx={{ px: 1.25, color: alpha('#111111', 0.35), fontWeight: 900, fontSize: 22 }}>→</Box>
 );
 
-const RootCauseSystemArt = () => (
+// Clean, professional SVG illustration - all text fits inside blocks, no overflow
+const RootCauseSystemArt = ({ fullView = false }) => (
   <Box
     component="svg"
-    viewBox="0 0 1000 520"
+    viewBox="0 0 960 430"
     aria-hidden="true"
-    sx={{ width: '100%', height: 'auto', display: 'block' }}
+    preserveAspectRatio="xMidYMid meet"
+    sx={{
+      width: fullView ? 'auto' : '100%',
+      height: fullView ? '100%' : 'auto',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      display: 'block',
+      flexShrink: 0,
+    }}
   >
     <defs>
-      <linearGradient id="stcRcBg" x1="0" y1="0" x2="1" y2="1">
+      <linearGradient id="rcBg" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0" stopColor="#ffffff" />
-        <stop offset="0.42" stopColor="#fffde7" />
+        <stop offset="0.5" stopColor="#fffde7" />
         <stop offset="1" stopColor="#ffffff" />
       </linearGradient>
-      <linearGradient id="stcRcY" x1="0" y1="0" x2="1" y2="0">
+      <linearGradient id="rcY" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#fff200" />
         <stop offset="1" stopColor="#e6d700" />
       </linearGradient>
-      <linearGradient id="stcRcInk" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stopColor="#111111" stopOpacity="0.92" />
-        <stop offset="1" stopColor="#111111" stopOpacity="0.58" />
+      <linearGradient id="rcDanger" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#fff200" />
+        <stop offset="1" stopColor="#e6d700" />
       </linearGradient>
-      <filter id="stcRcShadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
-        <feOffset dx="0" dy="10" result="o" />
-        <feComponentTransfer>
-          <feFuncA type="linear" slope="0.16" />
-        </feComponentTransfer>
-        <feMerge>
-          <feMergeNode />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
+      <filter id="rcSh" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#000" floodOpacity="0.1" />
       </filter>
     </defs>
 
-    <rect x="0" y="0" width="1000" height="520" rx="30" fill="url(#stcRcBg)" />
+    {/* Background */}
+    <rect x="0" y="0" width="960" height="430" rx="24" fill="url(#rcBg)" />
 
-    {/* subtle grid */}
-    <g opacity="0.55">
-      {[...Array(10)].map((_, i) => (
-        <path
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
-          d={`M${90 + i * 90} 40 V480`}
-          stroke="#111111"
-          strokeOpacity="0.04"
-          strokeWidth="2"
-        />
-      ))}
-    </g>
-
-    {/* Left inputs */}
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="70"
-        y="80"
-        width="220"
-        height="120"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.12"
-      />
-      <circle cx="120" cy="140" r="26" fill="#fff200" opacity="0.24" />
-      <path
-        d="M110 128 h20 v34 l-4-3 -4 3 -4-3 -4 3 -4-3 -4 3 z"
-        fill="none"
-        stroke="#111111"
-        strokeOpacity="0.75"
-        strokeWidth="3.5"
-        strokeLinejoin="round"
-      />
-      <text
-        x="160"
-        y="132"
-        fontSize="18"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        EFD / POS events
-      </text>
-      <text
-        x="160"
-        y="156"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Receipts + transactions
-      </text>
-    </g>
-
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="70"
-        y="230"
-        width="220"
-        height="120"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.12"
-      />
-      <circle cx="120" cy="290" r="26" fill="#fff200" opacity="0.24" />
-      <path
-        d="M110 278 h22 a6 6 0 0 1 6 6 v24 a6 6 0 0 1-6 6 h-22 a6 6 0 0 1-6-6 v-24 a6 6 0 0 1 6-6 z"
-        fill="none"
-        stroke="#111111"
-        strokeOpacity="0.75"
-        strokeWidth="3.5"
-      />
-      <path
-        d="M112 290 h20"
-        stroke="#111111"
-        strokeOpacity="0.55"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M112 300 h16"
-        stroke="#111111"
-        strokeOpacity="0.45"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-      <text
-        x="160"
-        y="282"
-        fontSize="18"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        Declarations
-      </text>
-      <text
-        x="160"
-        y="306"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Returns + filings
-      </text>
-    </g>
-
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="70"
-        y="380"
-        width="220"
-        height="90"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.12"
-      />
-      <circle cx="120" cy="425" r="26" fill="#fff200" opacity="0.24" />
-      <path
-        d="M110 420 h28"
-        fill="none"
-        stroke="#111111"
-        strokeOpacity="0.75"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M112 432 h24"
-        fill="none"
-        stroke="#111111"
-        strokeOpacity="0.55"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-      <text
-        x="160"
-        y="420"
-        fontSize="18"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        Other sources
-      </text>
-      <text
-        x="160"
-        y="444"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Payments, adjustments
-      </text>
-    </g>
-
-    {/* Arrows to core */}
-    <g fill="none" stroke="#111111" strokeOpacity="0.22" strokeWidth="4" strokeLinecap="round">
-      <path d="M300 140 H360" />
-      <path d="M300 290 H360" />
-      <path d="M300 425 H360" />
-      <path d="M350 130 l20 10 l-20 10" />
-      <path d="M350 280 l20 10 l-20 10" />
-      <path d="M350 415 l20 10 l-20 10" />
-    </g>
-
-    {/* Core system */}
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="370"
-        y="120"
-        width="340"
-        height="260"
-        rx="28"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.14"
-        strokeWidth="2.5"
-      />
-      <rect x="392" y="145" width="296" height="42" rx="21" fill="url(#stcRcY)" opacity="0.28" />
-      <text
-        x="410"
-        y="173"
-        fontSize="18"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="950"
-        fill="#111111"
-      >
-        CORE TAX SYSTEM (TODAY)
-      </text>
-      <text
-        x="410"
-        y="206"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Records stored in a mutable database
-      </text>
-
-      {/* database icon */}
-      <g
-        transform="translate(410 228)"
-        fill="none"
-        stroke="#111111"
-        strokeOpacity="0.75"
-        strokeWidth="4"
-        strokeLinejoin="round"
-      >
-        <ellipse cx="52" cy="16" rx="48" ry="16" />
-        <path d="M4 16 v66 c0 10 21.5 20 48 20 s48-10 48-20 V16" />
-        <path d="M4 48 c0 10 21.5 20 48 20 s48-10 48-20" opacity="0.65" />
-        <path d="M4 72 c0 10 21.5 20 48 20 s48-10 48-20" opacity="0.45" />
-      </g>
-
-      {/* silent edit tag */}
-      <g transform="translate(560 238)">
-        <rect x="0" y="0" width="128" height="34" rx="17" fill="#111111" opacity="0.92" />
-        <text
-          x="18"
-          y="23"
-          fontSize="13"
-          fontFamily="ui-sans-serif, system-ui, -apple-system"
-          fontWeight="900"
-          fill="#fff200"
-        >
-          EDIT AFTER SAVE
-        </text>
-        <animate attributeName="opacity" values="0.85;1;0.85" dur="1.9s" repeatCount="indefinite" />
-      </g>
-
-      {/* broken evidence callout */}
-      <g transform="translate(520 292)">
-        <rect
-          x="0"
-          y="0"
-          width="168"
-          height="70"
-          rx="18"
-          fill="#fffde7"
-          stroke="#111111"
-          strokeOpacity="0.12"
-        />
-        <text
-          x="18"
-          y="28"
-          fontSize="13"
-          fontFamily="ui-sans-serif, system-ui, -apple-system"
-          fontWeight="900"
-          fill="#111111"
-        >
-          Evidence is weak
-        </text>
-        <text
-          x="18"
-          y="50"
-          fontSize="12"
-          fontFamily="ui-sans-serif, system-ui, -apple-system"
-          fill="url(#stcRcInk)"
-        >
-          Hard to prove who/when changed
-        </text>
-        {/* broken chain icon */}
-        <g
-          transform="translate(128 14)"
-          fill="none"
-          stroke="#111111"
-          strokeOpacity="0.55"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        >
-          <path d="M8 24 a10 10 0 0 1 0-14 l6-6 a10 10 0 0 1 14 0" />
-          <path d="M32 28 a10 10 0 0 1 0 14 l-6 6 a10 10 0 0 1-14 0" />
-          <path d="M18 20 l8-8" />
-          <path d="M16 22 l-8 8" />
-        </g>
-      </g>
-    </g>
-
-    {/* Right: manual verification + late audit */}
-    <g fill="none" stroke="#111111" strokeOpacity="0.22" strokeWidth="4" strokeLinecap="round">
-      <path d="M710 250 H800" />
-      <path d="M790 240 l20 10 l-20 10" />
-    </g>
-
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="810"
-        y="140"
-        width="160"
-        height="120"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.12"
-      />
-      <rect x="828" y="160" width="124" height="28" rx="14" fill="#111111" opacity="0.92" />
-      <text
-        x="842"
-        y="179"
-        fontSize="12.5"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#fff200"
-      >
-        MANUAL CHECKS
-      </text>
-      <text
-        x="828"
-        y="212"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        Verification
-      </text>
-      <text
-        x="828"
-        y="236"
-        fontSize="12"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Cross-checking + rework
-      </text>
-    </g>
-
-    <g filter="url(#stcRcShadow)">
-      <rect
-        x="810"
-        y="280"
-        width="160"
-        height="150"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
-        strokeOpacity="0.12"
-      />
-      <rect x="828" y="300" width="124" height="28" rx="14" fill="url(#stcRcY)" opacity="0.32" />
-      <text
-        x="840"
-        y="319"
-        fontSize="12.5"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        LATE AUDIT
-      </text>
-      <text
-        x="828"
-        y="352"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#111111"
-      >
-        Discovery window
-      </text>
-      <text
-        x="828"
-        y="376"
-        fontSize="12"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Often 30–180 days
-      </text>
-      <text
-        x="828"
-        y="404"
-        fontSize="12"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fill="url(#stcRcInk)"
-      >
-        Disputes + delayed recovery
-      </text>
-    </g>
-
-    {/* bottom timeline */}
-    <g>
-      <rect x="70" y="30" width="330" height="38" rx="19" fill="#111111" opacity="0.88" />
-      <text
-        x="92"
-        y="55"
-        fontSize="14"
-        fontFamily="ui-sans-serif, system-ui, -apple-system"
-        fontWeight="900"
-        fill="#fff200"
-      >
+    {/* Top banner - CORE PROBLEM (same style as MANUAL CHECKS) */}
+    <g transform="translate(20 -5)">
+      <rect x="0" y="0" width="420" height="30" rx="15" fill="#111" opacity="0.9" />
+      <text x="20" y="20" fontSize="13" fontWeight="950" fill="#fff200" fontFamily="system-ui">
         CORE PROBLEM: MUTABLE RECORDS + DELAYED VISIBILITY
       </text>
     </g>
 
-    <g>
+    {/* LEFT COLUMN: Input sources */}
+    <g filter="url(#rcSh)">
       <rect
-        x="370"
-        y="415"
-        width="600"
-        height="64"
-        rx="22"
-        fill="#ffffff"
-        stroke="#111111"
+        x="20"
+        y="30"
+        width="180"
+        height="90"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
+      />
+      <circle cx="60" cy="75" r="20" fill="#fff200" opacity="0.25" />
+      <g
+        transform="translate(47 61)"
+        fill="none"
+        stroke="#111"
+        strokeOpacity="0.75"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      >
+        <path d="M6 0 h14 v24 l-3-2 -3 2 -3-2 -3 2 -3-2 -3 2 z" />
+        <path d="M9 8 h8" strokeOpacity="0.45" strokeLinecap="round" />
+        <path d="M9 13 h10" strokeOpacity="0.35" strokeLinecap="round" />
+      </g>
+      <text x="90" y="65" fontSize="14" fontWeight="900" fill="#111" fontFamily="system-ui">
+        EFD / POS events
+      </text>
+      <text x="90" y="85" fontSize="11" fill="#111" opacity="0.6" fontFamily="system-ui">
+        Receipts + transactions
+      </text>
+    </g>
+
+    <g filter="url(#rcSh)">
+      <rect
+        x="20"
+        y="135"
+        width="180"
+        height="90"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
+      />
+      <circle cx="60" cy="180" r="20" fill="#fff200" opacity="0.25" />
+      <g
+        transform="translate(46 167)"
+        fill="none"
+        stroke="#111"
+        strokeOpacity="0.75"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      >
+        <path d="M6 2 h15 a4 4 0 0 1 4 4 v16 a4 4 0 0 1-4 4 h-15 a4 4 0 0 1-4-4 v-16 a4 4 0 0 1 4-4 z" />
+        <path d="M7 10 h14" strokeOpacity="0.45" strokeLinecap="round" />
+        <path d="M7 15 h11" strokeOpacity="0.35" strokeLinecap="round" />
+      </g>
+      <text x="90" y="170" fontSize="14" fontWeight="900" fill="#111" fontFamily="system-ui">
+        Declarations
+      </text>
+      <text x="90" y="190" fontSize="11" fill="#111" opacity="0.6" fontFamily="system-ui">
+        Returns + filings
+      </text>
+    </g>
+
+    <g filter="url(#rcSh)">
+      <rect
+        x="20"
+        y="240"
+        width="180"
+        height="90"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
+      />
+      <circle cx="60" cy="285" r="20" fill="#fff200" opacity="0.25" />
+      <g
+        transform="translate(46 273)"
+        fill="none"
+        stroke="#111"
+        strokeOpacity="0.75"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      >
+        <path d="M4 8 h22" />
+        <path d="M6 16 h18" strokeOpacity="0.55" />
+      </g>
+      <text x="90" y="275" fontSize="14" fontWeight="900" fill="#111" fontFamily="system-ui">
+        Other sources
+      </text>
+      <text x="90" y="295" fontSize="11" fill="#111" opacity="0.6" fontFamily="system-ui">
+        Payments / Adjustments
+      </text>
+    </g>
+
+    {/* Arrows: inputs → core */}
+    <g stroke="#111" strokeOpacity="0.25" strokeWidth="3" fill="none">
+      <path d="M200 75 L250 75 L250 200 L290 200" />
+      <path d="M200 180 L250 180 L250 200 L290 200" />
+      <path d="M200 285 L250 285 L250 200 L290 200" />
+      <polygon points="290,195 305,200 290,205" fill="#111" fillOpacity="0.25" />
+    </g>
+
+    {/* CENTER: Core system */}
+    <g filter="url(#rcSh)">
+      <rect
+        x="305"
+        y="60"
+        width="300"
+        height="200"
+        rx="20"
+        fill="#fff"
+        stroke="#111"
         strokeOpacity="0.12"
+        strokeWidth="2"
+      />
+      {/* Dotted red border to highlight issue area */}
+      <rect
+        x="305"
+        y="60"
+        width="300"
+        height="200"
+        rx="20"
+        fill="none"
+        stroke="#f28b82"
+        strokeOpacity="0.85"
+        strokeWidth="2"
+        strokeDasharray="6 4"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
+
+      {/* Header with cream background */}
+      <rect
+        x="330"
+        y="80"
+        width="250"
+        height="42"
+        rx="12"
+        fill="#fffde7"
+        stroke="#e6d700"
+        strokeWidth="1"
+      />
+      <text
+        x="455"
+        y="100"
+        fontSize="14"
+        fontWeight="900"
+        fill="#111"
+        textAnchor="middle"
+        fontFamily="system-ui"
+      >
+        CORE TAX SYSTEM (TODAY)
+      </text>
+      <text
+        x="455"
+        y="116"
+        fontSize="10"
+        fill="#111"
+        opacity="0.55"
+        textAnchor="middle"
+        fontFamily="system-ui"
+      >
+        Records stored in a mutable database
+      </text>
+
+      {/* Database icon - danger color */}
+      <g
+        transform="translate(345 130)"
+        stroke="#e53935"
+        strokeOpacity="0.85"
+        strokeWidth="3"
+        fill="none"
+      >
+        <ellipse cx="35" cy="10" rx="32" ry="10" />
+        <path d="M3 10 v50 c0 6 14 12 32 12 s32-6 32-12 V10" />
+        <path d="M3 32 c0 6 14 12 32 12 s32-6 32-12" opacity="0.6" />
+      </g>
+
+      {/* Edit tag - dark charcoal */}
+      <g transform="translate(460 135)">
+        <rect x="0" y="0" width="110" height="28" rx="14" fill="#4a4a4a" />
+        <text x="14" y="19" fontSize="11" fontWeight="900" fill="#ffffff" fontFamily="system-ui">
+          EDIT AFTER SAVE
+        </text>
+        <animate attributeName="opacity" values="0.85;1;0.85" dur="1.5s" repeatCount="indefinite" />
+      </g>
+
+      {/* Evidence callout */}
+      <g transform="translate(440 175)">
+        <rect
+          x="0"
+          y="0"
+          width="175"
+          height="55"
+          rx="12"
+          fill="#fffde7"
+          stroke="#e6d700"
+          strokeOpacity="0.35"
+          strokeWidth="1.5"
+        />
+        <text x="14" y="22" fontSize="11" fontWeight="900" fill="#111" fontFamily="system-ui">
+          Evidence is weak
+        </text>
+        <text x="14" y="40" fontSize="9" fill="#111" opacity="0.6" fontFamily="system-ui">
+          Hard to prove who/when changed
+        </text>
+      </g>
+    </g>
+
+    {/* Arrow: core → outcomes */}
+    <g stroke="#111" strokeOpacity="0.25" strokeWidth="3" fill="none">
+      <path d="M605 160 L650 160" />
+      <polygon points="650,155 665,160 650,165" fill="#111" fillOpacity="0.25" />
+    </g>
+
+    {/* RIGHT COLUMN: Outcomes */}
+    <g filter="url(#rcSh)">
+      <rect
+        x="680"
+        y="60"
+        width="260"
+        height="100"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
+      />
+      <rect x="700" y="78" width="110" height="24" rx="12" fill="#111" opacity="0.9" />
+      <text x="712" y="95" fontSize="10" fontWeight="900" fill="#fff200" fontFamily="system-ui">
+        MANUAL CHECKS
+      </text>
+      <text x="700" y="125" fontSize="12" fontWeight="900" fill="#111" fontFamily="system-ui">
+        Verification
+      </text>
+      <text x="700" y="145" fontSize="10" fill="#111" opacity="0.6" fontFamily="system-ui">
+        Cross-check + rework
+      </text>
+    </g>
+
+    {/* Arrow down */}
+    <g stroke="#111" strokeOpacity="0.25" strokeWidth="3" fill="none">
+      <path d="M810 160 L810 190" />
+      <polygon points="805,190 810,205 815,190" fill="#111" fillOpacity="0.25" />
+    </g>
+
+    <g filter="url(#rcSh)">
+      <rect
+        x="680"
+        y="210"
+        width="260"
+        height="120"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
+      />
+      <rect
+        x="700"
+        y="228"
+        width="90"
+        height="24"
+        rx="12"
+        fill="#fffde7"
+        stroke="#e6d700"
+        strokeWidth="1"
+      />
+      <text x="714" y="245" fontSize="10" fontWeight="900" fill="#111" fontFamily="system-ui">
+        LATE AUDIT
+      </text>
+      <text x="700" y="275" fontSize="12" fontWeight="900" fill="#111" fontFamily="system-ui">
+        Discovery window
+      </text>
+      <text x="700" y="295" fontSize="10" fill="#111" opacity="0.6" fontFamily="system-ui">
+        30–180 days
+      </text>
+      <text x="700" y="315" fontSize="10" fill="#111" opacity="0.6" fontFamily="system-ui">
+        Disputes + late recovery
+      </text>
+    </g>
+
+    {/* Bottom timeline */}
+    <g filter="url(#rcSh)">
+      <rect
+        x="20"
+        y="355"
+        width="920"
+        height="60"
+        rx="16"
+        fill="#fff"
+        stroke="#111"
+        strokeOpacity="0.1"
       />
       <path
-        d="M410 448 H930"
-        stroke="#111111"
-        strokeOpacity="0.2"
-        strokeWidth="4"
+        d="M80 385 H880"
+        stroke="#111"
+        strokeOpacity="0.15"
+        strokeWidth="6"
         strokeLinecap="round"
       />
 
       {[
-        { x: 430, label: 'Day 0', sub: 'Saved' },
-        { x: 620, label: 'Day 1', sub: 'Silent edit' },
-        { x: 860, label: 'Day 30–180', sub: 'Audit finds late' },
-      ].map((m, i) => (
+        { x: 120, label: 'Day 0', sub: 'Saved', danger: false },
+        { x: 480, label: 'Day 1', sub: 'Silent edit', danger: true },
+        { x: 820, label: 'Day 30+', sub: 'Audit late', danger: true },
+      ].map((m) => (
         <g key={m.label}>
           <circle
             cx={m.x}
-            cy="448"
-            r="10"
+            cy="385"
+            r="8"
             fill="#fff200"
-            stroke="#111111"
-            strokeOpacity="0.12"
-            strokeWidth="3"
+            stroke="#111"
+            strokeOpacity={0.15}
+            strokeWidth="2"
           />
-          <circle cx={m.x} cy="448" r="10" fill="#fff200" opacity="0.35">
-            <animate
-              attributeName="r"
-              values="10;18"
-              dur="2.8s"
-              begin={`${i * 0.25}s`}
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.35;0"
-              dur="2.8s"
-              begin={`${i * 0.25}s`}
-              repeatCount="indefinite"
-            />
-          </circle>
           <text
-            x={m.x - 26}
-            y="438"
-            fontSize="12"
-            fontFamily="ui-sans-serif, system-ui, -apple-system"
+            x={m.x}
+            y="377"
+            fontSize="10"
             fontWeight="900"
-            fill="#111111"
+            fill="#111"
+            textAnchor="middle"
+            fontFamily="system-ui"
           >
             {m.label}
           </text>
           <text
-            x={m.x - 26}
-            y="466"
-            fontSize="12"
-            fontFamily="ui-sans-serif, system-ui, -apple-system"
-            fill="url(#stcRcInk)"
+            x={m.x}
+            y="405"
+            fontSize="9"
+            fill="#111"
+            opacity={0.6}
+            fontWeight={400}
+            textAnchor="middle"
+            fontFamily="system-ui"
           >
             {m.sub}
           </text>
@@ -3324,6 +3428,221 @@ const RootCauseSystemArt = () => (
     </g>
   </Box>
 );
+
+// Slide 2 content with toggle between one-side and full-side views
+const RootCauseSlideContent = ({ illustrationFull = false, onToggleIllustration }) => {
+  const handleToggle = onToggleIllustration || (() => {});
+
+  const toggleBtn = (
+    <Button
+      size="small"
+      variant="outlined"
+      onClick={handleToggle}
+      startIcon={illustrationFull ? <FullscreenExit /> : <Fullscreen />}
+      sx={{
+        textTransform: 'none',
+        fontWeight: 800,
+        borderColor: alpha('#111111', 0.2),
+        color: alpha('#111111', 0.8),
+        flexShrink: 0,
+      }}
+    >
+      {illustrationFull ? '' : ''}
+    </Button>
+  );
+
+  // Full diagram view - illustration fills the content area (constrained to not overflow header/footer)
+  if (illustrationFull) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: 0,
+          maxHeight: '100%',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        {/* Toggle button overlay */}
+        <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>{toggleBtn}</Box>
+        <Paper
+          elevation={0}
+          sx={{
+            flex: 1,
+            minHeight: 0,
+            maxHeight: '100%',
+            overflow: 'hidden',
+            borderRadius: 3,
+            border: `1px solid ${alpha('#111111', 0.08)}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            p: 1,
+          }}
+        >
+          <RootCauseSystemArt fullView />
+        </Paper>
+      </Box>
+    );
+  }
+
+  // Split view - text on left, illustration on right
+  return (
+    <Grid container spacing={{ xs: 1, sm: 1.5, md: 2 }} sx={{ height: '100%', minHeight: 0 }}>
+      <Grid item xs={12} md={4}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 1.25, sm: 1.5, md: 2 },
+            borderRadius: { xs: 2, md: 3 },
+            border: `1px solid ${alpha('#111111', 0.08)}`,
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+            overflow: 'hidden',
+          }}
+        >
+          <Box sx={{ mb: { xs: 1, md: 2 }, flexShrink: 0 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 950, fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.25rem' } }}
+            >
+              Pain today (root cause)
+            </Typography>
+            <Stack direction="row" spacing={0.75} alignItems="center" sx={{ mt: 0.5 }}>
+              <Box
+                sx={{
+                  width: { xs: 8, md: 10 },
+                  height: { xs: 8, md: 10 },
+                  borderRadius: 999,
+                  backgroundColor: '#fff200',
+                  boxShadow: `0 0 0 4px ${alpha('#e6d700', 0.25)}`,
+                  flexShrink: 0,
+                }}
+              />
+              <Typography
+                variant="overline"
+                sx={{
+                  fontWeight: 950,
+                  letterSpacing: '0.08em',
+                  color: alpha('#111111', 0.62),
+                  lineHeight: 1,
+                  fontSize: { xs: '0.55rem', sm: '0.65rem', md: '0.75rem' },
+                }}
+              >
+                Mutable records + late visibility → weak evidence
+              </Typography>
+            </Stack>
+          </Box>
+
+          <Stack spacing={{ xs: 1, sm: 1.5, md: 2.2 }} sx={{ flex: 1, minHeight: 0 }}>
+            <BulletItem
+              spacing={0.75}
+              icon={<EditNote sx={{ color: '#111111', fontSize: { xs: 16, sm: 18, md: 20 } }} />}
+              iconBoxSx={{
+                width: { xs: 24, sm: 28, md: 30 },
+                height: { xs: 24, sm: 28, md: 30 },
+                borderRadius: 2,
+              }}
+              textSx={{
+                fontSize: { xs: 11, sm: 12, md: 13.5 },
+                lineHeight: 1.45,
+                color: alpha('#111111', 0.8),
+              }}
+              text="Silent edits after submission are possible"
+            />
+            <BulletItem
+              spacing={0.75}
+              icon={<Lock sx={{ color: '#111111', fontSize: { xs: 16, sm: 18, md: 20 } }} />}
+              iconBoxSx={{
+                width: { xs: 24, sm: 28, md: 30 },
+                height: { xs: 24, sm: 28, md: 30 },
+                borderRadius: 2,
+              }}
+              textSx={{
+                fontSize: { xs: 11, sm: 12, md: 13.5 },
+                lineHeight: 1.45,
+                color: alpha('#111111', 0.8),
+              }}
+              text="Proof is weak (who/when/what is hard to prove)"
+            />
+            <BulletItem
+              spacing={0.75}
+              icon={
+                <VisibilityOff sx={{ color: '#111111', fontSize: { xs: 16, sm: 18, md: 20 } }} />
+              }
+              iconBoxSx={{
+                width: { xs: 24, sm: 28, md: 30 },
+                height: { xs: 24, sm: 28, md: 30 },
+                borderRadius: 2,
+              }}
+              textSx={{
+                fontSize: { xs: 11, sm: 12, md: 13.5 },
+                lineHeight: 1.45,
+                color: alpha('#111111', 0.8),
+              }}
+              text="Detection is late — often 30–180 days"
+            />
+            <BulletItem
+              spacing={0.75}
+              icon={<FactCheck sx={{ color: '#111111', fontSize: { xs: 16, sm: 18, md: 20 } }} />}
+              iconBoxSx={{
+                width: { xs: 24, sm: 28, md: 30 },
+                height: { xs: 24, sm: 28, md: 30 },
+                borderRadius: 2,
+              }}
+              textSx={{
+                fontSize: { xs: 11, sm: 12, md: 13.5 },
+                lineHeight: 1.45,
+                color: alpha('#111111', 0.8),
+              }}
+              text="Cases become manual cross-check + rework"
+            />
+            <BulletItem
+              spacing={0.75}
+              icon={<Timer sx={{ color: '#111111', fontSize: { xs: 16, sm: 18, md: 20 } }} />}
+              iconBoxSx={{
+                width: { xs: 24, sm: 28, md: 30 },
+                height: { xs: 24, sm: 28, md: 30 },
+                borderRadius: 2,
+              }}
+              textSx={{
+                fontSize: { xs: 11, sm: 12, md: 13.5 },
+                lineHeight: 1.45,
+                color: alpha('#111111', 0.8),
+              }}
+              text="Outcome: bigger fraud window + delayed recovery"
+            />
+          </Stack>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={8} sx={{ minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 1,
+            borderRadius: 3,
+            border: `1px solid ${alpha('#111111', 0.08)}`,
+            flex: 1,
+            minHeight: 0,
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+          }}
+        >
+          {/* Toggle button overlay */}
+          <Box sx={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>{toggleBtn}</Box>
+          <RootCauseSystemArt fullView={false} />
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+};
 
 const AuditDelayFlowArt = () => (
   <Box
@@ -3422,7 +3741,7 @@ const AuditDelayFlowArt = () => (
         strokeOpacity="0.1"
       />
       <text x="14" y="16" fontSize="13" fontWeight="900" fill="#111111" opacity="0.72">
-        Outcome: delayed recovery + bigger fraud window + weaker management control
+        Outcome: delayed recovery + bigger fraud window + weaker control
       </text>
     </g>
   </Box>
@@ -4097,9 +4416,13 @@ const CoverHeroArt = () => (
 
 export default function SmartTaxChainPresentation() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const fullscreenElRef = useRef(null);
   const deckRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [rootCauseFullView, setRootCauseFullView] = useState(false);
+  const [platformMapFullView, setPlatformMapFullView] = useState(false);
 
   const demoUrl = useMemo(() => {
     if (typeof window === 'undefined') return '/auth/login';
@@ -4123,10 +4446,10 @@ export default function SmartTaxChainPresentation() {
       },
       {
         title: 'Root Cause: System Architecture Weakness',
-        subtitle: 'The same tax record can change after submission — and leadership sees it late',
+        subtitle: 'The same tax record can change after submission — and oversight sees it late',
         body: [
-          'Core pain: records are stored in a mutable database and verified manually — creating weak evidence and delayed control.',
-          'This is why fraud windows stay open and disputes become harder to resolve.',
+          'Silent edits are possible after submission (mutable records).',
+          'Visibility comes late (often 30–180 days) — evidence is weaker and recovery is delayed.',
         ],
         pills: [
           { icon: <EditNote />, label: 'Mutable records' },
@@ -4135,98 +4458,10 @@ export default function SmartTaxChainPresentation() {
           { icon: <Gavel />, label: 'Harder decisions' },
         ],
         content: (
-          <Grid container spacing={2.5} alignItems="stretch" sx={{ mt: 0.5 }}>
-            <Grid item xs={12} md={4.5}>
-              <Paper
-                elevation={0}
-                sx={{
-                  p: 2.5,
-                  borderRadius: 4,
-                  border: `1px solid ${alpha('#111111', 0.08)}`,
-                  backgroundColor: '#ffffff',
-                  height: '100%',
-                }}
-              >
-                <Stack spacing={1.5} sx={{ height: '100%' }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 1000, letterSpacing: '-0.2px' }}
-                  >
-                    What management experiences today
-                  </Typography>
-                  <Stack spacing={1.25}>
-                    <BulletItem
-                      icon={<EditNote sx={{ color: '#111111' }} />}
-                      text="Records can be edited after submission — “silent changes” are possible"
-                    />
-                    <BulletItem
-                      icon={<Lock sx={{ color: '#111111' }} />}
-                      text="Evidence is not tamper-evident — proving who/when/what changed becomes difficult"
-                    />
-                    <BulletItem
-                      icon={<VisibilityOff sx={{ color: '#111111' }} />}
-                      text="Leadership control is delayed — manual checks and late audits (30–180 days)"
-                    />
-                  </Stack>
-
-                  <Box sx={{ flexGrow: 1 }} />
-
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 1.75,
-                      borderRadius: 3,
-                      background: alpha('#111111', 0.02),
-                      border: `1px dashed ${alpha('#111111', 0.18)}`,
-                    }}
-                  >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 950 }}>
-                      Leadership impact
-                    </Typography>
-                    <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1 }}>
-                      {['Delayed discovery', 'Disputes & rework', 'Delayed recovery'].map((t) => (
-                        <Chip
-                          key={t}
-                          label={t}
-                          size="small"
-                          sx={{
-                            fontWeight: 950,
-                            borderRadius: 999,
-                            backgroundColor:
-                              t === 'Delayed recovery'
-                                ? alpha('#fff200', 0.22)
-                                : alpha('#111111', 0.03),
-                            border: `1px solid ${alpha(
-                              t === 'Delayed recovery' ? '#fff200' : '#111111',
-                              t === 'Delayed recovery' ? 0.6 : 0.12,
-                            )}`,
-                          }}
-                        />
-                      ))}
-                    </Stack>
-                  </Paper>
-                </Stack>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={7.5}>
-              <DiagramCard
-                title="Today: where control breaks"
-                subtitle="Save → silent edit → late audit"
-              >
-                <Box
-                  sx={{
-                    borderRadius: 3,
-                    overflow: 'hidden',
-                    border: `1px solid ${alpha('#111111', 0.08)}`,
-                    backgroundColor: '#ffffff',
-                  }}
-                >
-                  <RootCauseSystemArt />
-                </Box>
-              </DiagramCard>
-            </Grid>
-          </Grid>
+          <RootCauseSlideContent
+            illustrationFull={rootCauseFullView}
+            onToggleIllustration={() => setRootCauseFullView((v) => !v)}
+          />
         ),
       },
       {
@@ -4301,7 +4536,7 @@ export default function SmartTaxChainPresentation() {
             {
               title: 'System Fraud',
               kicker: 'External + internal manipulation',
-              lead: 'Fraud succeeds when sales can be suppressed and records can be edited without immediate visibility—leaving management with delayed discovery and weak proof.',
+              lead: 'Fraud succeeds when sales can be suppressed and records can be edited without immediate visibility—causing delayed discovery and weak proof.',
               bullets: [
                 {
                   icon: <BugReport sx={{ color: '#111111' }} />,
@@ -4322,7 +4557,7 @@ export default function SmartTaxChainPresentation() {
             {
               title: 'Audit & Compliance Delays',
               kicker: 'Slow cycles = wider fraud window',
-              lead: 'Long manual verification cycles delay recovery, widen the fraud window, and reduce leadership’s real-time control and confidence.',
+              lead: 'Long manual verification cycles delay recovery, widen the fraud window, and reduce real-time control and confidence.',
               bullets: [
                 {
                   icon: <Timer sx={{ color: '#111111' }} />,
@@ -4385,14 +4620,14 @@ export default function SmartTaxChainPresentation() {
                 }}
               >
                 <Typography variant="subtitle2" sx={{ fontWeight: 950 }}>
-                  Management promise
+                  Program promise
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{ color: alpha('#111111', 0.72), mt: 0.5, lineHeight: 1.65 }}
                 >
-                  A verifiable evidence trail for every critical tax event — so leadership decisions
-                  become faster, defensible, and measurable.
+                  A verifiable evidence trail for every critical tax event — so decisions become
+                  faster, defensible, and measurable.
                 </Typography>
               </Paper>
             </Grid>
@@ -4404,90 +4639,10 @@ export default function SmartTaxChainPresentation() {
         subtitle:
           'A blockchain-based system providing immutable ledger, automated fraud detection, and real-time auditing capabilities for transparent tax administration.',
         content: (
-          <Grid container spacing={2.5} alignItems="stretch" sx={{ mt: 0.5 }}>
-            <Grid item xs={12} md={7.2}>
-              <DiagramCard
-                title="What Smart Tax Chain comes with"
-                subtitle="Inputs → evidence → real-time decisions"
-              >
-                <Box
-                  sx={{
-                    borderRadius: 3,
-                    overflow: 'hidden',
-                    border: `1px solid ${alpha('#111111', 0.08)}`,
-                    backgroundColor: '#ffffff',
-                  }}
-                >
-                  <PlatformMapArt />
-                </Box>
-                <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1.25 }}>
-                  {[
-                    'Dashboards',
-                    'APIs & integration',
-                    'Role-based access',
-                    'Audit-ready exports',
-                    'Alerts & cases',
-                  ].map((t) => (
-                    <Chip
-                      key={t}
-                      label={t}
-                      size="small"
-                      sx={{
-                        fontWeight: 950,
-                        borderRadius: 999,
-                        backgroundColor: alpha('#111111', 0.03),
-                        border: `1px solid ${alpha('#111111', 0.12)}`,
-                      }}
-                    />
-                  ))}
-                </Stack>
-              </DiagramCard>
-            </Grid>
-
-            <Grid item xs={12} md={4.8}>
-              <Stack spacing={2} sx={{ height: '100%' }}>
-                <CapabilityShowCard
-                  icon={<AccountTree />}
-                  title="Immutable evidence ledger"
-                  desc="Every critical tax event becomes tamper‑evident evidence (hash + signature), strengthening enforcement and reducing disputes."
-                  tags={['Traceable receipts', 'Non-repudiation', 'Audit trail']}
-                />
-                <CapabilityShowCard
-                  icon={<TrackChanges />}
-                  title="Automated fraud signals"
-                  desc="Continuous monitoring highlights anomalies early (suppression patterns, suspicious edits, compliance gaps) so leadership sees risks sooner."
-                  tags={['Real-time alerts', 'Anomaly detection', 'Risk scoring']}
-                />
-                <CapabilityShowCard
-                  icon={<Bolt />}
-                  title="Real-time audit & accountability"
-                  desc="Auditors and leadership get verified records instantly, with audit-ready exports that reduce manual cross-checking and accelerate recovery actions."
-                  tags={['Fast verification', 'Case workflow', 'Exports']}
-                />
-                <Paper
-                  elevation={0}
-                  sx={{
-                    mt: 'auto',
-                    p: 2,
-                    borderRadius: 4,
-                    border: `1px dashed ${alpha('#111111', 0.18)}`,
-                    background: alpha('#111111', 0.02),
-                  }}
-                >
-                  <Typography variant="subtitle2" sx={{ fontWeight: 950 }}>
-                    Leadership message
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: alpha('#111111', 0.74), mt: 0.5, lineHeight: 1.65 }}
-                  >
-                    Smart Tax Chain delivers integrity + visibility + defensible proof — turning tax
-                    administration into measurable, evidence-based control.
-                  </Typography>
-                </Paper>
-              </Stack>
-            </Grid>
-          </Grid>
+          <PlatformMapSlideContent
+            illustrationFull={platformMapFullView}
+            onToggleIllustration={() => setPlatformMapFullView((v) => !v)}
+          />
         ),
       },
       {
@@ -4497,7 +4652,7 @@ export default function SmartTaxChainPresentation() {
         content: <CallToActionSlide demoUrl={demoUrl} />,
       },
     ],
-    [demoUrl],
+    [demoUrl, rootCauseFullView, platformMapFullView],
   );
 
   const slideRefs = useRef([]);
@@ -4696,7 +4851,7 @@ export default function SmartTaxChainPresentation() {
   return (
     <PageContainer
       title="SMART TAX CHAIN | Presentation"
-      description="Smart Tax Chain — Presentation deck for TRA leadership"
+      description="Smart Tax Chain — Presentation deck for revenue administration"
     >
       <GlobalStyles
         styles={{
@@ -4746,26 +4901,6 @@ export default function SmartTaxChainPresentation() {
           },
           '.stc-slide .MuiChip-label': {
             fontSize: 'inherit',
-          },
-          '.stc-diagram-wrap': {
-            position: 'relative',
-          },
-          '.stc-diagram-hint': {
-            display: 'none',
-          },
-          '@media (max-width: 600px)': {
-            '.stc-diagram-wrap': {
-              overflow: 'auto',
-              touchAction: 'pan-x pan-y',
-              WebkitOverflowScrolling: 'touch',
-            },
-            '.stc-diagram-wrap svg, .stc-diagram-wrap img': {
-              width: '100% !important',
-              height: 'auto !important',
-            },
-            '.stc-diagram-hint': {
-              display: 'block',
-            },
           },
           '@media print': {
             '@page': { margin: '10mm', size: 'A4 landscape' },
@@ -4913,13 +5048,13 @@ export default function SmartTaxChainPresentation() {
           className="stc-deck"
           ref={deckRef}
           sx={{
-            // Use dvh to prevent jumps on mobile (address bar show/hide) while letting tall slides stretch.
-            height: isFullscreen ? '100dvh' : { xs: 'auto', sm: 'calc(100dvh - 64px)' },
-            minHeight: isFullscreen
+            // Use dvh to prevent jumps on mobile (address bar show/hide).
+            // Toolbar is 56px on xs, 64px on sm+.
+            height: isFullscreen
               ? '100dvh'
               : { xs: 'calc(100dvh - 56px)', sm: 'calc(100dvh - 64px)' },
             overflowY: 'auto',
-            scrollSnapType: { xs: 'none', sm: 'y mandatory' },
+            scrollSnapType: 'y mandatory',
             backgroundColor: isFullscreen ? '#0b0b0b' : 'transparent',
             overscrollBehavior: 'contain',
           }}
@@ -4934,14 +5069,13 @@ export default function SmartTaxChainPresentation() {
                     slideRefs.current[idx] = el;
                   }}
                   sx={{
-                    height: isFullscreen ? '100dvh' : { xs: 'auto', sm: 'calc(100dvh - 64px)' },
-                    minHeight: isFullscreen
+                    height: isFullscreen
                       ? '100dvh'
                       : { xs: 'calc(100dvh - 56px)', sm: 'calc(100dvh - 64px)' },
                     width: '100%',
                     display: 'flex',
-                    alignItems: { xs: 'stretch', md: 'center' },
-                    justifyContent: { xs: 'flex-start', md: 'center' },
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     // In fullscreen, keep a PPT-like safe margin (avoid content touching edges)
                     // Also respects notch safe-areas.
                     px: isFullscreen
@@ -4950,16 +5084,16 @@ export default function SmartTaxChainPresentation() {
                           sm: 'calc(env(safe-area-inset-left, 0px) + 16px)',
                           md: 'calc(env(safe-area-inset-left, 0px) + 24px)',
                         }
-                      : { xs: 0, sm: 0 },
+                      : 0,
                     py: isFullscreen
                       ? {
                           xs: 'calc(env(safe-area-inset-top, 0px) + 10px)',
                           sm: 'calc(env(safe-area-inset-top, 0px) + 16px)',
                           md: 'calc(env(safe-area-inset-top, 0px) + 24px)',
                         }
-                      : { xs: 4, sm: 0 },
-                    scrollSnapAlign: { xs: 'none', sm: 'start' },
-                    scrollSnapStop: { xs: 'normal', sm: 'always' },
+                      : 0,
+                    scrollSnapAlign: 'start',
+                    scrollSnapStop: 'always',
                   }}
                 >
                   <SlideFrame
@@ -4983,15 +5117,29 @@ export default function SmartTaxChainPresentation() {
                     }
                   >
                     {/* Slide content */}
-                    <Grid container spacing={3} sx={{ height: { md: '100%' } }}>
-                      <Grid item xs={12} md={s.diagram ? 7 : 12}>
-                        <Stack spacing={2.5} sx={{ height: { md: '100%' }, minHeight: 0 }}>
+                    <Grid container spacing={3} sx={{ height: '100%', minHeight: 0 }}>
+                      <Grid
+                        item
+                        xs={12}
+                        md={s.diagram ? 7 : 12}
+                        sx={{ minHeight: 0, display: 'flex', flexDirection: 'column' }}
+                      >
+                        <Stack
+                          spacing={{ xs: 1.5, sm: 2, md: 2.5 }}
+                          sx={{
+                            height: '100%',
+                            minHeight: 0,
+                            ...(s.title === 'Root Cause: System Architecture Weakness'
+                              ? { flex: 1, overflow: 'hidden' }
+                              : {}),
+                          }}
+                        >
                           {idx === 0 ? (
                             <Grid
                               container
                               spacing={3}
                               alignItems="stretch"
-                              sx={{ height: { md: '100%' } }}
+                              sx={{ height: '100%' }}
                             >
                               <Grid item xs={12} md={7}>
                                 <Stack
@@ -5002,15 +5150,16 @@ export default function SmartTaxChainPresentation() {
                                     justifyContent: { md: 'center' },
                                   }}
                                 >
-                                  <Stack spacing={{ xs: 6, md: 30 }} sx={{ maxWidth: 820 }}>
+                                  <Stack spacing={30} sx={{ maxWidth: 820 }}>
                                     {/* Classic title slide */}
                                     <Box>
                                       <Typography
                                         variant="h2"
                                         sx={{
                                           fontWeight: 1050,
-                                          letterSpacing: '-1.2px',
+                                          letterSpacing: { xs: '-0.5px', md: '-1.2px' },
                                           lineHeight: 1.02,
+                                          fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.75rem' },
                                         }}
                                       >
                                         SMART TAX CHAIN
@@ -5018,10 +5167,11 @@ export default function SmartTaxChainPresentation() {
                                       <Typography
                                         variant="h5"
                                         sx={{
-                                          mt: 1.2,
+                                          mt: { xs: 0.8, md: 1.2 },
                                           color: alpha('#111111', 0.78),
                                           lineHeight: 1.35,
                                           fontWeight: 800,
+                                          fontSize: { xs: '0.95rem', sm: '1.15rem', md: '1.5rem' },
                                         }}
                                       >
                                         Revolutionizing Tanzania&apos;s Tax Administration
@@ -5029,11 +5179,12 @@ export default function SmartTaxChainPresentation() {
                                       <Typography
                                         variant="body1"
                                         sx={{
-                                          mt: 1.6,
+                                          mt: { xs: 1, md: 1.6 },
                                           color: alpha('#111111', 0.74),
                                           lineHeight: 1.7,
                                           fontWeight: 650,
                                           maxWidth: 820,
+                                          fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' },
                                         }}
                                       >
                                         Blockchain-Based Solution for Enhanced Data Integrity,
@@ -5045,8 +5196,8 @@ export default function SmartTaxChainPresentation() {
                                     <Paper
                                       elevation={0}
                                       sx={{
-                                        p: 2.25,
-                                        borderRadius: 4,
+                                        p: { xs: 1.5, sm: 2, md: 2.25 },
+                                        borderRadius: { xs: 2, md: 4 },
                                         border: `1px solid ${alpha('#111111', 0.08)}`,
                                         background: `linear-gradient(135deg, ${alpha(
                                           theme.palette.primary.main,
@@ -5054,7 +5205,11 @@ export default function SmartTaxChainPresentation() {
                                         )} 0%, #ffffff 65%)`,
                                       }}
                                     >
-                                      <Grid container spacing={2} alignItems="center">
+                                      <Grid
+                                        container
+                                        spacing={{ xs: 1, sm: 2 }}
+                                        alignItems="center"
+                                      >
                                         <Grid item xs={12} sm={7}>
                                           <Typography
                                             variant="overline"
@@ -5062,16 +5217,31 @@ export default function SmartTaxChainPresentation() {
                                               letterSpacing: 1.2,
                                               fontWeight: 950,
                                               color: alpha('#111111', 0.7),
+                                              fontSize: { xs: '0.65rem', sm: '0.75rem' },
                                             }}
                                           >
                                             Presenter
                                           </Typography>
-                                          <Typography variant="h6" sx={{ fontWeight: 950 }}>
+                                          <Typography
+                                            variant="h6"
+                                            sx={{
+                                              fontWeight: 950,
+                                              fontSize: {
+                                                xs: '0.95rem',
+                                                sm: '1.1rem',
+                                                md: '1.25rem',
+                                              },
+                                            }}
+                                          >
                                             {PRESENTER_NAME}
                                           </Typography>
                                           <Typography
                                             variant="body2"
-                                            sx={{ color: alpha('#111111', 0.75), fontWeight: 700 }}
+                                            sx={{
+                                              color: alpha('#111111', 0.75),
+                                              fontWeight: 700,
+                                              fontSize: { xs: '0.75rem', sm: '0.85rem' },
+                                            }}
                                           >
                                             Tanzania Revenue Authority
                                           </Typography>
@@ -5083,16 +5253,31 @@ export default function SmartTaxChainPresentation() {
                                               letterSpacing: 1.2,
                                               fontWeight: 950,
                                               color: alpha('#111111', 0.7),
+                                              fontSize: { xs: '0.65rem', sm: '0.75rem' },
                                             }}
                                           >
                                             Date
                                           </Typography>
-                                          <Typography variant="h6" sx={{ fontWeight: 900 }}>
+                                          <Typography
+                                            variant="h6"
+                                            sx={{
+                                              fontWeight: 900,
+                                              fontSize: {
+                                                xs: '0.95rem',
+                                                sm: '1.1rem',
+                                                md: '1.25rem',
+                                              },
+                                            }}
+                                          >
                                             Nov 19, 2025
                                           </Typography>
                                           <Typography
                                             variant="caption"
-                                            sx={{ color: alpha('#111111', 0.65) }}
+                                            sx={{
+                                              color: alpha('#111111', 0.65),
+                                              fontSize: { xs: '0.65rem', sm: '0.75rem' },
+                                              display: { xs: 'none', sm: 'block' },
+                                            }}
                                           >
                                             Press <strong>F</strong> for full screen
                                           </Typography>
@@ -5129,6 +5314,7 @@ export default function SmartTaxChainPresentation() {
                                         fontWeight: 950,
                                         letterSpacing: '-0.6px',
                                         lineHeight: 1.08,
+                                        fontSize: { xs: '1.35rem', sm: '1.75rem', md: '2.125rem' },
                                       }}
                                     >
                                       {s.title}
@@ -5136,7 +5322,11 @@ export default function SmartTaxChainPresentation() {
                                     {s.subtitle ? (
                                       <Typography
                                         variant="subtitle1"
-                                        sx={{ color: alpha('#111111', 0.72), lineHeight: 1.65 }}
+                                        sx={{
+                                          color: alpha('#111111', 0.72),
+                                          lineHeight: 1.65,
+                                          fontSize: { xs: '0.85rem', sm: '0.95rem', md: '1rem' },
+                                        }}
                                       >
                                         {s.subtitle}
                                       </Typography>
@@ -5168,31 +5358,43 @@ export default function SmartTaxChainPresentation() {
                                   ) : idx === challengeSlideIdx && challengeStage === 'reveal' ? (
                                     <Stack
                                       direction="row"
-                                      spacing={0.9}
+                                      spacing={{ xs: 0.5, sm: 0.9 }}
                                       alignItems="center"
                                       justifyContent="flex-end"
                                       flexWrap="wrap"
+                                      useFlexGap
                                       sx={{
                                         mt: 0.5,
-                                        p: 0.75,
-                                        borderRadius: 999,
+                                        p: { xs: 0.5, sm: 0.75 },
+                                        borderRadius: { xs: 3, sm: 999 },
                                         backgroundColor: alpha('#ffffff', 0.72),
                                         border: `1px solid ${alpha('#111111', 0.1)}`,
                                         backdropFilter: 'blur(10px)',
                                         boxShadow: `0 18px 50px ${alpha('#111111', 0.08)}`,
                                         maxWidth: { xs: '100%', md: 640 },
+                                        gap: { xs: 0.5, sm: 0.75 },
                                       }}
                                     >
                                       <Chip
-                                        icon={<Verified sx={{ color: '#111111 !important' }} />}
+                                        icon={
+                                          <Verified
+                                            sx={{
+                                              color: '#111111 !important',
+                                              fontSize: { xs: 14, sm: 18 },
+                                            }}
+                                          />
+                                        }
                                         label={`Active: ${
                                           s?.cards?.[challengeActive]?.title ?? ''
                                         }`}
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          height: { xs: 24, sm: 28 },
+                                          '& .MuiChip-label': {
+                                            px: { xs: 0.75, sm: 1.1 },
+                                            fontSize: { xs: 10, sm: 12.5 },
+                                          },
                                         }}
                                       />
                                       <Chip
@@ -5205,10 +5407,14 @@ export default function SmartTaxChainPresentation() {
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          height: { xs: 24, sm: 28 },
+                                          '& .MuiChip-label': {
+                                            px: { xs: 0.75, sm: 1.1 },
+                                            fontSize: { xs: 10, sm: 12.5 },
+                                          },
                                           backgroundColor: alpha('#111111', 0.03),
                                           border: `1px solid ${alpha('#111111', 0.12)}`,
+                                          display: { xs: 'none', sm: 'flex' },
                                         }}
                                       />
                                       <Chip
@@ -5221,10 +5427,14 @@ export default function SmartTaxChainPresentation() {
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          height: { xs: 24, sm: 28 },
+                                          '& .MuiChip-label': {
+                                            px: { xs: 0.75, sm: 1.1 },
+                                            fontSize: { xs: 10, sm: 12.5 },
+                                          },
                                           backgroundColor: alpha('#111111', 0.03),
                                           border: `1px solid ${alpha('#111111', 0.12)}`,
+                                          display: { xs: 'none', md: 'flex' },
                                         }}
                                       />
                                       <Chip
@@ -5234,8 +5444,11 @@ export default function SmartTaxChainPresentation() {
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          height: { xs: 24, sm: 28 },
+                                          '& .MuiChip-label': {
+                                            px: { xs: 0.75, sm: 1.1 },
+                                            fontSize: { xs: 10, sm: 12.5 },
+                                          },
                                           backgroundColor: alpha('#111111', 0.03),
                                           border: `1px solid ${alpha('#111111', 0.12)}`,
                                         }}
@@ -5249,8 +5462,11 @@ export default function SmartTaxChainPresentation() {
                                         size="small"
                                         sx={{
                                           fontWeight: 950,
-                                          height: 28,
-                                          '& .MuiChip-label': { px: 1.1, fontSize: 12.5 },
+                                          height: { xs: 24, sm: 28 },
+                                          '& .MuiChip-label': {
+                                            px: { xs: 0.75, sm: 1.1 },
+                                            fontSize: { xs: 10, sm: 12.5 },
+                                          },
                                           backgroundColor: (challengeVisited || []).every(Boolean)
                                             ? alpha('#fff200', 0.26)
                                             : alpha('#111111', 0.03),
@@ -5268,12 +5484,16 @@ export default function SmartTaxChainPresentation() {
                           )}
 
                           {idx !== 0 && s.body ? (
-                            <Stack spacing={1}>
+                            <Stack spacing={{ xs: 0.5, sm: 0.75, md: 1 }}>
                               {s.body.map((t) => (
                                 <Typography
                                   key={t}
                                   variant="body1"
-                                  sx={{ color: alpha('#111111', 0.78), lineHeight: 1.7 }}
+                                  sx={{
+                                    color: alpha('#111111', 0.78),
+                                    lineHeight: 1.7,
+                                    fontSize: { xs: '0.8rem', sm: '0.9rem', md: '1rem' },
+                                  }}
                                 >
                                   {t}
                                 </Typography>
@@ -5282,7 +5502,13 @@ export default function SmartTaxChainPresentation() {
                           ) : null}
 
                           {s.pills ? (
-                            <Stack direction="row" spacing={1} flexWrap="wrap">
+                            <Stack
+                              direction="row"
+                              spacing={{ xs: 0.5, sm: 0.75, md: 1 }}
+                              flexWrap="wrap"
+                              useFlexGap
+                              sx={{ gap: { xs: 0.5, sm: 0.75, md: 1 } }}
+                            >
                               {s.pills.map((p) => (
                                 <Pill key={p.label} icon={p.icon} label={p.label} />
                               ))}
@@ -5295,6 +5521,16 @@ export default function SmartTaxChainPresentation() {
                                 mt: s.hideHeader ? 0 : 0.5,
                                 height: s.hideHeader ? '100%' : undefined,
                                 minHeight: s.hideHeader ? 0 : undefined,
+                                ...(s.title === 'Root Cause: System Architecture Weakness'
+                                  ? {
+                                      flex: 1,
+                                      minHeight: 0,
+                                      maxHeight: '100%',
+                                      overflow: 'hidden',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                    }
+                                  : {}),
                               }}
                             >
                               {isValidElement(s.content) && s.title === 'Call to Action'
@@ -5341,10 +5577,10 @@ export default function SmartTaxChainPresentation() {
                                           ? 12
                                           : 6
                                         : s.cards.length === 1
-                                        ? 12
-                                        : s.cards.length === 2
-                                        ? 6
-                                        : 4
+                                          ? 12
+                                          : s.cards.length === 2
+                                            ? 6
+                                            : 4
                                     }
                                   >
                                     <Paper
@@ -5491,49 +5727,9 @@ export default function SmartTaxChainPresentation() {
 
                       {s.diagram ? (
                         <Grid item xs={12} md={5}>
-                          <Box
-                            className="stc-diagram-wrap"
-                            onDoubleClick={(e) => {
-                              const el = e.currentTarget;
-                              if (el?.scrollTo)
-                                el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
-                            }}
-                            onTouchEnd={(e) => {
-                              const el = e.currentTarget;
-                              const now = Date.now();
-                              if (now - diagramDoubleTapRef.current.time < 400 && el?.scrollTo) {
-                                el.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
-                                diagramDoubleTapRef.current.time = 0;
-                                return;
-                              }
-                              diagramDoubleTapRef.current.time = now;
-                            }}
-                          >
-                            <Box
-                              className="stc-diagram-inner"
-                              sx={{
-                                width: '100%',
-                                height: '100%',
-                                mx: 'auto',
-                              }}
-                            >
-                              {isValidElement(s.diagram) && s.title === 'Call to Action'
-                                ? cloneElement(s.diagram, { isSlideActive: idx === active })
-                                : s.diagram}
-                            </Box>
-                            <Typography
-                              className="stc-diagram-hint"
-                              variant="caption"
-                              sx={{
-                                mt: 1,
-                                color: alpha('#111111', 0.6),
-                                fontWeight: 800,
-                                textAlign: 'center',
-                              }}
-                            >
-                              Tip: pinch to zoom and drag to explore; double-tap to reset view
-                            </Typography>
-                          </Box>
+                          {isValidElement(s.diagram) && s.title === 'Call to Action'
+                            ? cloneElement(s.diagram, { isSlideActive: idx === active })
+                            : s.diagram}
                         </Grid>
                       ) : null}
                     </Grid>
@@ -5556,6 +5752,52 @@ export default function SmartTaxChainPresentation() {
           }}
         >
           <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/* Mobile navigation */}
+            <Paper
+              elevation={0}
+              sx={{
+                pointerEvents: 'auto',
+                display: { xs: 'flex', md: 'none' },
+                alignItems: 'center',
+                gap: 0.5,
+                px: 1,
+                py: 0.5,
+                borderRadius: 999,
+                border: `1px solid ${alpha('#111111', 0.12)}`,
+                backgroundColor: alpha('#ffffff', 0.92),
+                backdropFilter: 'blur(10px)',
+              }}
+            >
+              <IconButton
+                size="small"
+                onClick={() => goTo(active - 1)}
+                disabled={active === 0}
+                sx={{ p: 0.75 }}
+              >
+                <KeyboardArrowLeft sx={{ fontSize: 20 }} />
+              </IconButton>
+              <Typography
+                variant="caption"
+                sx={{
+                  fontWeight: 900,
+                  color: alpha('#111111', 0.75),
+                  fontSize: 11,
+                  minWidth: 36,
+                  textAlign: 'center',
+                }}
+              >
+                {active + 1}/{slides.length}
+              </Typography>
+              <IconButton
+                size="small"
+                onClick={() => goTo(active + 1)}
+                disabled={active === slides.length - 1}
+                sx={{ p: 0.75 }}
+              >
+                <KeyboardArrowRight sx={{ fontSize: 20 }} />
+              </IconButton>
+            </Paper>
+            {/* Desktop navigation */}
             <Paper
               elevation={0}
               sx={{
@@ -5579,35 +5821,6 @@ export default function SmartTaxChainPresentation() {
               </Typography>
               <IconButton
                 size="small"
-                onClick={() => goTo(active + 1)}
-                disabled={active === slides.length - 1}
-              >
-                <KeyboardArrowRight />
-              </IconButton>
-            </Paper>
-            <Paper
-              elevation={0}
-              sx={{
-                pointerEvents: 'auto',
-                display: { xs: 'flex', md: 'none' },
-                alignItems: 'center',
-                gap: 1,
-                px: 1.5,
-                py: 0.9,
-                borderRadius: 999,
-                border: `1px solid ${alpha('#111111', 0.12)}`,
-                backgroundColor: alpha('#ffffff', 0.92),
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <IconButton size="medium" onClick={() => goTo(active - 1)} disabled={active === 0}>
-                <KeyboardArrowLeft />
-              </IconButton>
-              <Typography variant="caption" sx={{ fontWeight: 900, color: alpha('#111111', 0.75) }}>
-                {active + 1} / {slides.length}
-              </Typography>
-              <IconButton
-                size="medium"
                 onClick={() => goTo(active + 1)}
                 disabled={active === slides.length - 1}
               >
