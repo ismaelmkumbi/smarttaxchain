@@ -20,6 +20,15 @@ jobs:
           npm install
           npm run build
 
+      - name: Clear old files on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            rm -rf /var/www/html/smarttaxchain/assets/*
+
       - name: Upload dist to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -27,7 +36,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           source: 'dist/*'
-          target: '/var/www/html/smarttaxchain/dist'
+          target: '/var/www/html/smarttaxchain'
+          strip_components: 1
+          overwrite: true
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
