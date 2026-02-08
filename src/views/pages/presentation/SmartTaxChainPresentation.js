@@ -406,21 +406,21 @@ const TanzaniaBlockchainArt = () => (
   </Box>
 );
 
-// Option 1: Blockchain Network Shield - Cover Slide Illustration
+// Option 1: Blockchain Network Shield - Cover Slide (horizontal, left-to-right)
 const BlockchainNetworkShieldArt = () => (
   <Box
     component="svg"
-    viewBox="0 0 360 400"
+    viewBox="0 0 640 200"
     aria-hidden="true"
-    sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: 340 }}
+    sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}
   >
     <defs>
-      <linearGradient id="shieldGrad" x1="0" y1="0" x2="0" y2="1">
+      <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#fff200" stopOpacity="0.35" />
-        <stop offset="0.5" stopColor="#fff200" stopOpacity="0.12" />
-        <stop offset="1" stopColor="#e6d700" stopOpacity="0.2" />
+        <stop offset="0.5" stopColor="#fff200" stopOpacity="0.15" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.25" />
       </linearGradient>
-      <linearGradient id="shieldStroke" x1="0" y1="0" x2="1" y2="1">
+      <linearGradient id="shieldStroke" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stopColor="#fff200" />
         <stop offset="1" stopColor="#e6d700" />
       </linearGradient>
@@ -439,59 +439,245 @@ const BlockchainNetworkShieldArt = () => (
         <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.2" />
       </filter>
     </defs>
+    {/* Horizontal shield shape (wide, low) */}
     <path
-      d="M180 20 L320 80 L320 200 Q320 320 180 380 Q40 320 40 200 L40 80 Z"
+      d="M40 100 L100 40 L540 40 L600 100 L600 160 L540 200 L100 200 L40 160 Z"
       fill="url(#shieldGrad)"
       stroke="url(#shieldStroke)"
       strokeWidth="3"
       strokeOpacity="0.5"
       filter="url(#shieldGlow)"
     />
-    <g stroke="#111111" strokeOpacity="0.2" strokeWidth="1.5" strokeLinecap="round" fill="none">
-      <path d="M180 100 L140 160 L180 220 L220 160 Z" />
-      <path d="M180 100 L180 220" />
-      <path d="M140 160 L220 160" />
-      <path d="M180 160 L120 240" />
-      <path d="M180 160 L240 240" />
-      <path d="M140 160 L180 280" />
-      <path d="M220 160 L180 280" />
+    {/* Connection lines (horizontal flow) */}
+    <g stroke="#111111" strokeOpacity="0.22" strokeWidth="2" strokeLinecap="round" fill="none">
+      <path d="M120 100 H180" />
+      <path d="M220 100 H280" />
+      <path d="M320 100 H380" />
+      <path d="M420 100 H480" />
+      <path d="M520 100 H580" />
+      <path d="M180 100 V60 H220 V100" />
+      <path d="M280 100 V60 H320 V100" />
+      <path d="M380 100 V60 H420 V100" />
+      <path d="M480 100 V60 H520 V100" />
     </g>
+    {/* Nodes left to right */}
     {[
-      { cx: 180, cy: 100, r: 18, center: true },
-      { cx: 140, cy: 160, r: 14 },
-      { cx: 220, cy: 160, r: 14 },
-      { cx: 180, cy: 220, r: 14 },
-      { cx: 180, cy: 280, r: 12 },
-      { cx: 120, cy: 240, r: 10 },
-      { cx: 240, cy: 240, r: 10 },
+      { cx: 120, cy: 100, r: 22, center: true },
+      { cx: 220, cy: 100, r: 18 },
+      { cx: 320, cy: 100, r: 18 },
+      { cx: 420, cy: 100, r: 18 },
+      { cx: 520, cy: 100, r: 18 },
     ].map((node, i) => (
       <g key={i}>
         <circle cx={node.cx} cy={node.cy} r={node.r} fill="#ffffff" filter="url(#nodeShadow)" />
         <circle cx={node.cx} cy={node.cy} r={node.r} fill="url(#nodeGrad)" stroke="#111111" strokeOpacity="0.25" strokeWidth="2" />
         <circle cx={node.cx} cy={node.cy} r={node.r * 0.4} fill="#111111" opacity="0.6" />
         {node.center && (
-          <circle cx={node.cx} cy={node.cy} r={node.r + 4} fill="none" stroke="#fff200" strokeWidth="2" opacity="0.5">
+          <circle cx={node.cx} cy={node.cy} r={node.r + 5} fill="none" stroke="#fff200" strokeWidth="2" opacity="0.5">
             <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
           </circle>
         )}
       </g>
     ))}
+    {/* Chain links on connections */}
     {[
-      { x: 160, y: 130 },
-      { x: 200, y: 130 },
-      { x: 180, y: 190 },
-      { x: 150, y: 200 },
-      { x: 210, y: 200 },
-      { x: 180, y: 250 },
+      { x: 150, y: 100 },
+      { x: 250, y: 100 },
+      { x: 350, y: 100 },
+      { x: 450, y: 100 },
+      { x: 550, y: 100 },
     ].map((pos, i) => (
       <g key={i} transform={`translate(${pos.x} ${pos.y})`}>
-        <rect x="-6" y="-4" width="12" height="8" rx="2" fill="#ffffff" stroke="#111111" strokeOpacity="0.2" strokeWidth="1" />
-        <rect x="-3" y="-1.5" width="6" height="3" rx="1" fill="#fff200" opacity="0.8" />
+        <rect x="-10" y="-6" width="20" height="12" rx="2" fill="#ffffff" stroke="#111111" strokeOpacity="0.2" strokeWidth="1" />
+        <rect x="-5" y="-2" width="10" height="4" rx="1" fill="#fff200" opacity="0.8" />
       </g>
     ))}
-    <text x="180" y="360" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.7">
+    <text x="320" y="190" textAnchor="middle" fontSize="14" fontWeight="800" fill="#111111" opacity="0.7">
       Security + Decentralization
     </text>
+  </Box>
+);
+
+// Option 2: Data Flow Transformation - horizontal
+const DataFlowTransformationArt = () => (
+  <Box component="svg" viewBox="0 0 640 200" aria-hidden="true" sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}>
+    <defs>
+      <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.2" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.15" />
+      </linearGradient>
+    </defs>
+    {/* Paper/Manual */}
+    <g transform="translate(40 50)">
+      <rect x="0" y="0" width="140" height="100" rx="16" fill="#ffffff" stroke="#111111" strokeOpacity="0.12" strokeWidth="2" />
+      <rect x="12" y="12" width="80" height="8" rx="4" fill="#111111" opacity="0.2" />
+      <rect x="12" y="28" width="100" height="8" rx="4" fill="#111111" opacity="0.15" />
+      <rect x="12" y="44" width="60" height="8" rx="4" fill="#111111" opacity="0.12" />
+      <text x="70" y="85" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.7">Manual Records</text>
+    </g>
+    {/* Arrow + chain */}
+    <path d="M200 100 H260" stroke="#111111" strokeOpacity="0.3" strokeWidth="3" strokeDasharray="6 6" />
+    <g transform="translate(220 92)">
+      <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#fff200" stroke="#111111" strokeOpacity="0.2" strokeWidth="1" />
+    </g>
+    {/* Blockchain */}
+    <g transform="translate(280 40)">
+      <rect x="0" y="0" width="120" height="120" rx="20" fill="url(#flowGrad)" stroke="#fff200" strokeWidth="2" strokeOpacity="0.5" />
+      <circle cx="35" cy="45" r="12" fill="#ffffff" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" />
+      <circle cx="85" cy="45" r="12" fill="#ffffff" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" />
+      <circle cx="60" cy="85" r="12" fill="#ffffff" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" />
+      <path d="M35 45 L85 45 M60 45 L60 85" stroke="#111111" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" />
+      <text x="60" y="118" textAnchor="middle" fontSize="11" fontWeight="800" fill="#111111" opacity="0.75">Blockchain</text>
+    </g>
+    {/* Arrow */}
+    <path d="M420 100 H480" stroke="#111111" strokeOpacity="0.3" strokeWidth="3" strokeDasharray="6 6" />
+    <g transform="translate(440 92)">
+      <rect x="-8" y="-6" width="16" height="12" rx="2" fill="#fff200" stroke="#111111" strokeOpacity="0.2" strokeWidth="1" />
+    </g>
+    {/* Verified */}
+    <g transform="translate(500 50)">
+      <rect x="0" y="0" width="140" height="100" rx="16" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.6" />
+      <circle cx="70" cy="45" r="24" fill="#fff200" opacity="0.3" stroke="#e6d700" strokeWidth="2" />
+      <path d="M58 45 L66 53 L82 37" stroke="#111111" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <text x="70" y="85" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.8">Verified Data</text>
+    </g>
+    <text x="320" y="190" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.65">Transformation flow</text>
+  </Box>
+);
+
+// Option 4: Immutable Ledger Blocks - horizontal
+const ImmutableLedgerBlocksArt = () => (
+  <Box component="svg" viewBox="0 0 640 200" aria-hidden="true" sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}>
+    <defs>
+      <linearGradient id="blockGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" />
+        <stop offset="1" stopColor="#fff200" stopOpacity="0.3" />
+      </linearGradient>
+    </defs>
+    {[
+      { x: 60, y: 80, w: 90, h: 70, label: 'Block 1' },
+      { x: 165, y: 75, w: 90, h: 70, label: 'Block 2' },
+      { x: 270, y: 70, w: 100, h: 75, label: 'Block 3' },
+      { x: 385, y: 75, w: 90, h: 70, label: 'Block 4' },
+      { x: 490, y: 80, w: 90, h: 70, label: 'Block 5' },
+    ].map((b, i) => (
+      <g key={i}>
+        <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="12" fill="url(#blockGrad)" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" />
+        <rect x={b.x + 8} y={b.y + 12} width={b.w - 16} height="8" rx="4" fill="#111111" opacity="0.15" />
+        <rect x={b.x + 8} y={b.y + 28} width={b.w - 24} height="6" rx="3" fill="#111111" opacity="0.1" />
+        <text x={b.x + b.w / 2} y={b.y + b.h - 12} textAnchor="middle" fontSize="10" fontWeight="800" fill="#111111" opacity="0.7">{b.label}</text>
+        {i < 4 && (
+          <g transform={`translate(${b.x + b.w + 2} ${b.y + b.h / 2 - 8})`}>
+            <rect x="0" y="0" width="16" height="10" rx="2" fill="#fff200" stroke="#111111" strokeOpacity="0.2" strokeWidth="0.5" />
+          </g>
+        )}
+      </g>
+    ))}
+    <path d="M155 115 L165 115 M260 112 L270 112 M375 115 L385 115 M480 115 L490 115" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" strokeLinecap="round" />
+    <text x="320" y="190" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.65">Immutable chain</text>
+  </Box>
+);
+
+// Option 5: Three Pillars - horizontal
+const ThreePillarsArt = () => (
+  <Box component="svg" viewBox="0 0 640 200" aria-hidden="true" sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}>
+    <defs>
+      <linearGradient id="pillarGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.4" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.2" />
+      </linearGradient>
+    </defs>
+    {[
+      { x: 100, icon: 'shield', label: 'Security', sub: 'Protected' },
+      { x: 320, icon: 'eye', label: 'Transparency', sub: 'Visible' },
+      { x: 540, icon: 'lock', label: 'Immutability', sub: 'Tamper-proof' },
+    ].map((p, i) => (
+      <g key={i} transform={`translate(${p.x} 0)`}>
+        <rect x="-55" y="20" width="110" height="100" rx="16" fill="url(#pillarGrad)" stroke="#111111" strokeOpacity="0.12" strokeWidth="2" />
+        <circle cx="0" cy="55" r="24" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.6" />
+        {p.icon === 'shield' && <path d="M0 40 L12 48 L12 62 Q12 72 0 76 Q-12 72 -12 62 L-12 48 Z" fill="#111111" opacity="0.6" />}
+        {p.icon === 'eye' && <ellipse cx="0" cy="55" rx="12" ry="6" fill="none" stroke="#111111" strokeWidth="3" strokeOpacity="0.6" />}
+        {p.icon === 'lock' && <rect x="-10" y="48" width="20" height="18" rx="4" fill="none" stroke="#111111" strokeWidth="2.5" strokeOpacity="0.6" />}
+        <text x="0" y="95" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.85">{p.label}</text>
+        <text x="0" y="108" textAnchor="middle" fontSize="9" fontWeight="700" fill="#111111" opacity="0.55">{p.sub}</text>
+      </g>
+    ))}
+    <path d="M155 70 H265 M375 70 H485" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" strokeDasharray="4 4" />
+    <text x="320" y="190" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.65">Key pillars</text>
+  </Box>
+);
+
+// Option 6: Before/After Split - horizontal
+const BeforeAfterSplitArt = () => (
+  <Box component="svg" viewBox="0 0 640 200" aria-hidden="true" sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}>
+    <defs>
+      <linearGradient id="beforeGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#111111" stopOpacity="0.08" />
+        <stop offset="1" stopColor="#111111" stopOpacity="0.04" />
+      </linearGradient>
+      <linearGradient id="afterGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.25" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.15" />
+      </linearGradient>
+    </defs>
+    {/* Before - fragmented */}
+    <g transform="translate(40 40)">
+      <rect x="0" y="0" width="260" height="120" rx="16" fill="url(#beforeGrad)" stroke="#111111" strokeOpacity="0.1" strokeWidth="2" />
+      <text x="130" y="30" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.5">BEFORE</text>
+      <rect x="20" y="45" width="70" height="50" rx="8" fill="#ffffff" stroke="#111111" strokeOpacity="0.08" />
+      <rect x="100" y="50" width="60" height="40" rx="8" fill="#ffffff" stroke="#111111" strokeOpacity="0.08" />
+      <rect x="170" y="48" width="75" height="48" rx="8" fill="#ffffff" stroke="#111111" strokeOpacity="0.08" />
+      <rect x="210" y="55" width="40" height="35" rx="8" fill="#ffffff" stroke="#111111" strokeOpacity="0.08" />
+      <text x="130" y="115" textAnchor="middle" fontSize="10" fontWeight="700" fill="#111111" opacity="0.5">Fragmented • Mutable</text>
+    </g>
+    {/* Arrow */}
+    <path d="M320 100 H340" stroke="#111111" strokeOpacity="0.4" strokeWidth="3" />
+    <polygon points="335,95 345,100 335,105" fill="#111111" opacity="0.5" />
+    {/* After - connected */}
+    <g transform="translate(360 40)">
+      <rect x="0" y="0" width="260" height="120" rx="16" fill="url(#afterGrad)" stroke="#fff200" strokeOpacity="0.5" strokeWidth="2" />
+      <text x="130" y="30" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.8">AFTER</text>
+      <circle cx="70" cy="75" r="18" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.7" />
+      <circle cx="130" cy="75" r="18" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.7" />
+      <circle cx="190" cy="75" r="18" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.7" />
+      <circle cx="250" cy="75" r="18" fill="#ffffff" stroke="#fff200" strokeWidth="2" strokeOpacity="0.7" />
+      <path d="M88 75 H112 M148 75 H172 M208 75 H232" stroke="#fff200" strokeWidth="3" strokeOpacity="0.6" strokeLinecap="round" />
+      <text x="130" y="115" textAnchor="middle" fontSize="10" fontWeight="700" fill="#111111" opacity="0.75">Connected • Immutable</text>
+    </g>
+    <text x="320" y="190" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.65">Transformation</text>
+  </Box>
+);
+
+// Horizontal Tanzania Map (Option 3)
+const TanzaniaBlockchainArtHorizontal = () => (
+  <Box component="svg" viewBox="0 0 640 220" aria-hidden="true" sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: '100%', minWidth: 320 }}>
+    <defs>
+      <linearGradient id="tzHMapGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.2" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.12" />
+      </linearGradient>
+      <linearGradient id="tzHNodeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" />
+        <stop offset="1" stopColor="#fff200" />
+      </linearGradient>
+    </defs>
+    <path d="M80 80 L160 60 L240 70 L320 50 L400 70 L480 60 L560 80 L580 140 L560 180 L480 200 L320 190 L160 200 L80 180 L60 140 Z" fill="url(#tzHMapGrad)" stroke="#111111" strokeOpacity="0.12" strokeWidth="2" />
+    <ellipse cx="605" cy="120" rx="12" ry="20" fill="url(#tzHMapGrad)" stroke="#111111" strokeOpacity="0.1" strokeWidth="1" />
+    {[
+      { x: 120, y: 100, name: 'Arusha' },
+      { x: 240, y: 90, name: 'Dodoma' },
+      { x: 320, y: 110, name: 'Dar', primary: true },
+      { x: 440, y: 90, name: 'Mwanza' },
+      { x: 540, y: 110, name: 'Mbeya' },
+    ].map((c, i) => (
+      <g key={c.name}>
+        <circle cx={c.x} cy={c.y} r={c.primary ? 14 : 10} fill="url(#tzHNodeGrad)" stroke="#111111" strokeOpacity="0.2" strokeWidth="1.5" />
+        <circle cx={c.x} cy={c.y} r={(c.primary ? 14 : 10) * 0.4} fill="#111111" opacity="0.6" />
+        <text x={c.x} y={c.y + 28} textAnchor="middle" fontSize="9" fontWeight="700" fill="#111111" opacity="0.7">{c.name}</text>
+      </g>
+    ))}
+    <path d="M134 100 H226 M254 92 H306 M334 102 H426 M454 94 H526" stroke="#111111" strokeOpacity="0.15" strokeWidth="2" strokeDasharray="3 4" />
+    <text x="320" y="210" textAnchor="middle" fontSize="11" fontWeight="800" fill="#111111" opacity="0.65">National coverage</text>
   </Box>
 );
 
@@ -4704,6 +4890,7 @@ export default function SmartTaxChainPresentation() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [rootCauseFullView, setRootCauseFullView] = useState(false);
   const [platformMapFullView, setPlatformMapFullView] = useState(false);
+  const [coverIllustrationIndex, setCoverIllustrationIndex] = useState(0); // 0–5: switch before confirming
 
   const presentationDate = useMemo(() => {
     const d = new Date();
@@ -5481,15 +5668,50 @@ export default function SmartTaxChainPresentation() {
                                       </Typography>
                                     </Box>
 
-                                    {/* Tanzania Map Blockchain Network Illustration */}
-                                    <Box
-                                      sx={{
-                                        display: 'flex',
-                                        justifyContent: { xs: 'center', md: 'flex-start' },
-                                        py: { xs: 1, md: 2 },
-                                      }}
-                                    >
-                                      <BlockchainNetworkShieldArt />
+                                    {/* Cover illustration - switch before confirming */}
+                                    <Box sx={{ width: '100%' }}>
+                                      <Stack direction="row" spacing={0.75} sx={{ mb: 1, flexWrap: 'wrap', gap: 0.5 }}>
+                                        {[
+                                          { label: '1', cmp: BlockchainNetworkShieldArt },
+                                          { label: '2', cmp: DataFlowTransformationArt },
+                                          { label: '3', cmp: TanzaniaBlockchainArtHorizontal },
+                                          { label: '4', cmp: ImmutableLedgerBlocksArt },
+                                          { label: '5', cmp: ThreePillarsArt },
+                                          { label: '6', cmp: BeforeAfterSplitArt },
+                                        ].map((opt, i) => (
+                                          <Chip
+                                            key={opt.label}
+                                            label={opt.label}
+                                            size="small"
+                                            onClick={() => setCoverIllustrationIndex(i)}
+                                            sx={{
+                                              fontWeight: 800,
+                                              minWidth: 32,
+                                              backgroundColor: coverIllustrationIndex === i ? '#fff200' : alpha('#111111', 0.06),
+                                              border: `1px solid ${coverIllustrationIndex === i ? '#e6d700' : alpha('#111111', 0.12)}`,
+                                              '&:hover': { backgroundColor: coverIllustrationIndex === i ? '#e6d700' : alpha('#111111', 0.08) },
+                                            }}
+                                          />
+                                        ))}
+                                      </Stack>
+                                      <Box
+                                        sx={{
+                                          width: '100%',
+                                          display: 'flex',
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          py: { xs: 0.5, md: 1 },
+                                        }}
+                                      >
+                                        {[
+                                          <BlockchainNetworkShieldArt key="0" />,
+                                          <DataFlowTransformationArt key="1" />,
+                                          <TanzaniaBlockchainArtHorizontal key="2" />,
+                                          <ImmutableLedgerBlocksArt key="3" />,
+                                          <ThreePillarsArt key="4" />,
+                                          <BeforeAfterSplitArt key="5" />,
+                                        ][coverIllustrationIndex]}
+                                      </Box>
                                     </Box>
 
                                     {/* Presenter / Date (single clean block) ***/}
