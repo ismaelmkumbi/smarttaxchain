@@ -214,6 +214,198 @@ const BulletItem = ({ icon, text, spacing = 1.25, iconBoxSx, textSx, textVariant
   </Stack>
 );
 
+// Tanzania Map with Blockchain Network - Cover Slide Illustration
+const TanzaniaBlockchainArt = () => (
+  <Box
+    component="svg"
+    viewBox="0 0 400 380"
+    aria-hidden="true"
+    sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: 360 }}
+  >
+    <defs>
+      <linearGradient id="tzMapGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.25" />
+        <stop offset="1" stopColor="#fff200" stopOpacity="0.08" />
+      </linearGradient>
+      <linearGradient id="tzNodeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff200" />
+        <stop offset="1" stopColor="#e6d700" />
+      </linearGradient>
+      <filter id="tzGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="tzShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.15" />
+      </filter>
+    </defs>
+
+    {/* Tanzania Map Outline (simplified) */}
+    <path
+      d="M120 40 L180 35 L220 45 L260 40 L290 55 L310 50 L330 70 L340 100 
+         L335 130 L345 160 L340 190 L350 220 L345 250 L330 280 L300 300 
+         L270 320 L240 340 L200 350 L160 345 L130 330 L100 300 L80 260 
+         L70 220 L75 180 L85 140 L95 100 L105 70 L120 40 Z"
+      fill="url(#tzMapGrad)"
+      stroke="#111111"
+      strokeOpacity="0.15"
+      strokeWidth="2"
+    />
+
+    {/* Zanzibar */}
+    <ellipse
+      cx="355"
+      cy="195"
+      rx="18"
+      ry="28"
+      fill="url(#tzMapGrad)"
+      stroke="#111111"
+      strokeOpacity="0.12"
+      strokeWidth="1.5"
+    />
+
+    {/* Network Connection Lines */}
+    <g stroke="#111111" strokeOpacity="0.18" strokeWidth="2" strokeDasharray="4 4" fill="none">
+      {/* Dar es Salaam to other cities */}
+      <path d="M290 240 L200 120" /> {/* Dar to Arusha */}
+      <path d="M290 240 L150 180" /> {/* Dar to Dodoma */}
+      <path d="M290 240 L100 260" /> {/* Dar to Mbeya */}
+      <path d="M290 240 L240 300" /> {/* Dar to Mtwara */}
+      <path d="M290 240 L330 195" /> {/* Dar to Zanzibar */}
+      {/* Secondary connections */}
+      <path d="M200 120 L150 180" /> {/* Arusha to Dodoma */}
+      <path d="M150 180 L100 260" /> {/* Dodoma to Mbeya */}
+      <path d="M200 120 L260 80" /> {/* Arusha to Mwanza */}
+      <path d="M150 180 L260 80" /> {/* Dodoma to Mwanza */}
+    </g>
+
+    {/* Blockchain Chain Links on connections */}
+    {[
+      { x: 245, y: 180 },
+      { x: 220, y: 210 },
+      { x: 195, y: 250 },
+      { x: 175, y: 150 },
+      { x: 125, y: 220 },
+      { x: 175, y: 100 },
+      { x: 205, y: 80 },
+    ].map((pos, i) => (
+      <g key={i} transform={`translate(${pos.x} ${pos.y})`}>
+        <rect
+          x="-8"
+          y="-5"
+          width="16"
+          height="10"
+          rx="2"
+          fill="#ffffff"
+          stroke="#111111"
+          strokeOpacity="0.25"
+          strokeWidth="1"
+        />
+        <rect x="-4" y="-2" width="8" height="4" rx="1" fill="#fff200" opacity="0.7" />
+      </g>
+    ))}
+
+    {/* City Nodes */}
+    {[
+      { x: 200, y: 120, name: 'Arusha', size: 14 },
+      { x: 260, y: 80, name: 'Mwanza', size: 12 },
+      { x: 150, y: 180, name: 'Dodoma', size: 14 },
+      { x: 290, y: 240, name: 'Dar es Salaam', size: 18, primary: true },
+      { x: 100, y: 260, name: 'Mbeya', size: 12 },
+      { x: 240, y: 300, name: 'Mtwara', size: 10 },
+      { x: 330, y: 195, name: 'Zanzibar', size: 11 },
+    ].map((city, i) => (
+      <g key={city.name} filter={city.primary ? 'url(#tzGlow)' : undefined}>
+        {/* Outer pulse ring for primary */}
+        {city.primary && (
+          <circle
+            cx={city.x}
+            cy={city.y}
+            r={city.size + 8}
+            fill="none"
+            stroke="#fff200"
+            strokeWidth="2"
+            opacity="0.4"
+          >
+            <animate
+              attributeName="r"
+              values={`${city.size + 4};${city.size + 14};${city.size + 4}`}
+              dur="2.5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0.5;0.15;0.5"
+              dur="2.5s"
+              repeatCount="indefinite"
+            />
+          </circle>
+        )}
+        {/* Node background */}
+        <circle cx={city.x} cy={city.y} r={city.size} fill="#ffffff" filter="url(#tzShadow)" />
+        {/* Node border */}
+        <circle
+          cx={city.x}
+          cy={city.y}
+          r={city.size}
+          fill="url(#tzNodeGrad)"
+          stroke="#111111"
+          strokeOpacity="0.2"
+          strokeWidth="2"
+        />
+        {/* Inner dot */}
+        <circle cx={city.x} cy={city.y} r={city.size * 0.4} fill="#111111" opacity="0.75" />
+        {/* City label */}
+        <text
+          x={city.x}
+          y={city.y + city.size + 14}
+          textAnchor="middle"
+          fontSize={city.primary ? 11 : 9}
+          fontWeight={city.primary ? 900 : 700}
+          fill="#111111"
+          opacity={city.primary ? 0.9 : 0.7}
+        >
+          {city.name}
+        </text>
+      </g>
+    ))}
+
+    {/* Legend */}
+    <g transform="translate(20 340)">
+      <rect x="0" y="0" width="140" height="28" rx="6" fill="#ffffff" opacity="0.9" />
+      <circle
+        cx="16"
+        cy="14"
+        r="6"
+        fill="url(#tzNodeGrad)"
+        stroke="#111111"
+        strokeOpacity="0.2"
+        strokeWidth="1"
+      />
+      <text x="28" y="18" fontSize="10" fontWeight="800" fill="#111111" opacity="0.75">
+        Blockchain Nodes
+      </text>
+      <rect
+        x="100"
+        y="10"
+        width="12"
+        height="8"
+        rx="2"
+        fill="#fff200"
+        stroke="#111111"
+        strokeOpacity="0.2"
+        strokeWidth="0.5"
+      />
+      <text x="116" y="18" fontSize="8" fill="#111111" opacity="0.6">
+        Link
+      </text>
+    </g>
+  </Box>
+);
+
 const MiniEvasionArt = () => (
   <Box
     component="svg"
@@ -4424,6 +4616,14 @@ export default function SmartTaxChainPresentation() {
   const [rootCauseFullView, setRootCauseFullView] = useState(false);
   const [platformMapFullView, setPlatformMapFullView] = useState(false);
 
+  const presentationDate = useMemo(() => {
+    const d = new Date();
+    return {
+      full: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+      short: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    };
+  }, []);
+
   const demoUrl = useMemo(() => {
     if (typeof window === 'undefined') return '/auth/login';
     try {
@@ -4441,7 +4641,7 @@ export default function SmartTaxChainPresentation() {
         body: [
           'Blockchain-Based Solution for Enhanced Data Integrity, Trust, and Operational Efficiency',
           'Tanzania Revenue Authority',
-          'Date: November 19, 2025',
+          `Date: ${presentationDate.full}`,
         ],
       },
       {
@@ -4652,7 +4852,7 @@ export default function SmartTaxChainPresentation() {
         content: <CallToActionSlide demoUrl={demoUrl} />,
       },
     ],
-    [demoUrl, rootCauseFullView, platformMapFullView],
+    [demoUrl, rootCauseFullView, platformMapFullView, presentationDate],
   );
 
   const slideRefs = useRef([]);
@@ -5150,7 +5350,7 @@ export default function SmartTaxChainPresentation() {
                                     justifyContent: { md: 'center' },
                                   }}
                                 >
-                                  <Stack spacing={30} sx={{ maxWidth: 820 }}>
+                                  <Stack spacing={{ xs: 2, md: 3 }} sx={{ maxWidth: 820 }}>
                                     {/* Classic title slide */}
                                     <Box>
                                       <Typography
@@ -5190,6 +5390,17 @@ export default function SmartTaxChainPresentation() {
                                         Blockchain-Based Solution for Enhanced Data Integrity,
                                         Trust, and Operational Efficiency
                                       </Typography>
+                                    </Box>
+
+                                    {/* Tanzania Map Blockchain Network Illustration */}
+                                    <Box
+                                      sx={{
+                                        display: 'flex',
+                                        justifyContent: { xs: 'center', md: 'flex-start' },
+                                        py: { xs: 1, md: 2 },
+                                      }}
+                                    >
+                                      <TanzaniaBlockchainArt />
                                     </Box>
 
                                     {/* Presenter / Date (single clean block) ***/}
@@ -5269,7 +5480,7 @@ export default function SmartTaxChainPresentation() {
                                               },
                                             }}
                                           >
-                                            Nov 19, 2025
+                                            {presentationDate.short}
                                           </Typography>
                                           <Typography
                                             variant="caption"
