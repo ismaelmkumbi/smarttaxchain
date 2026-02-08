@@ -406,6 +406,95 @@ const TanzaniaBlockchainArt = () => (
   </Box>
 );
 
+// Option 1: Blockchain Network Shield - Cover Slide Illustration
+const BlockchainNetworkShieldArt = () => (
+  <Box
+    component="svg"
+    viewBox="0 0 360 400"
+    aria-hidden="true"
+    sx={{ width: '100%', height: 'auto', display: 'block', maxWidth: 340 }}
+  >
+    <defs>
+      <linearGradient id="shieldGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#fff200" stopOpacity="0.35" />
+        <stop offset="0.5" stopColor="#fff200" stopOpacity="0.12" />
+        <stop offset="1" stopColor="#e6d700" stopOpacity="0.2" />
+      </linearGradient>
+      <linearGradient id="shieldStroke" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#fff200" />
+        <stop offset="1" stopColor="#e6d700" />
+      </linearGradient>
+      <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" />
+        <stop offset="1" stopColor="#fff200" />
+      </linearGradient>
+      <filter id="shieldGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.2" />
+      </filter>
+    </defs>
+    <path
+      d="M180 20 L320 80 L320 200 Q320 320 180 380 Q40 320 40 200 L40 80 Z"
+      fill="url(#shieldGrad)"
+      stroke="url(#shieldStroke)"
+      strokeWidth="3"
+      strokeOpacity="0.5"
+      filter="url(#shieldGlow)"
+    />
+    <g stroke="#111111" strokeOpacity="0.2" strokeWidth="1.5" strokeLinecap="round" fill="none">
+      <path d="M180 100 L140 160 L180 220 L220 160 Z" />
+      <path d="M180 100 L180 220" />
+      <path d="M140 160 L220 160" />
+      <path d="M180 160 L120 240" />
+      <path d="M180 160 L240 240" />
+      <path d="M140 160 L180 280" />
+      <path d="M220 160 L180 280" />
+    </g>
+    {[
+      { cx: 180, cy: 100, r: 18, center: true },
+      { cx: 140, cy: 160, r: 14 },
+      { cx: 220, cy: 160, r: 14 },
+      { cx: 180, cy: 220, r: 14 },
+      { cx: 180, cy: 280, r: 12 },
+      { cx: 120, cy: 240, r: 10 },
+      { cx: 240, cy: 240, r: 10 },
+    ].map((node, i) => (
+      <g key={i}>
+        <circle cx={node.cx} cy={node.cy} r={node.r} fill="#ffffff" filter="url(#nodeShadow)" />
+        <circle cx={node.cx} cy={node.cy} r={node.r} fill="url(#nodeGrad)" stroke="#111111" strokeOpacity="0.25" strokeWidth="2" />
+        <circle cx={node.cx} cy={node.cy} r={node.r * 0.4} fill="#111111" opacity="0.6" />
+        {node.center && (
+          <circle cx={node.cx} cy={node.cy} r={node.r + 4} fill="none" stroke="#fff200" strokeWidth="2" opacity="0.5">
+            <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite" />
+          </circle>
+        )}
+      </g>
+    ))}
+    {[
+      { x: 160, y: 130 },
+      { x: 200, y: 130 },
+      { x: 180, y: 190 },
+      { x: 150, y: 200 },
+      { x: 210, y: 200 },
+      { x: 180, y: 250 },
+    ].map((pos, i) => (
+      <g key={i} transform={`translate(${pos.x} ${pos.y})`}>
+        <rect x="-6" y="-4" width="12" height="8" rx="2" fill="#ffffff" stroke="#111111" strokeOpacity="0.2" strokeWidth="1" />
+        <rect x="-3" y="-1.5" width="6" height="3" rx="1" fill="#fff200" opacity="0.8" />
+      </g>
+    ))}
+    <text x="180" y="360" textAnchor="middle" fontSize="12" fontWeight="800" fill="#111111" opacity="0.7">
+      Security + Decentralization
+    </text>
+  </Box>
+);
+
 const MiniEvasionArt = () => (
   <Box
     component="svg"
@@ -5400,7 +5489,7 @@ export default function SmartTaxChainPresentation() {
                                         py: { xs: 1, md: 2 },
                                       }}
                                     >
-                                      <TanzaniaBlockchainArt />
+                                      <BlockchainNetworkShieldArt />
                                     </Box>
 
                                     {/* Presenter / Date (single clean block) ***/}
