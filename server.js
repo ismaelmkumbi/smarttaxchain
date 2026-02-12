@@ -388,6 +388,87 @@ app.get('/api/taxpayers', authenticateToken, (req, res) => {
   });
 });
 
+// GET /api/taxpayers/:tin/history - Legacy Auditing compliance per taxpayer
+app.get('/api/taxpayers/:tin/history', authenticateToken, (req, res) => {
+  const { tin } = req.params;
+  const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+  const pageSize = Math.min(Math.max(parseInt(req.query.pageSize, 10) || 50, 1), 100);
+
+  // Filter audit logs: entityType TAXPAYER and entityId matches TIN
+  let trail = AUDIT_LOGS.filter(
+    (log) => log.entityType === 'TAXPAYER' && (log.entityId === tin || String(log.entityId).endsWith(tin))
+  );
+
+  // If no mock match, add synthetic entries for this TIN (from tax-assessments/compliance calls)
+  if (trail.length === 0) {
+    trail = [
+      {
+        id: `AUDIT-TP-${tin}-1`,
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+        user: { id: 'admin@tra.go.tz', name: 'admin@tra.go.tz', role: 'admin' },
+        action: 'READ',
+        entityType: 'TAXPAYER',
+        entityId: tin,
+        status: 'SUCCESS',
+        riskLevel: 'LOW',
+        details: {
+          path: '/api/compliance/taxpayer/' + tin + '/report',
+          method: 'GET',
+          entityId: tin,
+        },
+      },
+      {
+        id: `AUDIT-TP-${tin}-2`,
+        timestamp: new Date(Date.now() - 7200000).toISOString(),
+        user: { id: 'ANONYMOUS', name: null, role: null },
+        action: 'READ',
+        entityType: 'TAX_ASSESSMENT',
+        entityId: tin,
+        status: 'SUCCESS',
+        riskLevel: 'LOW',
+        details: {
+          path: '/api/tax-assessments/tin/' + tin,
+          method: 'GET',
+          entityId: tin,
+        },
+      },
+    ].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  } else {
+    trail = trail.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+  }
+
+  const start = (page - 1) * pageSize;
+  const history = trail.slice(start, start + pageSize).map((log) => ({
+    txId: log.id || log.blockchainTxId,
+    timestamp: log.timestamp,
+    creator: log.user?.name || log.user?.id || 'ANONYMOUS',
+    user: log.user ? { id: log.user.id, name: log.user.name, role: log.user.role, msp: log.user.msp } : { id: 'ANONYMOUS', name: null, role: null, msp: null },
+    device: log.deviceInfo ? { info: log.deviceInfo, userAgent: log.deviceInfo.userAgent } : {},
+    action: log.action,
+    status: log.status,
+    details: log.details || {},
+    beforeState: log.beforeState || null,
+    afterState: log.afterState || null,
+    changes: log.changes || null,
+    verified: log.verified || false,
+    source: 'audit_log',
+  }));
+
+  return res.json({
+    success: true,
+    history,
+    pagination: {
+      page,
+      pageSize,
+      total: trail.length,
+      totalPages: Math.ceil(trail.length / pageSize) || 1,
+    },
+    entityType: 'TAXPAYER',
+    entityId: tin,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Register new taxpayer
 app.post('/api/taxpayers/register', authenticateToken, (req, res) => {
   try {
@@ -630,6 +711,8 @@ let TAX_ASSESSMENTS = [
   },
 ];
 
+const ASSESSMENT_PAYMENTS = {};
+
 // GET /api/tax-assessments (with filters & pagination)
 app.get('/api/tax-assessments', authenticateToken, (req, res) => {
   const {
@@ -739,6 +822,137 @@ app.post('/api/tax-assessments', authenticateToken, (req, res) => {
     success: true,
     taxAssessment: record,
     timestamp: now,
+  });
+});
+
+// GET /api/tax-assessments/:assessmentId/account (full account view: assessment + summary + payment_entries)
+app.get('/api/tax-assessments/:assessmentId/account', authenticateToken, (req, res) => {
+  const assessmentId = req.params.assessmentId;
+  const found = TAX_ASSESSMENTS.find((a) => a.ID === assessmentId);
+  if (!found) {
+    return res.status(404).json({
+      success: false,
+      error: `The tax assessment ${assessmentId} does not exist`,
+      context: 'ChaincodeInvokeError',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  const payments = ASSESSMENT_PAYMENTS[assessmentId] || [];
+  const totalPaid = payments.reduce((sum, p) => sum + (p.amount_paid || 0), 0);
+  const totalDue = found.TotalDue || found.Amount + (found.Penalties || 0) + (found.Interest || 0);
+  const remainingBalance = Math.max(0, totalDue - totalPaid);
+  const status =
+    remainingBalance <= 0 ? 'PAID' : totalPaid > 0 ? 'PARTIALLY_PAID' : found.Status || 'PENDING';
+
+  return res.json({
+    success: true,
+    assessment_id: assessmentId,
+    assessment: found,
+    account_summary: {
+      total_due: totalDue,
+      total_paid: totalPaid,
+      remaining_balance: remainingBalance,
+      total_interest: found.Interest || 0,
+      total_penalties: found.Penalties || 0,
+      base_amount: found.Amount || 0,
+      payment_count: payments.length,
+    },
+    payment_entries: payments,
+    status,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// GET /api/tax-assessments/:assessmentId/payments
+app.get('/api/tax-assessments/:assessmentId/payments', authenticateToken, (req, res) => {
+  const assessmentId = req.params.assessmentId;
+  const found = TAX_ASSESSMENTS.find((a) => a.ID === assessmentId);
+  if (!found) {
+    return res.status(404).json({
+      success: false,
+      error: `The tax assessment ${assessmentId} does not exist`,
+      context: 'ChaincodeInvokeError',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  const payments = ASSESSMENT_PAYMENTS[assessmentId] || [];
+  const totalAmountPaid = payments.reduce((sum, p) => sum + (p.amount_paid || 0), 0);
+
+  return res.json({
+    success: true,
+    assessment_id: assessmentId,
+    payments,
+    payment_history: payments,
+    total_payments: payments.length,
+    total_amount_paid: totalAmountPaid,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// POST /api/tax-assessments/:assessmentId/payment
+app.post('/api/tax-assessments/:assessmentId/payment', authenticateToken, (req, res) => {
+  const assessmentId = req.params.assessmentId;
+  const { amount, paymentMethod, paymentDate, receivedBy } = req.body || {};
+
+  if (!amount || Number(amount) <= 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Payment amount must be positive',
+      context: 'ValidationError',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  const found = TAX_ASSESSMENTS.find((a) => a.ID === assessmentId);
+  if (!found) {
+    return res.status(404).json({
+      success: false,
+      error: `The tax assessment ${assessmentId} does not exist`,
+      context: 'ChaincodeInvokeError',
+      timestamp: new Date().toISOString(),
+    });
+  }
+
+  if (!ASSESSMENT_PAYMENTS[assessmentId]) ASSESSMENT_PAYMENTS[assessmentId] = [];
+
+  const payments = ASSESSMENT_PAYMENTS[assessmentId];
+  const amt = Number(amount);
+  const prevTotalPaid = payments.reduce((sum, p) => sum + (p.amount_paid || 0), 0);
+  const totalDue = found.TotalDue || found.Amount + (found.Penalties || 0) + (found.Interest || 0);
+  const totalPaidAfter = prevTotalPaid + amt;
+  const balanceAfter = Math.max(0, totalDue - totalPaidAfter);
+
+  const entry = {
+    entry_number: payments.length + 1,
+    receipt_id: `RECEIPT-${assessmentId}-${Date.now()}`,
+    amount_paid: amt,
+    payment_method: paymentMethod || 'CASH',
+    payment_reference: `PAY-${Date.now()}`,
+    payment_date: paymentDate || new Date().toISOString(),
+    received_by: receivedBy || 'admin@tra.go.tz',
+    balance_after: balanceAfter,
+    total_paid_after: totalPaidAfter,
+  };
+
+  payments.push(entry);
+
+  found.TotalPaid = totalPaidAfter;
+  found.RemainingBalance = balanceAfter;
+  found.Status = balanceAfter <= 0 ? 'PAID' : 'PARTIALLY_PAID';
+
+  return res.status(201).json({
+    success: true,
+    receipt: entry,
+    assessment: found,
+    account_summary: {
+      total_due: totalDue,
+      total_paid: totalPaidAfter,
+      remaining_balance: balanceAfter,
+      payment_count: payments.length,
+    },
+    timestamp: new Date().toISOString(),
   });
 });
 

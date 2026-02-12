@@ -49,6 +49,7 @@ import {
   Visibility,
   Refresh,
   Close,
+  AccountBalance,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import taxAssessmentService from 'src/services/taxAssessmentService';
@@ -1218,6 +1219,21 @@ const AssessmentList = () => {
                       </TableCell>
                       <TableCell align="center" onClick={(e) => e.stopPropagation()}>
                         <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+                          <Tooltip title="View account (payments & balance)">
+                            <IconButton
+                              size="small"
+                              onClick={() => navigate(`/apps/assessment/${assessmentId}/account`)}
+                              sx={{
+                                color: theme.palette.success.main,
+                                '&:hover': {
+                                  bgcolor: alpha(theme.palette.success.main, 0.1),
+                                  color: theme.palette.success.dark,
+                                },
+                              }}
+                            >
+                              <AccountBalance fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
                           <Tooltip title="View Details">
                             <IconButton
                               size="small"

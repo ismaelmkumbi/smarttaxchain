@@ -20,7 +20,9 @@ const LinkStyled = styled(Link)(({ theme }) => ({
 }));
 
 // Logo size wrapper - Compact and aligned
-const StyledLogo = styled(Box)(({ theme, isCollapsed }) => ({
+const StyledLogo = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isCollapsed',
+})(({ theme, isCollapsed }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: isCollapsed ? 'center' : 'flex-start',

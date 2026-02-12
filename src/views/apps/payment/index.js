@@ -53,7 +53,7 @@ const Payment = () => {
         } else if (isOverdue) {
           displayStatus = 'Overdue';
         } else if (status === 'PARTIALLY_PAID') {
-          displayStatus = 'Pending'; // Show as pending for partial payments
+          displayStatus = 'Partially paid';
         } else {
           displayStatus = 'Pending';
         }

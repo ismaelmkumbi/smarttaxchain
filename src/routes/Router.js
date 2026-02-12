@@ -48,6 +48,7 @@ const InvoiceCreate = Loadable(lazy(() => import('../views/apps/invoice/Create')
 const InvoiceDetail = Loadable(lazy(() => import('../views/apps/invoice/Detail')));
 const TaxAssessmentList = Loadable(lazy(() => import('../views/apps/assessment/List')));
 const TaxAssessmentDetail = Loadable(lazy(() => import('../views/apps/assessment/Detail')));
+const AssessmentAccountPage = Loadable(lazy(() => import('../views/apps/assessment/Account')));
 const TaxTypeManagementPage = Loadable(
   lazy(() => import('../views/apps/system/TaxTypeManagement')),
 );
@@ -278,6 +279,7 @@ const Router = [
       { path: '/apps/assessment/by-taxpayer', element: <TaxpayerSearchPage /> },
       { path: '/apps/invoice/create', element: <InvoiceCreate /> },
       { path: '/tax/assessment/detail/:id', element: <TaxAssessmentDetail /> },
+      { path: '/apps/assessment/:id/account', element: <AssessmentAccountPage /> },
       { path: '/tax/taxpayer/:tin/assessments', element: <TaxpayerAssessmentsPage /> },
       { path: '/tax/payments/list', element: <TaxPayment /> },
       { path: '/system/tax-types', element: <TaxTypeManagementPage /> },

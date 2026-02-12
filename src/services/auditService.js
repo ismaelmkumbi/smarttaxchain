@@ -1,5 +1,6 @@
 // src/services/auditService.js
 import api from './api';
+import { getToken } from './authService';
 
 /**
  * Enterprise Audit Service
@@ -85,6 +86,9 @@ const auditService = {
    */
   getArchivedLogs: async (filters = {}) => {
     try {
+      if (!getToken()) {
+        return { archivedLogs: [], pagination: { total: 0, page: 1, pageSize: 50, totalPages: 0 } };
+      }
       const queryParams = new URLSearchParams();
 
       if (filters.logType) queryParams.append('logType', filters.logType);
@@ -122,6 +126,9 @@ const auditService = {
    */
   getAuditLogs: async (filters = {}) => {
     try {
+      if (!getToken()) {
+        return { logs: [], pagination: { total: 0, page: 1, pageSize: 50, totalPages: 0 } };
+      }
       const queryParams = new URLSearchParams();
       
       if (filters.action) queryParams.append('action', filters.action);
@@ -240,6 +247,9 @@ const auditService = {
       if (!entityType || !entityId) {
         throw new Error('Entity type and ID are required');
       }
+      if (!getToken()) {
+        return [];
+      }
 
       const response = await api.get(`/api/audit/trail/${entityType}/${entityId}`);
       
@@ -319,6 +329,9 @@ const auditService = {
    */
   getHighRiskTransactions: async (filters = {}) => {
     try {
+      if (!getToken()) {
+        return { transactions: [], pagination: { total: 0, page: 1, pageSize: 25, totalPages: 0 } };
+      }
       const queryParams = new URLSearchParams();
       
       if (filters.riskLevel) queryParams.append('riskLevel', filters.riskLevel);
@@ -418,6 +431,9 @@ const auditService = {
    */
   getAuditStatistics: async (filters = {}) => {
     try {
+      if (!getToken()) {
+        return {};
+      }
       const queryParams = new URLSearchParams();
       
       if (filters.fromDate) queryParams.append('fromDate', filters.fromDate);
@@ -448,6 +464,9 @@ const auditService = {
     try {
       if (!userId) {
         throw new Error('User ID is required');
+      }
+      if (!getToken()) {
+        return {};
       }
 
       const queryParams = new URLSearchParams();

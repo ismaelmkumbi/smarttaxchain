@@ -374,6 +374,24 @@ const taxAssessmentService = {
   },
 
   /**
+   * Get assessment account (full view: assessment + account_summary + payment_entries)
+   * @param {string} assessmentId - Assessment ID
+   * @returns {Promise<Object>} { assessment, account_summary, payment_entries, status }
+   */
+  getAssessmentAccount: async (assessmentId) => {
+    try {
+      if (!assessmentId) {
+        throw new Error('Assessment ID is required');
+      }
+      const response = await api.get(`/api/tax-assessments/${assessmentId}/account`);
+      return response?.data ?? response;
+    } catch (error) {
+      console.error('Error fetching assessment account:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Get complete assessment with ledger and summary
    * @param {string} id - Assessment ID
    * @returns {Promise<Object>} Complete assessment with ledger and summary

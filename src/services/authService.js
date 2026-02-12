@@ -22,24 +22,36 @@ const getStoredUser = () => {
   }
 };
 
+const STAFF_NOT_FOUND_MESSAGE = 'Wrong email or password. Please try again.';
+
+const isStaffNotFoundError = (err) => {
+  const msg = (err?.message || err?.details || '').toString().toLowerCase();
+  return (
+    msg.includes('does not exist') ||
+    msg.includes('staff with id') ||
+    msg.includes('user not found') ||
+    err?.status === 404 ||
+    (err?.status === 500 && msg.includes('does not exist'))
+  );
+};
+
 export const login = async (email, password) => {
-  // Backend now uses email instead of username for login
-  const response = await api.post('/api/auth/login', { email, password });
-  
-  // Handle nested response structure: response.data.token or response.token
-  const token = response?.data?.token || response?.token;
-  const user = response?.data?.user || response?.user;
-  
-  if (token) {
-    localStorage.setItem(TOKEN_KEY, token);
-    storeUser(user);
-    return {
-      ...response,
-      token, // Ensure token is at top level for compatibility
-      user,
-    };
-  } else {
+  try {
+    const response = await api.post('/api/auth/login', { email, password });
+    const token = response?.data?.token || response?.token;
+    const user = response?.data?.user || response?.user;
+
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      storeUser(user);
+      return { ...response, token, user };
+    }
     throw new Error(response?.error || response?.message || 'Login failed');
+  } catch (err) {
+    if (isStaffNotFoundError(err)) {
+      throw new Error(STAFF_NOT_FOUND_MESSAGE);
+    }
+    throw new Error(err?.message || STAFF_NOT_FOUND_MESSAGE);
   }
 };
 
@@ -111,16 +123,25 @@ export const getUserInfo = async () => {
       storeUser(user);
       return user;
     }
-  } catch {
-    try {
-      // Fallback for mock server which still uses /me
-  const response = await api.get('/api/staff/me');
-      const user = response?.user || response?.data || response;
-      if (user) storeUser(user);
-      return user || storedUser;
-    } catch {
-      return storedUser;
+  } catch (err) {
+    if (isStaffNotFoundError(err)) {
+      logout();
+      throw new Error(STAFF_NOT_FOUND_MESSAGE);
     }
+    try {
+      const response = await api.get('/api/staff/me');
+      const user = response?.user || response?.data || response;
+      if (user) {
+        storeUser(user);
+        return user;
+      }
+    } catch (meErr) {
+      if (isStaffNotFoundError(meErr)) {
+        logout();
+        throw new Error(STAFF_NOT_FOUND_MESSAGE);
+      }
+    }
+    return storedUser;
   }
 
   return storedUser;

@@ -1,6 +1,7 @@
 // src/context/TRAContext.js
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react';
 import traApi from '../services/traApiService';
+import { getToken } from '../services/authService';
 
 // Add mock data at the top
 const MOCK_TAXPAYERS = [
@@ -698,12 +699,15 @@ export const TRAProvider = ({ children }) => {
 
     // Blockchain
     loadBlockchainStats: useCallback(async () => {
+      if (!getToken()) {
+        dispatch({ type: TRA_ACTIONS.SET_BLOCKCHAIN_STATS, payload: MOCK_BLOCKCHAIN_STATS });
+        return MOCK_BLOCKCHAIN_STATS;
+      }
       try {
         const response = await traApi.getBlockchainStats();
         dispatch({ type: TRA_ACTIONS.SET_BLOCKCHAIN_STATS, payload: response });
         return response;
       } catch (error) {
-        // Fallback to mock data
         dispatch({ type: TRA_ACTIONS.SET_BLOCKCHAIN_STATS, payload: MOCK_BLOCKCHAIN_STATS });
         return MOCK_BLOCKCHAIN_STATS;
       }

@@ -4,7 +4,6 @@ import {
   login as loginService,
   logout as logoutService,
   getToken,
-  isAuthenticated as checkAuth,
   getUserInfo,
 } from 'src/services/authService';
 import { useNavigate } from 'react-router-dom';
@@ -27,16 +26,18 @@ export const AuthProvider = ({ children }) => {
       const response = await loginService(email, password);
       setToken(response.token);
       setOpen(true);
-      // Optionally fetch user info
       try {
         const userInfo = await getUserInfo();
         setUser(userInfo);
-      } catch {
+        navigate('/dashboards/modern');
+      } catch (userErr) {
+        setToken(null);
         setUser(null);
+        setError(userErr?.message || 'Wrong email or password. Please try again.');
+        setOpen(true);
       }
-      navigate('/dashboards/modern');
     } catch (err) {
-      setError(err.message);
+      setError(err?.message || 'Wrong email or password. Please try again.');
       setOpen(true);
     } finally {
       setLoading(false);
@@ -52,12 +53,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      // Optionally fetch user info on mount
       getUserInfo()
         .then(setUser)
-        .catch(() => setUser(null));
+        .catch(() => {
+          logoutService();
+          setToken(null);
+          setUser(null);
+          navigate('/auth/login');
+        });
     }
-  }, [token]);
+  }, [token, navigate]);
 
   const value = {
     user,

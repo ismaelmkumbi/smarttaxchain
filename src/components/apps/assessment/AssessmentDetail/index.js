@@ -45,6 +45,7 @@ import {
   Receipt,
   Business,
   Person,
+  AccountBalance,
   CalendarToday,
   MonetizationOn,
   Warning,
@@ -567,6 +568,25 @@ const AssessmentDetail = () => {
                 }}
               >
                 View Taxpayer
+              </Button>
+            </Tooltip>
+            <Tooltip title="View account (payments & balance)">
+              <Button
+                variant="outlined"
+                startIcon={<AccountBalance />}
+                onClick={() => navigate(`/apps/assessment/${id}/account`)}
+                sx={{
+                  borderColor: theme.palette.success.main,
+                  color: theme.palette.success.dark,
+                  fontWeight: 600,
+                  '&:hover': {
+                    borderColor: theme.palette.success.dark,
+                    bgcolor: alpha(theme.palette.success.main, 0.15),
+                    color: theme.palette.success.dark,
+                  },
+                }}
+              >
+                View Account
               </Button>
             </Tooltip>
             <Tooltip title="Print">

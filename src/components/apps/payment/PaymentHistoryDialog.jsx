@@ -20,7 +20,8 @@ import {
   Button,
   useTheme,
 } from '@mui/material';
-import { Receipt, Close } from '@mui/icons-material';
+import { Receipt, Close, AccountBalance } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-TZ', {
@@ -30,8 +31,9 @@ const formatCurrency = (amount) => {
   }).format(amount);
 };
 
-export const PaymentHistoryDialog = ({ open, onClose, payments, loading }) => {
+export const PaymentHistoryDialog = ({ open, onClose, payments, loading, assessmentId }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -89,12 +91,12 @@ export const PaymentHistoryDialog = ({ open, onClose, payments, loading }) => {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={600} color="success.main">
-                        {formatCurrency(payment.amount || 0)}
+                        {formatCurrency(payment.amount ?? payment.amount_paid ?? 0)}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={payment.payment_method || payment.paymentMethod || 'N/A'}
+                        label={(payment.payment_method ?? payment.paymentMethod) || 'N/A'}
                         size="small"
                         variant="outlined"
                         sx={{ fontWeight: 500 }}
@@ -102,19 +104,19 @@ export const PaymentHistoryDialog = ({ open, onClose, payments, loading }) => {
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">
-                        {payment.timestamp || payment.payment_date || payment.paymentDate
-                          ? new Date(payment.timestamp || payment.payment_date || payment.paymentDate).toLocaleString('en-TZ')
+                        {(payment.timestamp ?? payment.payment_date ?? payment.paymentDate)
+                          ? new Date(payment.timestamp ?? payment.payment_date ?? payment.paymentDate).toLocaleString('en-TZ')
                           : 'N/A'}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">
-                        {payment.payment_reference || payment.paymentReference || 'N/A'}
+                        {(payment.payment_reference ?? payment.paymentReference) || '—'}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">
-                        {payment.received_by || payment.receivedBy || 'N/A'}
+                        {(payment.received_by ?? payment.receivedBy) || 'N/A'}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -124,7 +126,22 @@ export const PaymentHistoryDialog = ({ open, onClose, payments, loading }) => {
           </TableContainer>
         )}
       </DialogContent>
-      <DialogActions sx={{ p: 3 }}>
+      <DialogActions sx={{ p: 3, justifyContent: 'space-between' }}>
+        <Box>
+          {assessmentId && (
+            <Button
+              startIcon={<AccountBalance />}
+              onClick={() => {
+                onClose();
+                navigate(`/apps/assessment/${assessmentId}/account`);
+              }}
+              variant="outlined"
+              sx={{ mr: 1 }}
+            >
+              View full account
+            </Button>
+          )}
+        </Box>
         <Button
           onClick={onClose}
           variant="contained"

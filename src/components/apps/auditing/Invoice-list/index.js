@@ -161,21 +161,21 @@ const TaxHistoryViewer = () => {
       setLoading(true);
       setError(null);
       const endpoint = entityTypes[activeTab].endpoint;
-      const response = await fetch(`http://localhost:3000/api/${endpoint}/${id}/history`);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      // Use single axios client (api) - token attached via interceptor
+      const data =
+        activeTab === 0
+          ? await api.get(`/api/taxpayers/${id}/history`)
+          : await api.get(`/api/${endpoint}/${id}/history`);
 
       if (data.success) {
-        const sortedHistory = data.history.sort(
-          (a, b) => new Date(a.Timestamp) - new Date(b.Timestamp),
+        const rawHistory = data.history || data.trail || [];
+        const sortedHistory = [...rawHistory].sort(
+          (a, b) => new Date(a.timestamp || a.Timestamp) - new Date(b.timestamp || b.Timestamp),
         );
         setHistory(sortedHistory);
         setSubmittedId(id);
-        setSelectedEntry(sortedHistory[0]);
+        setSelectedEntry(sortedHistory[0] || null);
 
         const initialExpanded = {};
         sortedHistory.forEach((_, index) => {
@@ -281,6 +281,15 @@ const TaxHistoryViewer = () => {
     return `${hash.slice(0, 6)}...${hash.slice(-4)}`;
   };
 
+  const getEntryDisplay = (entry) => ({
+    timestamp: entry.timestamp || entry.Timestamp,
+    txId: entry.txId || entry.TxId,
+    data: entry.details || entry.Data,
+    performedBy: entry.creator || entry.user?.name || entry.performedBy || entry.Data?.CreatedBy || 'System',
+    performedByRole: entry.user?.role || entry.performedByRole || 'N/A',
+    performedByUserId: entry.user?.id || entry.performedByUserId || 'N/A',
+  });
+
   const getActionDetails = (entry, index) => {
     if (entry.IsDeleted) return { label: 'Deleted', color: 'error', icon: <CloseIcon /> };
 
@@ -360,7 +369,7 @@ const TaxHistoryViewer = () => {
                 {entityTypes[activeTab].label} History Details
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Transaction ID: {shortenHash(selectedEntry.TxId)}
+                Transaction ID: {shortenHash(selectedEntry.txId || selectedEntry.TxId)}
               </Typography>
             </Box>
             <IconButton onClick={() => setDialogOpen(false)}>
@@ -372,15 +381,13 @@ const TaxHistoryViewer = () => {
         <DialogContent dividers>
           <Stack spacing={3}>
             {history
-              .sort((a, b) => new Date(a.Timestamp) - new Date(b.Timestamp))
+              .sort((a, b) => new Date(a.timestamp || a.Timestamp) - new Date(b.timestamp || b.Timestamp))
               .map((entry, index) => {
                 const prevEntry = history[index - 1];
-                const changes = computeChanges(prevEntry?.Data, entry.Data);
+                const d = getEntryDisplay(entry);
+                const prevD = prevEntry ? getEntryDisplay(prevEntry) : null;
+                const changes = computeChanges(prevD?.data, d.data);
                 const { label, color } = getActionDetails(entry, index);
-                const performedBy = entry.performedBy || entry.Data?.CreatedBy || 'System';
-                const performedByRole = entry.performedByRole || 'N/A';
-                const performedByUserId = entry.performedByUserId || 'N/A';
-                const actionType = entry.action || (index === 0 ? 'CREATE' : 'UPDATE');
 
                 return (
                   <Box key={entry.txId || entry.TxId || entry.timestamp || `entry-${index}`}>
@@ -398,35 +405,35 @@ const TaxHistoryViewer = () => {
                           )
                         }
                       />
-                      <Typography variant="subtitle2">{formatDateTime(entry.Timestamp)}</Typography>
+                      <Typography variant="subtitle2">{formatDateTime(d.timestamp)}</Typography>
                       <Chip
-                        label={`By: ${performedBy}`}
+                        label={`By: ${d.performedBy}`}
                         size="small"
                         variant="outlined"
                         sx={{ fontSize: '0.7rem' }}
                       />
-                      {performedByRole !== 'N/A' && (
+                      {d.performedByRole !== 'N/A' && (
                         <Chip
-                          label={performedByRole}
+                          label={d.performedByRole}
                           size="small"
                           variant="outlined"
                           color="info"
                           sx={{ fontSize: '0.7rem' }}
                         />
                       )}
-                      {performedByUserId !== 'N/A' && performedByUserId && (
+                      {d.performedByUserId !== 'N/A' && d.performedByUserId && (
                         <Chip
-                          label={`ID: ${performedByUserId}`}
+                          label={`ID: ${d.performedByUserId}`}
                           size="small"
                           variant="outlined"
                           color="secondary"
                           sx={{ fontSize: '0.7rem' }}
                         />
                       )}
-                      <Tooltip title="View blockchain transaction">
+                      <Tooltip title="View details">
                         <IconButton
                           size="small"
-                          onClick={() => window.open(`https://blockexplorer.com/tx/${entry.TxId}`)}
+                          onClick={() => window.open(d.txId ? `https://blockexplorer.com/tx/${d.txId}` : '#')}
                         >
                           <OpenInNewIcon />
                         </IconButton>
@@ -441,9 +448,9 @@ const TaxHistoryViewer = () => {
                       </Typography>
                     ) : (
                       <List dense>
-                        {label === 'Created' && entry.Data ? (
-                          // Show complete initial data for creation
-                          Object.entries(entry.Data)
+                        {(label === 'Created' || entry.action === 'READ') && d.data ? (
+                          // Show complete initial data for creation or audit-log details
+                          Object.entries(d.data)
                             .filter(
                               ([key]) =>
                                 ![
@@ -451,10 +458,6 @@ const TaxHistoryViewer = () => {
                                   'docType',
                                   '__hash__',
                                   '__version__',
-                                  'CreatedBy',
-                                  'CreatedAt',
-                                  'UpdatedAt',
-                                  'UpdatedBy',
                                   'TxId',
                                 ].includes(key),
                             )
@@ -562,12 +565,14 @@ const TaxHistoryViewer = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => window.open(`https://blockexplorer.com/tx/${selectedEntry.TxId}`)}
-            startIcon={<OpenInNewIcon />}
-          >
-            View on Explorer
-          </Button>
+          {(selectedEntry?.txId || selectedEntry?.TxId) && (
+            <Button
+              onClick={() => window.open(`https://blockexplorer.com/tx/${selectedEntry.txId || selectedEntry.TxId}`)}
+              startIcon={<OpenInNewIcon />}
+            >
+              View on Explorer
+            </Button>
+          )}
           <Button onClick={() => setDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
@@ -884,21 +889,14 @@ const TaxHistoryViewer = () => {
                 <Timeline position="alternate">
                   {history.map((entry, index) => {
                     const prevEntry = history[index - 1];
-                    // For the first entry (oldest), show complete data. For others, show changes.
+                    const d = getEntryDisplay(entry);
+                    const prevD = prevEntry ? getEntryDisplay(prevEntry) : null;
                     const isFirstEntry = index === 0;
-                    const isCreation = entry.action === 'CREATE' || (isFirstEntry && !entry.action);
-                    const changes = isFirstEntry ? {} : computeChanges(prevEntry?.Data, entry.Data);
+                    const changes = isFirstEntry ? {} : computeChanges(prevD?.data, d.data);
                     const { label, color: actionColor, icon } = getActionDetails(entry, index);
-                    // Ensure color is valid, fallback to 'primary' if invalid
                     const color =
                       actionColor && theme.palette[actionColor]?.main ? actionColor : 'primary';
                     const isExpanded = expandedItems[index];
-
-                    // Extract user information from entry
-                    const performedBy = entry.performedBy || entry.Data?.CreatedBy || 'System';
-                    const performedByRole = entry.performedByRole || 'N/A';
-                    const performedByUserId = entry.performedByUserId || 'N/A';
-                    const actionType = entry.action || (isFirstEntry ? 'CREATE' : 'UPDATE');
 
                     return (
                       <TimelineItem
@@ -949,7 +947,7 @@ const TaxHistoryViewer = () => {
                                 >
                                   <Chip label={label} color={color} size="small" />
                                   <Typography variant="body2" color="text.secondary">
-                                    {formatDateTime(entry.Timestamp)}
+                                    {formatDateTime(d.timestamp)}
                                   </Typography>
                                 </Box>
                               }
@@ -959,7 +957,7 @@ const TaxHistoryViewer = () => {
                                     variant="caption"
                                     sx={{ fontFamily: 'monospace', display: 'block', mb: 0.5 }}
                                   >
-                                    TX: {shortenHash(entry.TxId)}
+                                    TX: {shortenHash(d.txId)}
                                   </Typography>
                                   <Box
                                     sx={{
@@ -971,24 +969,24 @@ const TaxHistoryViewer = () => {
                                     }}
                                   >
                                     <Chip
-                                      label={`By: ${performedBy}`}
+                                      label={`By: ${d.performedBy}`}
                                       size="small"
                                       variant="outlined"
                                       color="default"
                                       sx={{ fontSize: '0.7rem', height: 20 }}
                                     />
-                                    {performedByRole !== 'N/A' && (
+                                    {d.performedByRole !== 'N/A' && (
                                       <Chip
-                                        label={performedByRole}
+                                        label={d.performedByRole}
                                         size="small"
                                         variant="outlined"
                                         color="info"
                                         sx={{ fontSize: '0.7rem', height: 20 }}
                                       />
                                     )}
-                                    {performedByUserId !== 'N/A' && performedByUserId && (
+                                    {d.performedByUserId !== 'N/A' && d.performedByUserId && (
                                       <Chip
-                                        label={`ID: ${performedByUserId}`}
+                                        label={`ID: ${d.performedByUserId}`}
                                         size="small"
                                         variant="outlined"
                                         color="secondary"
@@ -1027,9 +1025,9 @@ const TaxHistoryViewer = () => {
                                   </Alert>
                                 ) : (
                                   <List dense>
-                                    {isFirstEntry && entry.Data ? (
-                                      // Show complete initial data for first entry (creation)
-                                      Object.entries(entry.Data)
+                                    {(isFirstEntry || entry.action === 'READ') && d.data ? (
+                                      // Show complete initial data for first entry or audit-log details
+                                      Object.entries(d.data)
                                         .map(([key, value]) => {
                                           // Skip internal/metadata fields
                                           if (
@@ -1038,6 +1036,8 @@ const TaxHistoryViewer = () => {
                                               'docType',
                                               '__hash__',
                                               '__version__',
+                                              'response',
+                                              'headers',
                                             ].includes(key)
                                           ) {
                                             return null;
@@ -1113,8 +1113,6 @@ const TaxHistoryViewer = () => {
                                                         ) + '...'
                                                       : isAmountField(key, value.previous)
                                                       ? formatCurrency(value.previous)
-                                                      : isAmountField(key, value.previous)
-                                                      ? formatCurrency(value.previous)
                                                       : String(value.previous).substring(0, 30)
                                                   }
                                                   color="error"
@@ -1158,7 +1156,7 @@ const TaxHistoryViewer = () => {
                                     size="small"
                                     startIcon={<OpenInNewIcon />}
                                     onClick={() =>
-                                      window.open(`https://blockexplorer.com/tx/${entry.TxId}`)
+                                      d.txId && window.open(`https://blockexplorer.com/tx/${d.txId}`)
                                     }
                                   >
                                     View Transaction

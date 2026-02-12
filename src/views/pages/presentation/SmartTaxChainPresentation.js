@@ -60,8 +60,7 @@ import PageContainer from 'src/components/container/PageContainer';
 import { ReactComponent as TRALogo } from 'src/assets/images/logos/tra_logo.svg';
 
 const PRESENTER_NAME = 'Eng: Ismael Ramadhani Mkumbi';
-const CITIZEN_TAX_EVASION_IMAGE_URL =
-  'https://www.thecitizen.co.tz/resource/image/5164142/landscape_ratio3x2/1200/800/ab89ac41563e7eeb0828dfa571160e6d/PV/tra-pic-1.jpg';
+const CITIZEN_TAX_EVASION_IMAGE_URL = '/presentation/tra-tax-evasion-the-citizen.png';
 
 const SlideFrame = ({ children, footerLeft, footerRight, sx }) => {
   const theme = useTheme();
@@ -4890,8 +4889,6 @@ export default function SmartTaxChainPresentation() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [rootCauseFullView, setRootCauseFullView] = useState(false);
   const [platformMapFullView, setPlatformMapFullView] = useState(false);
-  const [coverIllustrationIndex, setCoverIllustrationIndex] = useState(0); // 0–5: switch before confirming
-
   const presentationDate = useMemo(() => {
     const d = new Date();
     return {
@@ -5668,50 +5665,17 @@ export default function SmartTaxChainPresentation() {
                                       </Typography>
                                     </Box>
 
-                                    {/* Cover illustration - switch before confirming */}
-                                    <Box sx={{ width: '100%' }}>
-                                      <Stack direction="row" spacing={0.75} sx={{ mb: 1, flexWrap: 'wrap', gap: 0.5 }}>
-                                        {[
-                                          { label: '1', cmp: BlockchainNetworkShieldArt },
-                                          { label: '2', cmp: DataFlowTransformationArt },
-                                          { label: '3', cmp: TanzaniaBlockchainArtHorizontal },
-                                          { label: '4', cmp: ImmutableLedgerBlocksArt },
-                                          { label: '5', cmp: ThreePillarsArt },
-                                          { label: '6', cmp: BeforeAfterSplitArt },
-                                        ].map((opt, i) => (
-                                          <Chip
-                                            key={opt.label}
-                                            label={opt.label}
-                                            size="small"
-                                            onClick={() => setCoverIllustrationIndex(i)}
-                                            sx={{
-                                              fontWeight: 800,
-                                              minWidth: 32,
-                                              backgroundColor: coverIllustrationIndex === i ? '#fff200' : alpha('#111111', 0.06),
-                                              border: `1px solid ${coverIllustrationIndex === i ? '#e6d700' : alpha('#111111', 0.12)}`,
-                                              '&:hover': { backgroundColor: coverIllustrationIndex === i ? '#e6d700' : alpha('#111111', 0.08) },
-                                            }}
-                                          />
-                                        ))}
-                                      </Stack>
-                                      <Box
-                                        sx={{
-                                          width: '100%',
-                                          display: 'flex',
-                                          justifyContent: 'center',
-                                          alignItems: 'center',
-                                          py: { xs: 0.5, md: 1 },
-                                        }}
-                                      >
-                                        {[
-                                          <BlockchainNetworkShieldArt key="0" />,
-                                          <DataFlowTransformationArt key="1" />,
-                                          <TanzaniaBlockchainArtHorizontal key="2" />,
-                                          <ImmutableLedgerBlocksArt key="3" />,
-                                          <ThreePillarsArt key="4" />,
-                                          <BeforeAfterSplitArt key="5" />,
-                                        ][coverIllustrationIndex]}
-                                      </Box>
+                                    {/* Cover illustration - illustration 4 only (Immutable Ledger Blocks) */}
+                                    <Box
+                                      sx={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                        py: { xs: 0.5, md: 1 },
+                                      }}
+                                    >
+                                      <ImmutableLedgerBlocksArt />
                                     </Box>
 
                                     {/* Presenter / Date (single clean block) ***/}

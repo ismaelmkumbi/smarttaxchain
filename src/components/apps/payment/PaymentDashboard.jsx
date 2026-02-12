@@ -46,6 +46,7 @@ import {
   PendingActions,
   Download,
   AccountBalanceWallet,
+  AccountBalance,
   CheckCircle,
   Schedule,
   MonetizationOn,
@@ -57,6 +58,7 @@ import {
   Clear,
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import { PaymentConfirmationModal } from './modal/PaymentConfirmationModal';
 import { PaymentHistoryDialog } from './PaymentHistoryDialog';
 import { EmptyState } from './sub/EmptyState';
@@ -69,6 +71,7 @@ import paymentService from 'src/services/paymentService';
 
 const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [regionFilter, setRegionFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -105,16 +108,17 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
       const paginated = filtered.slice(start, start + pageSize);
 
       const metrics = {
-        totalPending: filtered.filter((p) => p.status === 'Pending').length,
-        totalOverdue: filtered.filter(
-          (p) => p.status === 'Pending' && new Date(p.dueDate) < new Date(),
+        totalPending: filtered.filter(
+          (p) => p.status === 'Pending' || p.status === 'Partially paid' || p.status === 'Overdue',
         ).length,
+        totalOverdue: filtered.filter((p) => p.status === 'Overdue').length,
         totalAmountPending: filtered
-          .filter((p) => p.status === 'Pending')
-          .reduce((sum, p) => sum + p.amount, 0),
-        totalAmountCompleted: filtered
-          .filter((p) => p.status === 'Completed')
-          .reduce((sum, p) => sum + p.amount, 0),
+          .filter((p) => p.status !== 'Paid')
+          .reduce((sum, p) => sum + (p.remainingBalance ?? p.amount ?? 0), 0),
+        totalAmountCompleted: filtered.reduce(
+          (sum, p) => sum + (Number(p.totalPaid) || 0),
+          0,
+        ),
       };
 
       return {
@@ -143,12 +147,18 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
 
   const handleViewPaymentDetails = async (payment) => {
     if (!payment || !payment.assessmentId) return;
-    
+
     setPaymentHistoryDialog({ open: true, assessmentId: payment.assessmentId, payments: [], loading: true });
-    
+
     try {
       const result = await paymentService.getPaymentHistory(payment.assessmentId);
-      const payments = result?.payments || result?.data?.payments || [];
+      const payments =
+        result?.payments ||
+        result?.payment_history ||
+        result?.data?.payments ||
+        result?.data?.payment_history ||
+        result?.payment_entries ||
+        [];
       setPaymentHistoryDialog({ open: true, assessmentId: payment.assessmentId, payments, loading: false });
     } catch (error) {
       console.error('Error fetching payment history:', error);
@@ -197,9 +207,10 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
     switch (status) {
       case 'Pending':
         return 'warning';
+      case 'Partially paid':
+        return 'info';
       case 'Overdue':
         return 'error';
-      case 'Completed':
       case 'Paid':
         return 'success';
       default:
@@ -463,7 +474,7 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
                   size="small"
                 >
                   <MenuItem value="">All Statuses</MenuItem>
-                  {['Pending', 'Paid', 'Overdue'].map((status) => (
+                  {['Pending', 'Partially paid', 'Paid', 'Overdue'].map((status) => (
                     <MenuItem key={status} value={status}>
                       {status}
                     </MenuItem>
@@ -534,7 +545,7 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
             }}
           >
             <Box sx={{ overflowX: 'auto' }}>
-              <Table sx={{ minWidth: 900 }}>
+              <Table sx={{ minWidth: 1100 }}>
                 <TableHead>
                   <TableRow
                     sx={{
@@ -547,6 +558,12 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
                     <TableCell sx={{ fontWeight: 600 }}>Taxpayer</TableCell>
                     <TableCell sx={{ fontWeight: 600 }} align="right">
                       Amount Due
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }} align="right">
+                      Total Paid
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }} align="right">
+                      Remaining
                     </TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>Due Date</TableCell>
                     <TableCell sx={{ fontWeight: 600 }}>Tax Type</TableCell>
@@ -576,6 +593,16 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
                       <TableCell align="right">
                         <Typography fontWeight={500}>{formatCurrency(payment.amount)}</Typography>
                       </TableCell>
+                      <TableCell align="right">
+                        <Typography fontWeight={500} color="success.main">
+                          {formatCurrency(payment.totalPaid ?? 0)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography fontWeight={500} color={payment.remainingBalance > 0 ? 'warning.main' : 'success.main'}>
+                          {formatCurrency(payment.remainingBalance ?? payment.amount)}
+                        </Typography>
+                      </TableCell>
                       <TableCell>
                         {new Date(payment.dueDate).toLocaleDateString()}
                         {payment.status === 'Pending' && new Date(payment.dueDate) < new Date() && (
@@ -599,7 +626,38 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
                         />
                       </TableCell>
                       <TableCell>
-                        <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                          <Tooltip title="View account (payments & balance)">
+                            <IconButton
+                              size="small"
+                              onClick={() => navigate(`/apps/assessment/${payment.assessmentId}/account`)}
+                              sx={{ color: 'success.main' }}
+                            >
+                              <AccountBalance fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                          {(payment.status === 'Paid' || payment.status === 'Partially paid') ? (
+                            <Tooltip title="View payment history">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleViewPaymentDetails(payment)}
+                                color="primary"
+                              >
+                                <Receipt fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          ) : null}
+                          {payment.status !== 'Paid' && (
+                            <Tooltip title="Make payment">
+                              <IconButton
+                                size="small"
+                                onClick={() => handlePay(payment)}
+                                color="success"
+                              >
+                                <Payment fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                           <Tooltip title="Edit payment">
                             <IconButton
                               size="small"
@@ -609,28 +667,6 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
                               <Edit fontSize="small" />
                             </IconButton>
                           </Tooltip>
-                          {payment.status === 'Paid' || payment.status === 'Completed' ? (
-                            <Tooltip title="View Payment Details">
-                              <IconButton
-                                size="small"
-                                onClick={() => handleViewPaymentDetails(payment)}
-                                color="primary"
-                              >
-                                <Receipt fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <Tooltip title="Make payment">
-                              <IconButton
-                                size="small"
-                                onClick={() => handlePay(payment)}
-                                color="success"
-                                disabled={payment.status === 'Completed' || payment.status === 'Paid'}
-                              >
-                                <Payment fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          )}
                         </Box>
                       </TableCell>
                     </TableRow>
@@ -858,6 +894,7 @@ const PaymentDashboard = ({ assessments, taxpayer, onPaymentConfirm, onRefresh }
         onClose={() => setPaymentHistoryDialog({ open: false, assessmentId: null, payments: [], loading: false })}
         payments={paymentHistoryDialog.payments}
         loading={paymentHistoryDialog.loading}
+        assessmentId={paymentHistoryDialog.assessmentId}
       />
     </Box>
   );
